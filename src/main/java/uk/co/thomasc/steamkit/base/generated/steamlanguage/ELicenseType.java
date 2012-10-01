@@ -8,28 +8,27 @@ public enum ELicenseType {
 	SinglePurchaseLimitedUse(2),
 	RecurringCharge(3),
 	RecurringChargeLimitedUse(4),
-	RecurringChargeLimitedUseWithOverages(5),
-	;
-	
+	RecurringChargeLimitedUseWithOverages(5), ;
+
 	private int code;
-	
+
 	private ELicenseType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, ELicenseType> values = new HashMap<Integer, ELicenseType>();
 
 	static {
-		for (ELicenseType type : values()) {
-			values.put(type.v(), type);
+		for (final ELicenseType type : ELicenseType.values()) {
+			ELicenseType.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static ELicenseType f(int code) {
-		return values.get(code);
+		return ELicenseType.values.get(code);
 	}
 }

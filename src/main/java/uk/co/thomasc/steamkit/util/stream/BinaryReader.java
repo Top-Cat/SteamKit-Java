@@ -10,7 +10,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class BinaryReader {
 
 	public static long LongMaxValue = 0xFFFFFFFFFFFFFFFFL;
-	
+
 	CodedInputStream reader;
 	int len = 0;
 
@@ -23,7 +23,7 @@ public class BinaryReader {
 		len = data.length;
 		try {
 			reader.pushLimit(len);
-		} catch (InvalidProtocolBufferException e) {
+		} catch (final InvalidProtocolBufferException e) {
 			e.printStackTrace();
 		}
 	}
@@ -31,11 +31,11 @@ public class BinaryReader {
 	public long readLong() throws IOException {
 		return getBuffer(8).getLong();
 	}
-	
+
 	private ByteBuffer getBuffer(int size) throws IOException {
-		byte[] buffer = new byte[size];
-		for (int i=1;i<=size;i++) {
-			buffer[size-i] = reader.readRawByte();
+		final byte[] buffer = new byte[size];
+		for (int i = 1; i <= size; i++) {
+			buffer[size - i] = reader.readRawByte();
 		}
 		return ByteBuffer.wrap(buffer);
 	}
@@ -91,5 +91,5 @@ public class BinaryReader {
 	public String readString() throws IOException {
 		return reader.readString();
 	}
-	
+
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader.Builder;
-
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 import uk.co.thomasc.steamkit.util.util.MsgUtil;
@@ -24,13 +23,13 @@ public class MsgGCHdrProtoBuf implements IGCSerializableHeader {
 	public Builder proto = CMsgProtoBufHeader.newBuilder();
 
 	public MsgGCHdrProtoBuf() {
-		
+
 	}
 
 	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
-		byte[] msProto = proto.build().toByteArray();
-		
+		final byte[] msProto = proto.build().toByteArray();
+
 		headerLength = msProto.length;
 
 		stream.write(MsgUtil.makeGCMsg(msg, true));
@@ -42,7 +41,7 @@ public class MsgGCHdrProtoBuf implements IGCSerializableHeader {
 	public void deSerialize(BinaryReader stream) throws IOException {
 		msg = MsgUtil.getGCMsg(stream.readInt());
 		headerLength = stream.readInt();
-		
+
 		proto.mergeFrom(stream.readBytes(headerLength));
 	}
 }

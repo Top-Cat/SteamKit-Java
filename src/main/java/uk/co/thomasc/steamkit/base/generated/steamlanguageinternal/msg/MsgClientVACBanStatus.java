@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg;
 
 import java.io.IOException;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -19,7 +18,7 @@ public class MsgClientVACBanStatus implements ISteamSerializableMessage {
 	public int numBans = 0;
 
 	public MsgClientVACBanStatus() {
-		
+
 	}
 
 	@Override

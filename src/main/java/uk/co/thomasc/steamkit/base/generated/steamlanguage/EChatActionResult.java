@@ -12,15 +12,14 @@ public enum EChatActionResult {
 	NotAllowedOnSelf(7),
 	ChatDoesntExist(8),
 	ChatFull(9),
-	VoiceSlotsFull(10),
-	;
-	
+	VoiceSlotsFull(10), ;
+
 	private int code;
-	
+
 	private EChatActionResult(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
@@ -28,12 +27,12 @@ public enum EChatActionResult {
 	private static HashMap<Integer, EChatActionResult> values = new HashMap<Integer, EChatActionResult>();
 
 	static {
-		for (EChatActionResult type : values()) {
-			values.put(type.v(), type);
+		for (final EChatActionResult type : EChatActionResult.values()) {
+			EChatActionResult.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EChatActionResult f(int code) {
-		return values.get(code);
+		return EChatActionResult.values.get(code);
 	}
 }

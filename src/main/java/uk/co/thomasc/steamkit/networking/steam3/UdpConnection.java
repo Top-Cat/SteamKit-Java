@@ -31,22 +31,22 @@ public class UdpConnection extends Connection {
 	 * Seconds to wait before sending packets.
 	 */
 	private final int RESEND_DELAY = 3;
-	
+
 	/**
 	 * Seconds to wait before considering the connection dead.
 	 */
 	private final int TIMEOUT_DELAY = 60;
-	
+
 	/**
 	 * Maximum number of packets to resend when RESEND_DELAY is exceeded.
 	 */
 	private final int RESEND_COUNT = 3;
-	
+
 	/**
 	 * Maximum number of packets that we can be waiting on at a time.
 	 */
 	private final int AHEAD_COUNT = 5;
-	
+
 	/**
 	 * Contains information about the state of the connection, used to filter out packets that are
 	 * unexpected or not valid given the state of the connection.
@@ -100,7 +100,7 @@ public class UdpConnection extends Connection {
 	public UdpConnection() {
 		try {
 			sock = new DatagramSocket();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
@@ -129,7 +129,6 @@ public class UdpConnection extends Connection {
 		inSeqAcked = 0;
 		inSeqHandled = 0;
 
-		
 		netThread = new Thread(new NetLoop());
 		netThread.setName("UdpConnection Thread");
 		netThread.start();
@@ -154,7 +153,8 @@ public class UdpConnection extends Connection {
 		// Graceful shutdown allows for the connection to empty its queue of messages to send
 		try {
 			netThread.join();
-		} catch (InterruptedException e) {};
+		} catch (final InterruptedException e) {
+		};
 
 		// Advance this the same way that steam does, when a socket gets reused.
 		sourceConnId += 256;
@@ -172,13 +172,13 @@ public class UdpConnection extends Connection {
 
 		try {
 			byte[] data = clientMsg.serialize();
-	
+
 			if (NetFilter != null) {
-				data = NetFilter.processOutgoing( data );
+				data = NetFilter.processOutgoing(data);
 			}
-	
+
 			sendData(new BinaryReader(data));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -188,11 +188,11 @@ public class UdpConnection extends Connection {
 	 * @param ms	The data to send.
 	 */
 	private void sendData(BinaryReader ms) {
-		UdpPacket[] packets = new UdpPacket[(ms.getRemaining() / UdpPacket.MAX_PAYLOAD) + 1];
+		final UdpPacket[] packets = new UdpPacket[ms.getRemaining() / UdpPacket.MAX_PAYLOAD + 1];
 
-		for (int i = 0 ; i < packets.length ; i++) {
-			long index = i * UdpPacket.MAX_PAYLOAD;
-			int length = (int) Math.min(UdpPacket.MAX_PAYLOAD, ms.getRemaining() - index);
+		for (int i = 0; i < packets.length; i++) {
+			final long index = i * UdpPacket.MAX_PAYLOAD;
+			final int length = (int) Math.min(UdpPacket.MAX_PAYLOAD, ms.getRemaining() - index);
 
 			packets[i] = new UdpPacket(EUdpPacketType.Data, ms, length);
 			packets[i].getHeader().msgSize = length;
@@ -205,8 +205,7 @@ public class UdpConnection extends Connection {
 	 * Sends the packet as a sequenced, reliable packet.
 	 * @param packet	The packet.
 	 */
-	private void sendSequenced(UdpPacket packet)
-	{
+	private void sendSequenced(UdpPacket packet) {
 		packet.getHeader().seqThis = outSeq;
 		packet.getHeader().msgStartSeq = outSeq;
 		packet.getHeader().packetsInMsg = 1;
@@ -221,9 +220,9 @@ public class UdpConnection extends Connection {
 	 * @param packets	The packets that make up the single net message
 	 */
 	private void sendSequenced(UdpPacket[] packets) {
-		int msgStart = outSeq;
+		final int msgStart = outSeq;
 
-		for (UdpPacket packet : packets) {
+		for (final UdpPacket packet : packets) {
 			sendSequenced(packet);
 
 			// Correct for any assumptions made for the single-packet case.
@@ -243,11 +242,11 @@ public class UdpConnection extends Connection {
 
 		DebugLog.writeLine("UdpConnection", "Sent -> %s Seq %d Ack %d; %d bytes; Message: %d bytes %d packets", packet.getHeader().packetType, packet.getHeader().seqThis, packet.getHeader().seqAck, packet.getHeader().payloadSize, packet.getHeader().msgSize, packet.getHeader().packetsInMsg);
 
-		byte[] data = packet.getData();
+		final byte[] data = packet.getData();
 
 		try {
 			sock.send(new DatagramPacket(data, data.length, new InetSocketAddress(remoteEndPoint.getIpAddress(), remoteEndPoint.getPort())));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			DebugLog.writeLine("UdpConnection", "Critical socket failure: " + e.getMessage());
 
 			state = UdpState.Disconnected;
@@ -257,7 +256,7 @@ public class UdpConnection extends Connection {
 		// If we've been idle but completely acked for more than two seconds, the next sent
 		// packet will trip the resend detection. This fixes that.
 		if (outSeqSent == outSeqAcked) {
-			Calendar cl = Calendar.getInstance();
+			final Calendar cl = Calendar.getInstance();
 			cl.add(Calendar.SECOND, RESEND_DELAY);
 			nextResend = cl.getTime();
 		}
@@ -289,13 +288,13 @@ public class UdpConnection extends Connection {
 				sendPacket(outPackets.get(i));
 			}
 
-			Calendar cl = Calendar.getInstance();
+			final Calendar cl = Calendar.getInstance();
 			cl.add(Calendar.SECOND, RESEND_DELAY);
 			nextResend = cl.getTime();
 		} else if (outSeqSent < outSeqAcked + AHEAD_COUNT) {
 			// I've never seen Steam send more than 4 packets before it gets an Ack, so this limits the
 			// number of sequenced packets that can be sent out at one time.
-			for (int i = (int) (outSeqSent - outSeqAcked); i < AHEAD_COUNT && i < outPackets.size(); i++) {
+			for (int i = outSeqSent - outSeqAcked; i < AHEAD_COUNT && i < outPackets.size(); i++) {
 				sendPacket(outPackets.get(i));
 			}
 		}
@@ -310,8 +309,8 @@ public class UdpConnection extends Connection {
 		if (!inPackets.containsKey(inSeqHandled + 1)) {
 			return 0;
 		}
-		
-		UdpPacket packet = inPackets.get(inSeqHandled + 1);
+
+		final UdpPacket packet = inPackets.get(inSeqHandled + 1);
 
 		// ...and if relevant, all subparts of the message also
 		for (int i = 1; i < packet.getHeader().packetsInMsg; i++) {
@@ -328,20 +327,20 @@ public class UdpConnection extends Connection {
 	 * @return True if a message was dispatched, false otherwise
 	 */
 	private boolean dispatchMessage() {
-		int numPackets = readyMessageParts();
+		final int numPackets = readyMessageParts();
 
 		if (numPackets == 0) {
 			return false;
 		}
 
-		BinaryWriter payload = new BinaryWriter();
+		final BinaryWriter payload = new BinaryWriter();
 		for (int i = 0; i < numPackets; i++) {
-			UdpPacket packet = inPackets.get(++inSeqHandled);
+			final UdpPacket packet = inPackets.get(++inSeqHandled);
 			inPackets.remove(inSeqHandled);
 
 			try {
 				payload.write(packet.getPayload().readBytes());
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -363,52 +362,53 @@ public class UdpConnection extends Connection {
 		/**
 		 * Processes incoming packets, maintains connection consistency, and oversees outgoing packets.
 		 */
+		@Override
 		public void run() {
 			// Variables that will be used deeper in the function; locating them here avoids recreating
 			// them since they don't need to be.
-			byte[] buf = new byte[2048];
-			DatagramPacket packet = new DatagramPacket(buf, buf.length);
+			final byte[] buf = new byte[2048];
+			final DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			boolean received = false;
 			try {
 				sock.setSoTimeout(150);
-			} catch (SocketException e1) {
+			} catch (final SocketException e1) {
 				e1.printStackTrace();
 			}
-	
+
 			Calendar cl = Calendar.getInstance();
 			cl.add(Calendar.SECOND, TIMEOUT_DELAY);
 			timeOut = cl.getTime();
-			
+
 			cl = Calendar.getInstance();
 			cl.add(Calendar.SECOND, RESEND_DELAY);
 			nextResend = cl.getTime();
-	
+
 			// Begin by sending off the challenge request
 			sendPacket(new UdpPacket(EUdpPacketType.ChallengeReq));
 			state = UdpState.ChallengeReqSent;
-	
+
 			while (state != UdpState.Disconnected) {
 				try {
 					try {
 						sock.receive(packet);
 						received = true;
-					} catch (SocketTimeoutException e) {
+					} catch (final SocketTimeoutException e) {
 						received = false;
 					}
-					
+
 					// Wait up to 150ms for data, if none is found and the timeout is exceeded, we're done here.
 					if (!received && new Date().compareTo(timeOut) > 0) {
 						DebugLog.writeLine("UdpConnection", "Connection timed out");
-	
+
 						state = UdpState.Disconnected;
 						break;
 					}
-	
+
 					// By using a 10ms wait, we allow for multiple packets sent at the time to all be processed before moving on
 					// to processing output and therefore Acks (the more we process at the same time, the fewer acks we have to send)
 					try {
 						Thread.sleep(10);
-					} catch (InterruptedException e1) {
+					} catch (final InterruptedException e1) {
 						e1.printStackTrace();
 					}
 					while (received) {
@@ -417,46 +417,46 @@ public class UdpConnection extends Connection {
 						cl.add(Calendar.SECOND, TIMEOUT_DELAY);
 						timeOut = cl.getTime();
 
-						BinaryReader ms = new BinaryReader(Arrays.copyOfRange(packet.getData(), 0, packet.getLength()));
-						UdpPacket pkt = new UdpPacket(ms);
-	
+						final BinaryReader ms = new BinaryReader(Arrays.copyOfRange(packet.getData(), 0, packet.getLength()));
+						final UdpPacket pkt = new UdpPacket(ms);
+
 						receivePacket(pkt);
-						
+
 						try {
 							sock.receive(packet);
 							received = true;
-						} catch (SocketTimeoutException e) {
+						} catch (final SocketTimeoutException e) {
 							received = false;
 						}
 					}
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					DebugLog.writeLine("UdpConnection", "Critical socket failure: " + e.getMessage());
-	
+
 					state = UdpState.Disconnected;
 					break;
 				}
-	
+
 				// Send or resend any sequenced packets; a call to ReceivePacket can set our state to disconnected
 				// so don't send anything we have queued in that case
 				if (state != UdpState.Disconnected) {
 					sendPendingMessages();
 				}
-	
+
 				// If we received data but had no data to send back, we need to manually Ack (usually tags along with
 				// outgoing data); also acks disconnections
 				if (inSeq != inSeqAcked) {
 					sendAck();
 				}
-	
+
 				// If a graceful shutdown has been requested, nothing in the outgoing queue is discarded.
 				// Once it's empty, we exit, since the last packet was our disconnect notification.
 				if (state == UdpState.Disconnecting && outPackets.size() == 0) {
 					DebugLog.writeLine("UdpConnection", "Graceful disconnect completed");
-	
+
 					state = UdpState.Disconnected;
 				}
 			}
-	
+
 			DebugLog.writeLine("UdpConnection", "Calling OnDisconnected");
 			onDisconnected(EventArgs.Empty);
 		}
@@ -493,16 +493,16 @@ public class UdpConnection extends Connection {
 				outSeqSent = outSeqAcked;
 			}
 
-			List<UdpPacket> toRemove = new ArrayList<UdpPacket>();
-			for (UdpPacket pkt : outPackets) {
+			final List<UdpPacket> toRemove = new ArrayList<UdpPacket>();
+			for (final UdpPacket pkt : outPackets) {
 				if (pkt.getHeader().seqThis <= outSeqAcked) {
 					toRemove.add(pkt);
 				}
 			}
-			
+
 			outPackets.removeAll(toRemove);
-			
-			Calendar cl = Calendar.getInstance();
+
+			final Calendar cl = Calendar.getInstance();
 			cl.add(Calendar.SECOND, RESEND_DELAY);
 			nextResend = cl.getTime();
 		}
@@ -541,23 +541,24 @@ public class UdpConnection extends Connection {
 	 * @param packet	The packet.
 	 */
 	private void receiveChallenge(UdpPacket packet) {
-		if ( state != UdpState.ChallengeReqSent )
+		if (state != UdpState.ChallengeReqSent) {
 			return;
+		}
 
-		ChallengeData cr = new ChallengeData();
+		final ChallengeData cr = new ChallengeData();
 		try {
 			cr.deSerialize(packet.getPayload());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
-		ConnectData cd = new ConnectData();
+		final ConnectData cd = new ConnectData();
 		cd.ChallengeValue = cr.ChallengeValue ^ ConnectData.CHALLENGE_MASK;
 
-		BinaryWriter ms = new BinaryWriter();
+		final BinaryWriter ms = new BinaryWriter();
 		try {
 			cd.serialize(ms);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
@@ -604,7 +605,9 @@ public class UdpConnection extends Connection {
 
 		inPackets.put(packet.getHeader().seqThis, packet);
 
-		while (dispatchMessage());
+		while (dispatchMessage()) {
+			;
+		}
 	}
 
 	@Override

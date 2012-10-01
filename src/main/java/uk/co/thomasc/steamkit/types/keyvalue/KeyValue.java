@@ -11,10 +11,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import uk.co.thomasc.steamkit.util.Passable;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
-
-import lombok.Getter;
 
 /**
  * Represents a recursive string key to arbitrary value container.
@@ -31,11 +31,11 @@ public class KeyValue {
 
 		children = new ArrayList<KeyValue>();
 	}
-	
+
 	public KeyValue(String name) {
 		this(null, null);
 	}
-	
+
 	public KeyValue() {
 		this(null);
 	}
@@ -65,12 +65,12 @@ public class KeyValue {
 	 * If no child with this key exists, {@link #Invalid} is returned.
 	 */
 	public KeyValue get(String key) {
-		for (KeyValue child : children) {
+		for (final KeyValue child : children) {
 			if (child.name.equalsIgnoreCase(key)) {
 				return child;
 			}
 		}
-		return Invalid;
+		return KeyValue.Invalid;
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class KeyValue {
 	 * @return The value of this instance as a string.
 	 */
 	public String asString() {
-		return this.value;
+		return value;
 	}
 
 	/**
@@ -90,11 +90,11 @@ public class KeyValue {
 	public int asInteger(int defaultValue) {
 		try {
 			return Integer.parseInt(value);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			return defaultValue;
 		}
 	}
-	
+
 	public int asInteger() {
 		return asInteger(0);
 	}
@@ -109,11 +109,11 @@ public class KeyValue {
 	public long asLong(long defaultValue) {
 		try {
 			return Long.parseLong(value);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			return defaultValue;
 		}
 	}
-	
+
 	public long asLong() {
 		return asLong(0);
 	}
@@ -127,11 +127,11 @@ public class KeyValue {
 	public float asFloat(float defaultValue) {
 		try {
 			return Float.parseFloat(value);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			return defaultValue;
 		}
 	}
-	
+
 	public float asFloat() {
 		return asFloat(0);
 	}
@@ -150,7 +150,7 @@ public class KeyValue {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s = %s", this.name, this.value);
+		return String.format("%s = %s", name, value);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class KeyValue {
 	 * @return a {@link KeyValue} instance if the load was successful, or null on failure.
 	 */
 	public static KeyValue loadAsText(String path) {
-		return loadFromFile(path, false);
+		return KeyValue.loadFromFile(path, false);
 	}
 
 	/**
@@ -170,29 +170,28 @@ public class KeyValue {
 	 * @return a {@link KeyValue} instance if the load was successful, or null on failure.
 	 */
 	public static KeyValue loadAsBinary(String path) {
-		return loadFromFile(path, true);
+		return KeyValue.loadFromFile(path, true);
 	}
 
-
 	static KeyValue loadFromFile(String path, boolean asBinary) {
-		File file = new File(path);
-		
+		final File file = new File(path);
+
 		if (file.exists() == false) {
 			return null;
 		}
 
 		try {
-			FileInputStream fstream = new FileInputStream(file);
-			KeyValue kv = new KeyValue();
-			
+			final FileInputStream fstream = new FileInputStream(file);
+			final KeyValue kv = new KeyValue();
+
 			if (asBinary) {
 				kv.readAsBinary(new BinaryReader(fstream));
 			} else {
 				kv.readAsText(fstream);
 			}
-			
+
 			return kv;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}
@@ -204,14 +203,14 @@ public class KeyValue {
 	 * @return a {@link KeyValue} instance if the load was successful, or null on failure.
 	 */
 	public static KeyValue loadFromString(String input) {
-		ByteArrayInputStream stream = new ByteArrayInputStream(input.getBytes());
-		
-		KeyValue kv = new KeyValue();
+		final ByteArrayInputStream stream = new ByteArrayInputStream(input.getBytes());
+
+		final KeyValue kv = new KeyValue();
 		try {
 			if (kv.readAsText(stream)) {
 				return kv;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 		}
 		return null;
 	}
@@ -223,7 +222,7 @@ public class KeyValue {
 	 * @throws IOException 
 	 */
 	public boolean readAsText(InputStream input) throws IOException {
-		this.children = new ArrayList<KeyValue>();
+		children = new ArrayList<KeyValue>();
 
 		/*KVTextReader kvr = */new KVTextReader(this, new BufferedInputStream(input));
 
@@ -237,19 +236,19 @@ public class KeyValue {
 	 * @throws {@link FileNotFoundException} , {@link IOException} 
 	 */
 	public boolean readFileAsText(String filename) throws FileNotFoundException, IOException {
-		FileInputStream stream = new FileInputStream(new File(filename));
+		final FileInputStream stream = new FileInputStream(new File(filename));
 		return readAsText(stream);
 	}
 
 	public void recursiveLoadFromBuffer(KVTextReader kvr) throws IOException {
-		Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
-		Passable<Boolean> wasConditional = new Passable<Boolean>(false);
+		final Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
+		final Passable<Boolean> wasConditional = new Passable<Boolean>(false);
 
 		while (true) {
 			//boolean bAccepted = true;
 
 			// get the key name
-			String name = kvr.readToken(wasQuoted, wasConditional);
+			final String name = kvr.readToken(wasQuoted, wasConditional);
 
 			if (name == null || name.length() == 0) {
 				throw new IOException("RecursiveLoadFromBuffer: got EOF or empty keyname");
@@ -259,8 +258,8 @@ public class KeyValue {
 				break;
 			}
 
-			KeyValue dat = new KeyValue(name);
-			this.children.add(dat);
+			final KeyValue dat = new KeyValue(name);
+			children.add(dat);
 
 			// get the value
 			String value = kvr.readToken(wasQuoted, wasConditional);
@@ -301,11 +300,11 @@ public class KeyValue {
 			throw new UnsupportedOperationException();
 		}
 
-		File file = new File(path);
+		final File file = new File(path);
 		try {
 			file.createNewFile();
 			recursiveSaveToFile(new FileOutputStream(file));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -314,49 +313,49 @@ public class KeyValue {
 		recursiveSaveToFile(f, 0);
 	}
 
-	private void recursiveSaveToFile(FileOutputStream f, int indentLevel ) throws IOException {
+	private void recursiveSaveToFile(FileOutputStream f, int indentLevel) throws IOException {
 		// write header
 		writeIndents(f, indentLevel);
-		writeString(f, name, true);
-		writeString(f, "\n");
+		KeyValue.writeString(f, name, true);
+		KeyValue.writeString(f, "\n");
 		writeIndents(f, indentLevel);
-		writeString(f, "{\n");
+		KeyValue.writeString(f, "{\n");
 
 		// loop through all our keys writing them to disk
-		for (KeyValue child : children) {
+		for (final KeyValue child : children) {
 			if (child.value == null) {
 				child.recursiveSaveToFile(f, indentLevel + 1);
 			} else {
 				writeIndents(f, indentLevel + 1);
-				writeString(f, child.name, true);
-				writeString(f, "\t\t");
-				writeString(f, child.asString(), true);
-				writeString(f, "\n");
+				KeyValue.writeString(f, child.name, true);
+				KeyValue.writeString(f, "\t\t");
+				KeyValue.writeString(f, child.asString(), true);
+				KeyValue.writeString(f, "\n");
 			}
 		}
 
 		writeIndents(f, indentLevel);
-		writeString(f, "}\n");
+		KeyValue.writeString(f, "}\n");
 	}
 
 	private void writeIndents(FileOutputStream f, int indentLevel) throws IOException {
-		for (int i=0;i<indentLevel;i++) {
-			writeString(f, "\t");
+		for (int i = 0; i < indentLevel; i++) {
+			KeyValue.writeString(f, "\t");
 		}
 	}
 
 	private static void writeString(FileOutputStream f, String str, boolean quote) throws IOException {
-		byte[] bytes = ((quote ? "\"" : "").getBytes() + str.replace("\"", "\\\"") + (quote ? "\"" : "")).getBytes();
+		final byte[] bytes = ((quote ? "\"" : "").getBytes() + str.replace("\"", "\\\"") + (quote ? "\"" : "")).getBytes();
 		f.write(bytes, 0, bytes.length);
 	}
 
 	private static void writeString(FileOutputStream f, String str) throws IOException {
-		writeString(f, str, false);
+		KeyValue.writeString(f, str, false);
 	}
-	
+
 	public static String readNullTermString(InputStream in) throws IOException {
 		int rb, i = 0;
-		byte[] res = new byte[1024];
+		final byte[] res = new byte[1024];
 		while ((rb = in.read()) != 0 && rb != -1) {
 			res[i++] = (byte) rb;
 		}
@@ -371,13 +370,13 @@ public class KeyValue {
 	 */
 	public boolean readAsBinary(BinaryReader input) throws IOException {
 		while (true) {
-			Type type = Type.f(input.readByte());
+			final Type type = Type.f(input.readByte());
 
 			if (type == Type.End) {
 				break;
 			}
 
-			KeyValue current = new KeyValue();
+			final KeyValue current = new KeyValue();
 			current.name = input.readString();
 
 			try {
@@ -404,11 +403,11 @@ public class KeyValue {
 					default:
 						throw new IOException("Unknown KV type encountered.");
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new IOException(String.format("An exception ocurred while reading KV '%s'", current.name), e);
 			}
 
-			this.children.add(current);
+			children.add(current);
 		}
 
 		return input.isAtEnd();

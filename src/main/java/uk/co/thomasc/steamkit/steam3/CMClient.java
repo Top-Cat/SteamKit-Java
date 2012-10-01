@@ -12,12 +12,6 @@ import java.util.Random;
 
 import lombok.Getter;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgMulti;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientHeartBeat;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLogonResponse;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientServerList;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientServerList.Server;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
@@ -25,6 +19,11 @@ import uk.co.thomasc.steamkit.base.Msg;
 import uk.co.thomasc.steamkit.base.PacketClientMsg;
 import uk.co.thomasc.steamkit.base.PacketClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.PacketMsg;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgMulti;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientHeartBeat;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLogonResponse;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientServerList;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientServerList.Server;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EServerType;
@@ -69,33 +68,14 @@ public abstract class CMClient {
 	static {
 		InetAddress[] temp = null;
 		try {
-			temp = new InetAddress[] {
-				InetAddress.getByName("68.142.64.164"),
-				InetAddress.getByName("68.142.64.165"),
-				InetAddress.getByName("68.142.91.34"),
-				InetAddress.getByName("68.142.91.35"),
-				InetAddress.getByName("68.142.91.36"),
-				InetAddress.getByName("68.142.116.178"),
-				InetAddress.getByName("68.142.116.179"),
+			temp = new InetAddress[] { InetAddress.getByName("68.142.64.164"), InetAddress.getByName("68.142.64.165"), InetAddress.getByName("68.142.91.34"), InetAddress.getByName("68.142.91.35"), InetAddress.getByName("68.142.91.36"), InetAddress.getByName("68.142.116.178"), InetAddress.getByName("68.142.116.179"),
 
-				InetAddress.getByName("69.28.145.170"),
-				InetAddress.getByName("69.28.145.171"),
-				InetAddress.getByName("69.28.145.172"),
-				InetAddress.getByName("69.28.156.250"),
+			InetAddress.getByName("69.28.145.170"), InetAddress.getByName("69.28.145.171"), InetAddress.getByName("69.28.145.172"), InetAddress.getByName("69.28.156.250"),
 
-				InetAddress.getByName("72.165.61.185"),
-				InetAddress.getByName("72.165.61.186"),
-				InetAddress.getByName("72.165.61.187"),
-				InetAddress.getByName("72.165.61.188"),
+			InetAddress.getByName("72.165.61.185"), InetAddress.getByName("72.165.61.186"), InetAddress.getByName("72.165.61.187"), InetAddress.getByName("72.165.61.188"),
 
-				InetAddress.getByName("208.111.133.84"),
-				InetAddress.getByName("208.111.133.85"),
-				InetAddress.getByName("208.111.158.52"),
-				InetAddress.getByName("208.111.158.53"),
-				InetAddress.getByName("208.111.171.82"),
-				InetAddress.getByName("208.111.171.83"),
-			};
-		} catch (UnknownHostException e) {
+			InetAddress.getByName("208.111.133.84"), InetAddress.getByName("208.111.133.85"), InetAddress.getByName("208.111.158.52"), InetAddress.getByName("208.111.158.53"), InetAddress.getByName("208.111.171.82"), InetAddress.getByName("208.111.171.83"), };
+		} catch (final UnknownHostException e) {
 			e.printStackTrace();
 		}
 		Servers = temp;
@@ -135,7 +115,7 @@ public abstract class CMClient {
 	public CMClient() {
 		this(ProtocolType.Tcp);
 	}
-	
+
 	/**
 	 * Initializes a new instance of the {@link CMClient} class with a specific connection type.
 	 * @param type	The connection type to use.
@@ -159,8 +139,8 @@ public abstract class CMClient {
 			@Override
 			public void handleEvent(Object sender, NetMsgEventArgs e) {
 				try {
-					onClientMsgReceived(getPacketMsg(e.getData()));
-				} catch (IOException ex) {
+					onClientMsgReceived(CMClient.getPacketMsg(e.getData()));
+				} catch (final IOException ex) {
 					ex.printStackTrace();
 				}
 			}
@@ -202,7 +182,7 @@ public abstract class CMClient {
 	public void connect() {
 		connect(true);
 	}
-	
+
 	/**
 	 * Connects this client to a Steam3 server.
 	 * This begins the process of connecting and encrypting the data channel between the client and the server.
@@ -213,10 +193,10 @@ public abstract class CMClient {
 		disconnect();
 		encrypted = bEncrypted;
 
-		Random random = new Random();
+		final Random random = new Random();
 
-		InetAddress server = Servers[random.nextInt(Servers.length)];
-		IPEndPoint endPoint = new IPEndPoint(server, bEncrypted ? PortCM_PublicEncrypted : PortCM_Public);
+		final InetAddress server = CMClient.Servers[random.nextInt(CMClient.Servers.length)];
+		final IPEndPoint endPoint = new IPEndPoint(server, bEncrypted ? PortCM_PublicEncrypted : PortCM_Public);
 
 		connection.connect(endPoint);
 	}
@@ -236,7 +216,7 @@ public abstract class CMClient {
 	 * @param msg	The client message to send.
 	 */
 	public void send(IClientMsg msg) {
-		if (this.SessionID != null) {
+		if (SessionID != null) {
 			msg.setSessionID(SessionID);
 		}
 
@@ -252,7 +232,7 @@ public abstract class CMClient {
 
 		try {
 			connection.send(msg);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
@@ -310,17 +290,17 @@ public abstract class CMClient {
 	protected abstract void onClientConnected();
 
 	static IPacketMsg getPacketMsg(byte[] data) {
-		byte[] rMsg = new byte[4];
-		for (int i=0;i<4;i++) {
-			rMsg[3-i] = data[i];
+		final byte[] rMsg = new byte[4];
+		for (int i = 0; i < 4; i++) {
+			rMsg[3 - i] = data[i];
 		}
-		ByteBuffer buffer = ByteBuffer.wrap(rMsg);
-		int rawEMsg = buffer.getInt();
-		
-		EMsg eMsg = MsgUtil.getMsg(rawEMsg);
+		final ByteBuffer buffer = ByteBuffer.wrap(rMsg);
+		final int rawEMsg = buffer.getInt();
+
+		final EMsg eMsg = MsgUtil.getMsg(rawEMsg);
 
 		switch (eMsg) {
-			// certain message types are always MsgHdr
+		// certain message types are always MsgHdr
 			case ChannelEncryptRequest:
 			case ChannelEncryptResponse:
 			case ChannelEncryptResult:
@@ -342,42 +322,42 @@ public abstract class CMClient {
 			return;
 		}
 
-		ClientMsgProtobuf<CMsgMulti.Builder> msgMulti = new ClientMsgProtobuf<CMsgMulti.Builder>(packetMsg, CMsgMulti.class);
+		final ClientMsgProtobuf<CMsgMulti.Builder> msgMulti = new ClientMsgProtobuf<CMsgMulti.Builder>(packetMsg, CMsgMulti.class);
 
 		byte[] payload = msgMulti.getBody().getMessageBody().toByteArray();
-		
+
 		if (msgMulti.getBody().getSizeUnzipped() > 0) {
 			try {
 				payload = ZipUtil.deCompress(payload);
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				DebugLog.writeLine("CMClient", "HandleMulti encountered an exception when decompressing.\n%s", ex.toString());
 				return;
 			}
 		}
 
-		BinaryReader ds = new BinaryReader(payload);
+		final BinaryReader ds = new BinaryReader(payload);
 
 		while (!ds.isAtEnd()) {
-			int subSize = ds.readInt();
-			byte[] subData = ds.readBytes(subSize);
+			final int subSize = ds.readInt();
+			final byte[] subData = ds.readBytes(subSize);
 
-			onClientMsgReceived(getPacketMsg(subData));
+			onClientMsgReceived(CMClient.getPacketMsg(subData));
 		}
 	}
-	
+
 	void handleLogOnResponse(IPacketMsg packetMsg) {
 		if (!packetMsg.isProto()) {
 			DebugLog.writeLine("CMClient", "HandleLogOnResponse got non-proto MsgClientLogonResponse!!");
 			return;
 		}
 
-		ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(packetMsg, CMsgClientLogonResponse.class);
+		final ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(packetMsg, CMsgClientLogonResponse.class);
 
 		if (EResult.f(logonResp.getBody().getEresult()) == EResult.OK) {
 			SessionID = logonResp.getProtoHeader().getClientSessionid();
 			SteamID = new SteamID(logonResp.getProtoHeader().getSteamid());
 
-			int hbDelay = logonResp.getBody().getOutOfGameHeartbeatSeconds();
+			final int hbDelay = logonResp.getBody().getOutOfGameHeartbeatSeconds();
 
 			// restart heartbeat
 			heartBeatFunc.stop();
@@ -385,16 +365,16 @@ public abstract class CMClient {
 			heartBeatFunc.start();
 		}
 	}
-	
-	void handleEncryptRequest(IPacketMsg packetMsg) {
-		Msg<MsgChannelEncryptRequest> encRequest = new Msg<MsgChannelEncryptRequest>(packetMsg, MsgChannelEncryptRequest.class);
 
-		EUniverse eUniv = encRequest.getBody().universe;
-		int protoVersion = encRequest.getBody().protocolVersion;
+	void handleEncryptRequest(IPacketMsg packetMsg) {
+		final Msg<MsgChannelEncryptRequest> encRequest = new Msg<MsgChannelEncryptRequest>(packetMsg, MsgChannelEncryptRequest.class);
+
+		final EUniverse eUniv = encRequest.getBody().universe;
+		final int protoVersion = encRequest.getBody().protocolVersion;
 
 		DebugLog.writeLine("CMClient", "Got encryption request. Universe: %s Protocol ver: %d", eUniv, protoVersion);
 
-		byte[] pubKey = KeyDictionary.getPublicKey(eUniv);
+		final byte[] pubKey = KeyDictionary.getPublicKey(eUniv);
 
 		if (pubKey == null) {
 			DebugLog.writeLine("CMClient", "HandleEncryptionRequest got request for invalid universe! Universe: %s Protocol ver: %d", eUniv, protoVersion);
@@ -403,29 +383,29 @@ public abstract class CMClient {
 
 		ConnectedUniverse = eUniv;
 
-		Msg<MsgChannelEncryptResponse> encResp = new Msg<MsgChannelEncryptResponse>(MsgChannelEncryptResponse.class);
+		final Msg<MsgChannelEncryptResponse> encResp = new Msg<MsgChannelEncryptResponse>(MsgChannelEncryptResponse.class);
 
 		tempSessionKey = CryptoHelper.GenerateRandomBlock(32);
 		byte[] cryptedSessKey = null;
 
-		RSACrypto rsa = new RSACrypto(pubKey);
+		final RSACrypto rsa = new RSACrypto(pubKey);
 		cryptedSessKey = rsa.encrypt(tempSessionKey);
 
-		byte[] keyCrc = CryptoHelper.CRCHash(cryptedSessKey);
+		final byte[] keyCrc = CryptoHelper.CRCHash(cryptedSessKey);
 
 		try {
 			encResp.write(cryptedSessKey);
 			encResp.write(keyCrc);
-			encResp.write((int) 0);
-		} catch (IOException e) {
+			encResp.write(0);
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
 		send(encResp);
 	}
-	
+
 	void handleEncryptResult(IPacketMsg packetMsg) {
-		Msg<MsgChannelEncryptResult> encResult = new Msg<MsgChannelEncryptResult>(packetMsg, MsgChannelEncryptResult.class);
+		final Msg<MsgChannelEncryptResult> encResult = new Msg<MsgChannelEncryptResult>(packetMsg, MsgChannelEncryptResult.class);
 
 		DebugLog.writeLine("CMClient", "Encryption result: %s", encResult.getBody().result);
 
@@ -433,7 +413,7 @@ public abstract class CMClient {
 			connection.NetFilter = new NetFilterEncryption(tempSessionKey);
 		}
 	}
-	
+
 	void handleLoggedOff(IPacketMsg packetMsg) {
 		SessionID = null;
 		SteamID = null;
@@ -442,15 +422,15 @@ public abstract class CMClient {
 	}
 
 	void handleServerList(IPacketMsg packetMsg) {
-		ClientMsgProtobuf<CMsgClientServerList.Builder> listMsg = new ClientMsgProtobuf<CMsgClientServerList.Builder>(packetMsg, CMsgClientServerList.class);
+		final ClientMsgProtobuf<CMsgClientServerList.Builder> listMsg = new ClientMsgProtobuf<CMsgClientServerList.Builder>(packetMsg, CMsgClientServerList.class);
 
-		for (Server server : listMsg.getBody().getServersList()) {
-			EServerType type = EServerType.f(server.getServerType());
+		for (final Server server : listMsg.getBody().getServersList()) {
+			final EServerType type = EServerType.f(server.getServerType());
 
 			if (!serverMap.containsKey(type)) {
 				serverMap.put(type, new ArrayList<IPEndPoint>());
 			}
-			
+
 			serverMap.get(type).add(new IPEndPoint(NetHelpers.getIPAddress(server.getServerIp()), (short) server.getServerPort()));
 		}
 	}

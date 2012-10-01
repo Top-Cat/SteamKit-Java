@@ -43,11 +43,11 @@ public abstract class UInt64Handle {
 		if (obj == null) {
 			return false;
 		}
-		
+
 		if (!(obj instanceof UInt64Handle)) {
 			return false;
 		}
-		
+
 		return ((UInt64Handle) obj).value.equals(value);
 	}
 

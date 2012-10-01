@@ -7,8 +7,6 @@ import java.util.Arrays;
 
 import lombok.Getter;
 
-
-import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ExtendedClientMsgHdr;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
@@ -30,12 +28,12 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	public boolean isProto() {
 		return false;
 	}
-	
+
 	@Override
 	public EMsg getMsgType() {
 		return getHeader().msg;
 	}
-	
+
 	/**
 	 * Gets the session id for this client message.
 	 */
@@ -43,7 +41,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	public int getSessionID() {
 		return getHeader().sessionID;
 	}
-	
+
 	/**
 	 * Sets the session id for this client message.
 	 */
@@ -59,7 +57,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	public SteamID getSteamID() {
 		return getHeader().getSteamID();
 	}
-	
+
 	/**
 	 * Sets the {@link SteamID} for this client message.
 	 */
@@ -75,7 +73,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	public JobID getTargetJobID() {
 		return new JobID(getHeader().targetJobID);
 	}
-	
+
 	/**
 	 * Sets the target job id for this client message.
 	 */
@@ -91,7 +89,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	public JobID getSourceJobID() {
 		return new JobID(getHeader().sourceJobID);
 	}
-	
+
 	/**
 	 * Sets the target job id for this client message.
 	 */
@@ -119,9 +117,9 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 
 		try {
 			body = clazz.newInstance();
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 		}
 
@@ -156,7 +154,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 
 		try {
 			deSerialize(msg.getData());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -167,8 +165,8 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	 */
 	@Override
 	public byte[] serialize() throws IOException {
-		BinaryWriter ms = new BinaryWriter(new ByteArrayOutputStream());
-		
+		final BinaryWriter ms = new BinaryWriter(new ByteArrayOutputStream());
+
 		getHeader().serialize(ms);
 		body.serialize(ms);
 		ms.write(getOutputStream().toByteArray());
@@ -182,13 +180,13 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	 */
 	@Override
 	public void deSerialize(byte[] data) throws IOException {
-		BinaryReader cs = new BinaryReader(data);
+		final BinaryReader cs = new BinaryReader(data);
 		getHeader().deSerialize(cs);
 		body.deSerialize(cs);
 
 		// the rest of the data is the payload
-		int payloadOffset = cs.getPosition();
-		int payloadLen = cs.getRemaining();
+		final int payloadOffset = cs.getPosition();
+		final int payloadLen = cs.getRemaining();
 
 		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
 	}

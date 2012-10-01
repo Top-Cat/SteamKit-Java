@@ -16,28 +16,27 @@ public enum EEconTradeResponse {
 	ConnectionFailed(10),
 	InitiatorAlreadyTrading(11),
 	Error(12),
-	Timeout(13),
-	;
-	
+	Timeout(13), ;
+
 	private int code;
-	
+
 	private EEconTradeResponse(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EEconTradeResponse> values = new HashMap<Integer, EEconTradeResponse>();
 
 	static {
-		for (EEconTradeResponse type : values()) {
-			values.put(type.v(), type);
+		for (final EEconTradeResponse type : EEconTradeResponse.values()) {
+			EEconTradeResponse.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EEconTradeResponse f(int code) {
-		return values.get(code);
+		return EEconTradeResponse.values.get(code);
 	}
 }

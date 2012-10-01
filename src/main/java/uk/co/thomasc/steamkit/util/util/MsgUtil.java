@@ -4,10 +4,10 @@ import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 
 public class MsgUtil {
 	private static final int ProtoMask = 0x80000000;
-	private static final int EMsgMask = ~ProtoMask;
+	private static final int EMsgMask = ~MsgUtil.ProtoMask;
 
 	public static EMsg getMsg(int msg) {
-		return EMsg.f(msg & EMsgMask);
+		return EMsg.f(msg & MsgUtil.EMsgMask);
 	}
 
 	/**
@@ -16,7 +16,7 @@ public class MsgUtil {
 	 * @return The underlying EMsg.
 	 */
 	public static int getGCMsg(int msg) {
-		return (msg & EMsgMask);
+		return msg & MsgUtil.EMsgMask;
 	}
 
 	/**
@@ -25,7 +25,7 @@ public class MsgUtil {
 	 * @return The underlying EMsg.
 	 */
 	public static EMsg getMsg(EMsg msg) {
-		return getMsg(msg.v());
+		return MsgUtil.getMsg(msg.v());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class MsgUtil {
 	 * @return true if this message is protobuf flagged; otherwise, false
 	 */
 	public static boolean isProtoBuf(int msg) {
-		return ((msg & 0xffffffffL) & ProtoMask) > 0;
+		return (msg & 0xffffffffL & MsgUtil.ProtoMask) > 0;
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class MsgUtil {
 	 * @return true if this message is protobuf flagged; otherwise, false
 	 */
 	public static boolean isProtoBuf(EMsg msg) {
-		return isProtoBuf(msg.v());
+		return MsgUtil.isProtoBuf(msg.v());
 	}
 
 	/**
@@ -54,16 +54,16 @@ public class MsgUtil {
 	 */
 	public static int makeMsg(int msg, boolean protobuf) {
 		if (protobuf) {
-			return msg | ProtoMask;
+			return msg | MsgUtil.ProtoMask;
 		}
 
 		return msg;
 	}
-	
+
 	public int makeMsg(int msg) {
-		return makeMsg(msg, false);
+		return MsgUtil.makeMsg(msg, false);
 	}
-	
+
 	/**
 	 * Crafts an EMsg, flagging it if required.
 	 * @param msg		The EMsg to flag.
@@ -72,14 +72,13 @@ public class MsgUtil {
 	 */
 	public static int makeGCMsg(int msg, boolean protobuf) {
 		if (protobuf) {
-			return msg | ProtoMask;
+			return msg | MsgUtil.ProtoMask;
 		}
 
 		return msg;
 	}
-	
 
 	public static int makeGCMsg(int msg) {
-		return makeGCMsg(msg, false);
+		return MsgUtil.makeGCMsg(msg, false);
 	}
 }

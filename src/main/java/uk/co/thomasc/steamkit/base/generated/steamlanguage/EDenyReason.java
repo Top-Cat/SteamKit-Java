@@ -15,15 +15,14 @@ public enum EDenyReason {
 	SteamConnectionError(12),
 	SteamResponseTimedOut(13),
 	SteamValidationStalled(14),
-	SteamOwnerLeftGuestUser(15),
-	;
-	
+	SteamOwnerLeftGuestUser(15), ;
+
 	private int code;
-	
+
 	private EDenyReason(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

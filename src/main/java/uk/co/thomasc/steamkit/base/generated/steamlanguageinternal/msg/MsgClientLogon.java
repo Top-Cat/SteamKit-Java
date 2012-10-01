@@ -2,14 +2,13 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg;
 
 import java.io.IOException;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 public class MsgClientLogon implements ISteamSerializableMessage {
-	
+
 	@Override
 	public EMsg getEMsg() {
 		return EMsg.ClientLogon;
@@ -41,11 +40,11 @@ public class MsgClientLogon implements ISteamSerializableMessage {
 
 	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
-		
+
 	}
 
 	@Override
 	public void deSerialize(BinaryReader stream) throws IOException {
-		
+
 	}
 }

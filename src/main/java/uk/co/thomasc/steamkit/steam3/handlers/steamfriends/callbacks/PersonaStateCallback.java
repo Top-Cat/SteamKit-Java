@@ -6,7 +6,6 @@ import java.util.Date;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientPersonaState;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EClientPersonaStateFlag;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EPersonaState;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -21,127 +20,127 @@ public final class PersonaStateCallback extends CallbackMsg {
 	/**
 	 * Gets the status flags. This shows what has changed.
 	 */
-	@Getter private EClientPersonaStateFlag statusFlags;
+	@Getter private final EClientPersonaStateFlag statusFlags;
 
 	/**
 	 * Gets the friend ID.
 	 */
-	@Getter private SteamID friendID;
+	@Getter private final SteamID friendID;
 
 	/**
 	 * Gets the state.
 	 */
-	@Getter private EPersonaState state;
+	@Getter private final EPersonaState state;
 
 	/**
 	 * Gets the game app ID.
 	 */
-	@Getter private int gameAppID;
+	@Getter private final int gameAppID;
 
 	/**
 	 * Gets the game ID.
 	 */
-	@Getter private GameID gameID;
+	@Getter private final GameID gameID;
 
 	/**
 	 * Gets the name of the game.
 	 */
-	@Getter private String gameName;
+	@Getter private final String gameName;
 
 	/**
 	 * Gets the game server IP.
 	 */
-	@Getter private InetAddress gameServerIP;
+	@Getter private final InetAddress gameServerIP;
 
 	/**
 	 * Gets the game server port.
 	 */
-	@Getter private int gameServerPort;
+	@Getter private final int gameServerPort;
 
 	/**
 	 * Gets the query port.
 	 */
-	@Getter private int queryPort;
+	@Getter private final int queryPort;
 
 	/**
 	 * Gets the source steam ID.
 	 */
-	@Getter private SteamID sourceSteamID;
+	@Getter private final SteamID sourceSteamID;
 
 	/**
 	 * Gets the game data blob.
 	 */
-	@Getter private byte[] gameDataBlob;
+	@Getter private final byte[] gameDataBlob;
 
 	/**
 	 * Gets the name.
 	 */
-	@Getter private String name;
+	@Getter private final String name;
 
 	/**
 	 * Gets the avatar hash.
 	 */
-	@Getter private byte[] avatarHash;
+	@Getter private final byte[] avatarHash;
 
 	/**
 	 * Gets the last log off.
 	 */
-	@Getter private Date lastLogOff;
+	@Getter private final Date lastLogOff;
 
 	/**
 	 * Gets the last log on.
 	 */
-	@Getter private Date lastLogOn;
+	@Getter private final Date lastLogOn;
 
 	/**
 	 * Gets the clan rank.
 	 */
-	@Getter private int clanRank;
+	@Getter private final int clanRank;
 
 	/**
 	 * Gets the clan tag.
 	 */
-	@Getter private String clanTag;
+	@Getter private final String clanTag;
 
 	/**
 	 * Gets the online session instances.
 	 */
-	@Getter private int onlineSessionInstances;
+	@Getter private final int onlineSessionInstances;
 
 	/**
 	 * Gets the published session ID.
 	 */
-	@Getter private int publishedSessionID;
+	@Getter private final int publishedSessionID;
 
 	public PersonaStateCallback(CMsgClientPersonaState.Friend friend) {
-		this.statusFlags = EClientPersonaStateFlag.f(friend.getPersonaStateFlags());
+		statusFlags = EClientPersonaStateFlag.f(friend.getPersonaStateFlags());
 
-		this.friendID = new SteamID(friend.getFriendid());
-		this.state = EPersonaState.f(friend.getPersonaState());
+		friendID = new SteamID(friend.getFriendid());
+		state = EPersonaState.f(friend.getPersonaState());
 
-		this.gameAppID = friend.getGamePlayedAppId();
-		this.gameID = new GameID(friend.getGameid());
-		this.gameName = friend.getGameName();
+		gameAppID = friend.getGamePlayedAppId();
+		gameID = new GameID(friend.getGameid());
+		gameName = friend.getGameName();
 
-		this.gameServerIP = NetHelpers.getIPAddress(friend.getGameServerIp());
-		this.gameServerPort = friend.getGameServerPort();
-		this.queryPort = friend.getQueryPort();
+		gameServerIP = NetHelpers.getIPAddress(friend.getGameServerIp());
+		gameServerPort = friend.getGameServerPort();
+		queryPort = friend.getQueryPort();
 
-		this.sourceSteamID = new SteamID(friend.getSteamidSource());
+		sourceSteamID = new SteamID(friend.getSteamidSource());
 
-		this.gameDataBlob = friend.getGameDataBlob().toByteArray();
+		gameDataBlob = friend.getGameDataBlob().toByteArray();
 
-		this.name = friend.getPlayerName();
+		name = friend.getPlayerName();
 
-		this.avatarHash = friend.getAvatarHash().toByteArray();
+		avatarHash = friend.getAvatarHash().toByteArray();
 
-		this.lastLogOff = new Date(friend.getLastLogoff());
-		this.lastLogOn = new Date(friend.getLastLogon());
+		lastLogOff = new Date(friend.getLastLogoff());
+		lastLogOn = new Date(friend.getLastLogon());
 
-		this.clanRank = friend.getClanRank();
-		this.clanTag = friend.getClanTag();
+		clanRank = friend.getClanRank();
+		clanTag = friend.getClanTag();
 
-		this.onlineSessionInstances = friend.getOnlineSessionInstances();
-		this.publishedSessionID = friend.getPublishedInstanceId();
+		onlineSessionInstances = friend.getOnlineSessionInstances();
+		publishedSessionID = friend.getPublishedInstanceId();
 	}
 }

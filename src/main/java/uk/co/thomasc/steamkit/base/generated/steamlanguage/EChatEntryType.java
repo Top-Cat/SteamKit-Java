@@ -9,15 +9,14 @@ public enum EChatEntryType {
 	InviteGame(3),
 	Emote(4),
 	LobbyGameStart(5),
-	LeftConversation(6),
-	;
-	
+	LeftConversation(6), ;
+
 	private int code;
-	
+
 	private EChatEntryType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
@@ -25,12 +24,12 @@ public enum EChatEntryType {
 	private static HashMap<Integer, EChatEntryType> values = new HashMap<Integer, EChatEntryType>();
 
 	static {
-		for (EChatEntryType type : values()) {
-			values.put(type.v(), type);
+		for (final EChatEntryType type : EChatEntryType.values()) {
+			EChatEntryType.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EChatEntryType f(int code) {
-		return values.get(code);
+		return EChatEntryType.values.get(code);
 	}
 }

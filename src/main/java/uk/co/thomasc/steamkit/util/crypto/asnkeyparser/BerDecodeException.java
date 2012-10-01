@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public final class BerDecodeException extends Exception {
 	private static final long serialVersionUID = -2265804415271565348L;
-	
+
 	@Getter private final int _position;
 
 	public BerDecodeException() {
@@ -33,7 +33,7 @@ public final class BerDecodeException extends Exception {
 
 	@Override
 	public String getMessage() {
-		StringBuilder sb = new StringBuilder(super.getMessage());
+		final StringBuilder sb = new StringBuilder(super.getMessage());
 
 		sb.append(String.format(" (Position %d)%s", _position, System.getProperty("line.separator")));
 

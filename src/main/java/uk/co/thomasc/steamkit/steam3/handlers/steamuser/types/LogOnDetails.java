@@ -43,6 +43,6 @@ public final class LogOnDetails {
 	 * Initializes a new instance of the {@link LogOnDetails} class.
 	 */
 	public LogOnDetails() {
-		
+
 	}
 }

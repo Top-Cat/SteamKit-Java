@@ -13,14 +13,16 @@ public class ChallengeData implements ISteamSerializable {
 	public int ServerLoad = 0;
 
 	public ChallengeData() {
-		
+
 	}
 
+	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
 		stream.write(ChallengeValue);
 		stream.write(ServerLoad);
 	}
 
+	@Override
 	public void deSerialize(BinaryReader stream) throws IOException {
 		ChallengeValue = stream.readInt();
 		ServerLoad = stream.readInt();

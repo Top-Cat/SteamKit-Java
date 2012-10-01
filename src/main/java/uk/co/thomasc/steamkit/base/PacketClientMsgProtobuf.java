@@ -5,8 +5,6 @@ import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
 
-
-import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdrProtoBuf;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -18,6 +16,7 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 	/**
 	 * This type of message is always protobuf backed.
 	 */
+	@Override
 	public boolean isProto() {
 		return true;
 	}
@@ -27,9 +26,9 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 	 */
 	@Getter @Setter private EMsg MsgType;
 
-	@Getter private long TargetJobID;
-	
-	@Getter private long SourceJobID;
+	@Getter private final long TargetJobID;
+
+	@Getter private final long SourceJobID;
 
 	byte[] payload;
 
@@ -42,13 +41,13 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 		MsgType = eMsg;
 		payload = data;
 
-		MsgHdrProtoBuf protobufHeader = new MsgHdrProtoBuf();
+		final MsgHdrProtoBuf protobufHeader = new MsgHdrProtoBuf();
 
 		// we need to pull out the job ids, so we deSerialize the protobuf header
-		BinaryReader ms = new BinaryReader(data);
+		final BinaryReader ms = new BinaryReader(data);
 		try {
 			protobufHeader.deSerialize(ms);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
@@ -59,6 +58,7 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 	/**
 	 * Gets the underlying data that represents this client message.
 	 */
+	@Override
 	public byte[] getData() {
 		return payload;
 	}

@@ -33,7 +33,7 @@ public class ScheduledFunction implements Runnable {
 		}
 
 		task = timer.scheduleAtFixedRate(this, 0, delay, TimeUnit.MILLISECONDS);
-		bStarted = (task != null);
+		bStarted = task != null;
 	}
 
 	public void stop() {

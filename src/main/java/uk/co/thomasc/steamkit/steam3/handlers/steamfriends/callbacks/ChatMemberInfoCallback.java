@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatInfoType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientChatMemberInfo;
 import uk.co.thomasc.steamkit.steam3.handlers.steamfriends.types.StateChangeDetails;
@@ -16,12 +15,12 @@ public final class ChatMemberInfoCallback extends CallbackMsg {
 	/**
 	 * Gets SteamId of the chat room.
 	 */
-	@Getter private SteamID chatRoomID;
+	@Getter private final SteamID chatRoomID;
 
 	/**
 	 * Gets the info type.
 	 */
-	@Getter private EChatInfoType type;
+	@Getter private final EChatInfoType type;
 
 	/**
 	 * Gets the state change info for {@link EChatInfoType#StateChange} member info updates.
@@ -36,7 +35,7 @@ public final class ChatMemberInfoCallback extends CallbackMsg {
 			case StateChange:
 				StateChangeInfo = new StateChangeDetails(payload);
 				break;
-			//TODO: handle more types
+		//TODO: handle more types
 		}
 	}
 }

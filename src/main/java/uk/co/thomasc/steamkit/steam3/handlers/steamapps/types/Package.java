@@ -2,12 +2,11 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamapps.types;
 
 import java.io.IOException;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientPackageInfoResponse;
+import lombok.Getter;
 
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientPackageInfoResponse;
 import uk.co.thomasc.steamkit.types.keyvalue.KeyValue;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
-
-import lombok.Getter;
 
 /**
  * Represents a single package in this response.
@@ -16,12 +15,12 @@ public final class Package {
 	/**
 	 * Gets the status of this package.
 	 */
-	@Getter private PackageStatus status;
+	@Getter private final PackageStatus status;
 
 	/**
 	 * Gets the PackageID for this package.
 	 */
-	@Getter private int packageID;
+	@Getter private final int packageID;
 
 	/**
 	 * Gets the last change number for this package.
@@ -47,11 +46,11 @@ public final class Package {
 
 		data = new KeyValue();
 
-		BinaryReader is = new BinaryReader(pack.getBuffer().toByteArray());
+		final BinaryReader is = new BinaryReader(pack.getBuffer().toByteArray());
 		try {
 			is.readInt(); // unknown uint at the beginning of the buffer
 			data.readAsBinary(is);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

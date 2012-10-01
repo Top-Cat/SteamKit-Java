@@ -14,10 +14,12 @@ public class ConnectData implements ISteamSerializable {
 		ChallengeValue = 0;
 	}
 
+	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
 		stream.write(ChallengeValue);
 	}
 
+	@Override
 	public void deSerialize(BinaryReader stream) throws IOException {
 		ChallengeValue = stream.readInt();
 	}

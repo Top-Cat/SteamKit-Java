@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientPackageInfoResponse;
-
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.SteamApps;
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.types.Package;
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.types.PackageStatus;
@@ -19,7 +18,7 @@ public final class PackageInfoCallback extends CallbackMsg {
 	/**
 	 * Gets the list of packages this response contains.
 	 */
-	@Getter private List<Package> packages = new ArrayList<Package>();
+	@Getter private final List<Package> packages = new ArrayList<Package>();
 
 	/**
 	 * Gets a count of packages pending in this response.
@@ -27,14 +26,14 @@ public final class PackageInfoCallback extends CallbackMsg {
 	public int packagesPending;
 
 	public PackageInfoCallback(CMsgClientPackageInfoResponse msg) {
-		for (CMsgClientPackageInfoResponse.Package pkg : msg.getPackagesList()) {
+		for (final CMsgClientPackageInfoResponse.Package pkg : msg.getPackagesList()) {
 			packages.add(new Package(pkg, PackageStatus.OK));
 		}
-		
-		for (Integer pkg : msg.getPackagesUnknownList()) {
+
+		for (final Integer pkg : msg.getPackagesUnknownList()) {
 			packages.add(new Package(pkg, PackageStatus.Unknown));
 		}
-		
+
 		packagesPending = msg.getPackagesPending();
 	}
 }

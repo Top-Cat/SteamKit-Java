@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdr;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -25,7 +24,7 @@ public final class PacketMsg implements IPacketMsg {
 	/**
 	 * Gets the network message type of this packet message.
 	 */
-	@Getter private EMsg msgType;
+	@Getter private final EMsg msgType;
 
 	/**
 	 * Gets the target job id for this packet message.
@@ -48,16 +47,16 @@ public final class PacketMsg implements IPacketMsg {
 		msgType = eMsg;
 		payload = data;
 
-		MsgHdr msgHdr = new MsgHdr();
+		final MsgHdr msgHdr = new MsgHdr();
 
 		// deserialize the header to get our hands on the job ids
-		BinaryReader is = new BinaryReader(data);
+		final BinaryReader is = new BinaryReader(data);
 		try {
 			msgHdr.deSerialize(is);
 
 			targetJobID = msgHdr.targetJobID;
 			sourceJobID = msgHdr.sourceJobID;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

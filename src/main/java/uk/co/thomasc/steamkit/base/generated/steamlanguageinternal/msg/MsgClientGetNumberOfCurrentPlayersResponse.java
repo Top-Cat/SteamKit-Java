@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg;
 
 import java.io.IOException;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
@@ -22,7 +21,7 @@ public class MsgClientGetNumberOfCurrentPlayersResponse implements ISteamSeriali
 	public int numPlayers = 0;
 
 	public MsgClientGetNumberOfCurrentPlayersResponse() {
-		
+
 	}
 
 	@Override

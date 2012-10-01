@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EUdpPacketType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.UdpHeader;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -15,6 +14,7 @@ class UdpPacket {
 
 	@Getter private UdpHeader header;
 	@Getter private BinaryReader payload;
+
 	//public MemoryStream Payload { get; private set; }
 
 	/**
@@ -22,7 +22,7 @@ class UdpPacket {
 	 * @return true if this instance is valid; otherwise, false.
 	 */
 	public boolean isValid() {
-		return header.magic == UdpHeader.MAGIC && header.payloadSize <= MAX_PAYLOAD && payload != null;
+		return header.magic == UdpHeader.MAGIC && header.payloadSize <= UdpPacket.MAX_PAYLOAD && payload != null;
 	}
 
 	/**
@@ -37,11 +37,11 @@ class UdpPacket {
 
 		try {
 			header.deSerialize(ms);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return;
 		}
 
-		if (this.header.magic != UdpHeader.MAGIC) {
+		if (header.magic != UdpHeader.MAGIC) {
 			return;
 		}
 
@@ -56,10 +56,10 @@ class UdpPacket {
 	 * @param type	The type.
 	 */
 	public UdpPacket(EUdpPacketType type) {
-		this.header = new UdpHeader();
-		this.payload = new BinaryReader(new byte[0]);
+		header = new UdpHeader();
+		payload = new BinaryReader(new byte[0]);
 
-		this.header.packetType = type;
+		header.packetType = type;
 	}
 
 	/**
@@ -103,17 +103,17 @@ class UdpPacket {
 	 * @param length	The length.
 	 */
 	public void setPayload(BinaryReader ms, int length) {
-		if (length > MAX_PAYLOAD) {
+		if (length > UdpPacket.MAX_PAYLOAD) {
 			throw new IllegalArgumentException("Payload length exceeds 0x4DC maximum");
 		}
 
 		try {
-			byte[] buf = ms.readBytes(length);
+			final byte[] buf = ms.readBytes(length);
 
 			payload = new BinaryReader(buf);
 			header.payloadSize = (short) buf.length;
 			header.msgSize = buf.length;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -123,16 +123,16 @@ class UdpPacket {
 	 * @return The serialized packet.
 	 */
 	public byte[] getData() {
-		BinaryWriter ms = new BinaryWriter();
-		
+		final BinaryWriter ms = new BinaryWriter();
+
 		try {
 			header.serialize(ms);
-		
+
 			ms.write(payload.readBytes());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-	
+
 		return ms.toByteArray();
 	}
 

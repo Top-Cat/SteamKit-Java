@@ -6,9 +6,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader.Builder;
+import lombok.Getter;
 
-import uk.co.thomasc.steamkit.base.IPacketMsg;
+import com.google.protobuf.AbstractMessage;
+import com.google.protobuf.GeneratedMessage;
+
+import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader.Builder;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdrProtoBuf;
 import uk.co.thomasc.steamkit.types.JobID;
@@ -17,11 +20,6 @@ import uk.co.thomasc.steamkit.util.logging.Debug;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
-import lombok.Getter;
-
-import com.google.protobuf.AbstractMessage;
-import com.google.protobuf.GeneratedMessage;
-	
 /**
  * Represents a protobuf backed client message.
  * @param <U> The builder for T
@@ -51,7 +49,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public int getSessionID() {
 		return getProtoHeader().getClientSessionid();
 	}
-	
+
 	/**
 	 * Sets the session id for this client message.
 	 */
@@ -59,7 +57,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public void setSessionID(int sessionID) {
 		getProtoHeader().setClientSessionid(sessionID);
 	}
-	
+
 	/**
 	 * Gets the {@link SteamID} for this client message.
 	 */
@@ -67,7 +65,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public SteamID getSteamID() {
 		return new SteamID(getProtoHeader().getSteamid());
 	}
-	
+
 	/**
 	 * Sets the {@link SteamID} for this client message.
 	 */
@@ -75,7 +73,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public void setSteamID(SteamID steamID) {
 		getProtoHeader().setSteamid(steamID.convertToUInt64());
 	}
-	
+
 	/**
 	 * Gets or sets the target job id for this client message.
 	 */
@@ -83,7 +81,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public JobID getTargetJobID() {
 		return new JobID(getProtoHeader().getJobidTarget());
 	}
-	
+
 	/**
 	 * Sets the target job id for this client message.
 	 */
@@ -99,7 +97,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public JobID getSourceJobID() {
 		return new JobID(getProtoHeader().getJobidSource());
 	}
-	
+
 	/**
 	 * Sets the target job id for this client message.
 	 */
@@ -119,13 +117,13 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 * Gets the body structure of this message.
 	 */
 	@Getter private U body;
-	
+
 	private Class<? extends AbstractMessage> clazz;
 
 	public ClientMsgProtobuf(EMsg eMsg, Class<? extends AbstractMessage> clazz) {
 		this(eMsg, clazz, 64);
 	}
-	
+
 	/**
 	 * Initializes a new instance of the {@link ClientMsgProtobuf} class.
 	 * This is a client send constructor.
@@ -136,16 +134,16 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	@SuppressWarnings("unchecked")
 	public ClientMsgProtobuf(EMsg eMsg, Class<? extends AbstractMessage> clazz, int payloadReserve) {
 		super(MsgHdrProtoBuf.class, payloadReserve);
-		
+
 		this.clazz = clazz;
-		
+
 		try {
-			Method m = clazz.getMethod("newBuilder");
+			final Method m = clazz.getMethod("newBuilder");
 			body = (U) m.invoke(null);
 		} catch (IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		
+
 		// set our emsg
 		getHeader().msg = eMsg;
 	}
@@ -153,7 +151,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	public ClientMsgProtobuf(EMsg eMsg, MsgBase<MsgHdrProtoBuf> msg, Class<? extends AbstractMessage> clazz) {
 		this(eMsg, msg, clazz, 64);
 	}
-	
+
 	/**
 	 * Initializes a new instance of the {@link ClientMsgProtobuf} class.
 	 * This a reply constructor.
@@ -174,12 +172,12 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 */
 	public ClientMsgProtobuf(IPacketMsg msg, Class<? extends AbstractMessage> clazz) {
 		this(msg.getMsgType(), clazz);
-		
+
 		Debug.Assert(msg.isProto(), "ClientMsgProtobuf used for non-proto message!");
 
 		try {
 			deSerialize(msg.getData());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -190,8 +188,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 */
 	@Override
 	public byte[] serialize() throws IOException {
-		BinaryWriter ms = new BinaryWriter();
-		
+		final BinaryWriter ms = new BinaryWriter();
+
 		getHeader().serialize(ms);
 		ms.write(body.build().toByteArray());
 		ms.write(getOutputStream().toByteArray());
@@ -206,10 +204,10 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	@SuppressWarnings("unchecked")
 	@Override
 	public void deSerialize(byte[] data) throws IOException {
-		BinaryReader is = new BinaryReader(data);
+		final BinaryReader is = new BinaryReader(data);
 		getHeader().deSerialize(is);
 		try {
-			Method m = clazz.getMethod("newBuilder");
+			final Method m = clazz.getMethod("newBuilder");
 			body = (U) m.invoke(null);
 		} catch (IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -217,8 +215,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 		body.mergeFrom(is.getStream());
 
 		// the rest of the data is the payload
-		int payloadOffset = is.getPosition();
-		int payloadLen = is.getRemaining();
+		final int payloadOffset = is.getPosition();
+		final int payloadLen = is.getRemaining();
 
 		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
 	}

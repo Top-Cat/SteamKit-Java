@@ -63,7 +63,7 @@ public class GameID {
 	public long getAppID() {
 		return gameid.getMask((short) 0, 0xFFFFFF);
 	}
-	
+
 	/**
 	 * Gets the app id.
 	 * @param appID	The app IDid
@@ -79,7 +79,7 @@ public class GameID {
 	public GameType getAppType() {
 		return GameType.fromCode((int) gameid.getMask((short) 24, 0xFF));
 	}
-	
+
 	/**
 	 * Sets the type of the app.
 	 * @param appType	The type of the app.
@@ -95,7 +95,7 @@ public class GameID {
 	public long getModID() {
 		return gameid.getMask((short) 32, 0xFFFFFFFF);
 	}
-	
+
 	/**
 	 * Sets the mod id.
 	 * @param modID	The mod ID.
@@ -109,7 +109,7 @@ public class GameID {
 	 * @return true if this instance is a mod; otherwise, false
 	 */
 	public boolean isMod() {
-		return (getAppType() == GameType.GameMod);
+		return getAppType() == GameType.GameMod;
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class GameID {
 	 * @return true if this instance is a shortcut; otherwise, false
 	 */
 	public boolean isShortcut() {
-		return (getAppType() == GameType.Shortcut);
+		return getAppType() == GameType.Shortcut;
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class GameID {
 	 * @return true if this instance is a p2p file; otherwise, false
 	 */
 	public boolean IsP2PFile() {
-		return (getAppType() == GameType.P2P);
+		return getAppType() == GameType.P2P;
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class GameID {
 	 * @return true if this instance is a steam app; otherwise, false
 	 */
 	public boolean IsSteamApp() {
-		return (getAppType() == GameType.App);
+		return getAppType() == GameType.App;
 	}
 
 	/**
@@ -144,14 +144,14 @@ public class GameID {
 		if (obj == null) {
 			return false;
 		}
-		
+
 		if (!(obj instanceof GameID)) {
 			return false;
 		}
-		
+
 		return gameid.getData().equals(((GameID) obj).gameid.getData());
 	}
-	
+
 	/**
 	 * Returns a hash code for this instance.
 	 */

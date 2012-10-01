@@ -7,28 +7,27 @@ public enum EChatMemberStateChange {
 	Left(0x02),
 	Disconnected(0x04),
 	Kicked(0x08),
-	Banned(0x10),
-	;
-	
+	Banned(0x10), ;
+
 	private byte code;
-	
+
 	private EChatMemberStateChange(int code) {
 		this.code = (byte) code;
 	}
-	
+
 	public byte v() {
 		return code;
 	}
-	
+
 	private static HashMap<Byte, EChatMemberStateChange> values = new HashMap<Byte, EChatMemberStateChange>();
 
 	static {
-		for (EChatMemberStateChange type : values()) {
-			values.put(type.v(), type);
+		for (final EChatMemberStateChange type : EChatMemberStateChange.values()) {
+			EChatMemberStateChange.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EChatMemberStateChange f(int code) {
-		return values.get(code);
+		return EChatMemberStateChange.values.get(code);
 	}
 }

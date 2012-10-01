@@ -9,28 +9,27 @@ public enum EUniverse {
 	Internal(3),
 	Dev(4),
 	RC(5),
-	Max(6),
-	;
-	
+	Max(6), ;
+
 	private int code;
-	
+
 	private EUniverse(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EUniverse> values = new HashMap<Integer, EUniverse>();
 
 	static {
-		for (EUniverse type : values()) {
-			values.put(type.v(), type);
+		for (final EUniverse type : EUniverse.values()) {
+			EUniverse.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EUniverse f(int mask) {
-		return values.get(mask);
+		return EUniverse.values.get(mask);
 	}
 }

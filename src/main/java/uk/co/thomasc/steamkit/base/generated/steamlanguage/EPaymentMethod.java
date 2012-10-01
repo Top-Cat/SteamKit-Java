@@ -19,28 +19,27 @@ public enum EPaymentMethod {
 	Wallet(128),
 	OEMTicket(256),
 	Split(512),
-	Complimentary(1024),
-	;
-	
+	Complimentary(1024), ;
+
 	private int code;
-	
+
 	private EPaymentMethod(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EPaymentMethod> values = new HashMap<Integer, EPaymentMethod>();
 
 	static {
-		for (EPaymentMethod type : values()) {
-			values.put(type.v(), type);
+		for (final EPaymentMethod type : EPaymentMethod.values()) {
+			EPaymentMethod.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EPaymentMethod f(int code) {
-		return values.get(code);
+		return EPaymentMethod.values.get(code);
 	}
 }

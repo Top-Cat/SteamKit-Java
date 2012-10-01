@@ -12,7 +12,7 @@ import uk.co.thomasc.steamkit.util.crypto.CryptoHelper;
 public class Utils {
 
 	public static EOSType getOSType() {
-		String os = System.getProperty("os.name");
+		final String os = System.getProperty("os.name");
 		switch (os) {
 			case "Windows 7":
 				return EOSType.Win7;
@@ -43,19 +43,19 @@ public class Utils {
 
 	public static byte[] generateMachineID() {
 		// Java can't really do much here :/
-		
+
 		try {
-			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			final Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 			do {
-				NetworkInterface n = interfaces.nextElement();
+				final NetworkInterface n = interfaces.nextElement();
 				if (n.getHardwareAddress() != null && n.getHardwareAddress().length > 0) {
 					return Arrays.copyOfRange(CryptoHelper.CRCHash(n.getHardwareAddress()), 0, 20);
 				}
 			} while (NetworkInterface.getNetworkInterfaces().hasMoreElements());
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 }

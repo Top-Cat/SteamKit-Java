@@ -5,7 +5,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventArgs;
 import uk.co.thomasc.steamkit.util.cSharp.ip.IPEndPoint;
@@ -40,21 +39,22 @@ public class TcpConnection extends Connection {
 		Socket socket = null;
 		try {
 			socket = new Socket(endPoint.getIpAddress(), endPoint.getPort());
-		} catch (UnknownHostException e) {
+		} catch (final UnknownHostException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
 		try {
 			connectCompleted(socket);
-		} catch (IOException e) {};
+		} catch (final IOException e) {
+		};
 	}
 
 	void connectCompleted(Socket socket) throws IOException {
 
 		sock = socket;
-		
+
 		if (sock == null || !sock.isConnected()) {
 			onDisconnected(EventArgs.Empty);
 			return;
@@ -91,7 +91,8 @@ public class TcpConnection extends Connection {
 		// wait for our network thread to terminate
 		try {
 			netThread.join();
-		} catch (InterruptedException e) {};
+		} catch (final InterruptedException e) {
+		};
 		netThread = null;
 
 		cleanup();
@@ -124,7 +125,7 @@ public class TcpConnection extends Connection {
 			netWriter.write(TcpConnection.MAGIC);
 
 			netWriter.write(data);
-			
+
 			netWriter.flush();
 		}
 	}
@@ -133,37 +134,38 @@ public class TcpConnection extends Connection {
 		/**
 		 * Nets the loop.
 		 */
+		@Override
 		public void run() {
 			// poll for readable data every 100ms
 			//final int POLL_MS = 100; 
-	
+
 			while (true) {
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e1) {
+				} catch (final InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				
+
 				if (!isConnected) {
 					break;
 				}
-				
+
 				boolean canRead = false;
 				try {
 					canRead = !netReader.isAtEnd();
-				} catch (IOException e) {};
-	
+				} catch (final IOException e) {
+				};
+
 				if (!canRead) {
 					// nothing to read yet
 					continue;
 				}
-	
+
 				// read the packet off the network
 				readPacket();
 			}
 		}
 	}
-
 
 	void readPacket() {
 		// the tcp packet header is considerably less complex than the udp one
@@ -177,7 +179,7 @@ public class TcpConnection extends Connection {
 			try {
 				packetLen = netReader.readInt();
 				packetMagic = netReader.readInt();
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				throw new IOException("Connection lost while reading packet header.", ex);
 			}
 
@@ -196,7 +198,7 @@ public class TcpConnection extends Connection {
 			if (NetFilter != null) {
 				packData = NetFilter.processIncoming(packData);
 			}
-		} catch ( IOException ex ) {
+		} catch (final IOException ex) {
 			DebugLog.writeLine("TcpConnection", "Socket exception occurred while reading packet: %s", ex);
 
 			// signal that our connection is dead
@@ -204,7 +206,7 @@ public class TcpConnection extends Connection {
 
 			cleanup();
 
-			onDisconnected( EventArgs.Empty );
+			onDisconnected(EventArgs.Empty);
 			return;
 		}
 
@@ -240,7 +242,8 @@ public class TcpConnection extends Connection {
 					sock.shutdownOutput();
 				}
 				sock.close();
-			} catch (IOException e) {};
+			} catch (final IOException e) {
+			};
 
 			sock = null;
 		}

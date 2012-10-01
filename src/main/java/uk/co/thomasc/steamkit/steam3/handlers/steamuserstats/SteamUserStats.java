@@ -1,6 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamuserstats;
 
-
 import uk.co.thomasc.steamkit.base.ClientMsg;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientGetNumberOfCurrentPlayers;
@@ -22,7 +21,7 @@ public final class SteamUserStats extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID getNumberOfCurrentPlayers(GameID gameId) {
-		ClientMsg<MsgClientGetNumberOfCurrentPlayers> msg = new ClientMsg<MsgClientGetNumberOfCurrentPlayers>(MsgClientGetNumberOfCurrentPlayers.class);
+		final ClientMsg<MsgClientGetNumberOfCurrentPlayers> msg = new ClientMsg<MsgClientGetNumberOfCurrentPlayers>(MsgClientGetNumberOfCurrentPlayers.class);
 		msg.setSourceJobID(getClient().getNextJobID());
 
 		msg.getBody().setGameId(gameId);
@@ -45,10 +44,10 @@ public final class SteamUserStats extends ClientMsgHandler {
 	}
 
 	void handleNumberOfPlayersResponse(IPacketMsg packetMsg) {
-		ClientMsg<MsgClientGetNumberOfCurrentPlayersResponse> msg = new ClientMsg<MsgClientGetNumberOfCurrentPlayersResponse>(packetMsg, MsgClientGetNumberOfCurrentPlayersResponse.class);
+		final ClientMsg<MsgClientGetNumberOfCurrentPlayersResponse> msg = new ClientMsg<MsgClientGetNumberOfCurrentPlayersResponse>(packetMsg, MsgClientGetNumberOfCurrentPlayersResponse.class);
 
-		NumberOfPlayersCallback innerCallback = new NumberOfPlayersCallback(msg.getBody());
-		JobCallback<?> callback = new JobCallback<NumberOfPlayersCallback>(new JobID(msg.getHeader().targetJobID), innerCallback);
-		getClient().postCallback( callback );
+		final NumberOfPlayersCallback innerCallback = new NumberOfPlayersCallback(msg.getBody());
+		final JobCallback<?> callback = new JobCallback<NumberOfPlayersCallback>(new JobID(msg.getHeader().targetJobID), innerCallback);
+		getClient().postCallback(callback);
 	}
 }

@@ -24,7 +24,7 @@ public class AsnKeyParser {
 
 	public static byte[] trimLeadingZero(byte[] values) {
 		byte[] r;
-		if ((0x00 == values[0]) && (values.length > 1)) {
+		if (0x00 == values[0] && values.length > 1) {
 			r = new byte[values.length - 1];
 			System.arraycopy(values, 1, r, 0, values.length - 1);
 		} else {
@@ -50,7 +50,7 @@ public class AsnKeyParser {
 	}
 
 	public BigInteger[] parseRSAPublicKey() throws BerDecodeException {
-		BigInteger[] parameters = new BigInteger[2];
+		final BigInteger[] parameters = new BigInteger[2];
 
 		// Current value
 
@@ -62,7 +62,7 @@ public class AsnKeyParser {
 		// Ignore Sequence - PublicKeyInfo
 		int length = _parser.nextSequence();
 		if (length != _parser.remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Sequence Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Sequence Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, _parser.remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -73,7 +73,7 @@ public class AsnKeyParser {
 		// Ignore Sequence - AlgorithmIdentifier
 		length = _parser.nextSequence();
 		if (length > _parser.remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect AlgorithmIdentifier Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect AlgorithmIdentifier Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, _parser.remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -81,9 +81,9 @@ public class AsnKeyParser {
 		// Checkpoint
 		position = _parser.currentPosition();
 		// Grab the OID
-		byte[] value = _parser.nextOID();
-		byte[] oid = { (byte) 0x2a, (byte) 0x86, (byte) 0x48, (byte) 0x86, (byte) 0xf7, (byte) 0x0d, (byte) 0x01, (byte) 0x01, (byte) 0x01 };
-		if (!equalOid(value, oid)) {
+		final byte[] value = _parser.nextOID();
+		final byte[] oid = { (byte) 0x2a, (byte) 0x86, (byte) 0x48, (byte) 0x86, (byte) 0xf7, (byte) 0x0d, (byte) 0x01, (byte) 0x01, (byte) 0x01 };
+		if (!AsnKeyParser.equalOid(value, oid)) {
 			throw new BerDecodeException("Expected OID 1.2.840.113549.1.1.1", position);
 		}
 
@@ -102,7 +102,7 @@ public class AsnKeyParser {
 		// Ignore BitString - PublicKey
 		length = _parser.NextBitString();
 		if (length > _parser.remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect PublicKey Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect PublicKey Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, _parser.remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -113,13 +113,13 @@ public class AsnKeyParser {
 		// Ignore Sequence - RSAPublicKey
 		length = _parser.nextSequence();
 		if (length < _parser.remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect RSAPublicKey Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect RSAPublicKey Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, _parser.remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
-		
-		parameters[0] = new BigInteger(1, trimLeadingZero(_parser.nextInteger()));
-		parameters[1] = new BigInteger(1, trimLeadingZero(_parser.nextInteger()));
+
+		parameters[0] = new BigInteger(1, AsnKeyParser.trimLeadingZero(_parser.nextInteger()));
+		parameters[1] = new BigInteger(1, AsnKeyParser.trimLeadingZero(_parser.nextInteger()));
 
 		Debug.Assert(0 == _parser.remainingBytes());
 

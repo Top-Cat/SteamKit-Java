@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg;
 
 import java.io.IOException;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
 import uk.co.thomasc.steamkit.types.gameid.GameID;
@@ -18,17 +17,17 @@ public class MsgClientGetNumberOfCurrentPlayers implements ISteamSerializableMes
 
 	// Static size: 8
 	private long gameID = 0;
-	
+
 	public GameID getGameId() {
 		return new GameID(gameID);
 	}
-	
+
 	public void setGameId(GameID GameID) {
 		gameID = GameID.toLong();
 	}
 
 	public MsgClientGetNumberOfCurrentPlayers() {
-		
+
 	}
 
 	@Override

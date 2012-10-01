@@ -1,6 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.types;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EFriendRelationship;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EPersonaState;
 import uk.co.thomasc.steamkit.types.gameid.GameID;

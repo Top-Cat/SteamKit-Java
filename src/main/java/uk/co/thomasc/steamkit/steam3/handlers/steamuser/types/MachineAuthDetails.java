@@ -1,6 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamuser.types;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.UpdateMachineAuthCallback;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.JobCallback;
@@ -59,6 +58,6 @@ public final class MachineAuthDetails {
 	 * Initializes a new instance of the {@link MachineAuthDetails} class.
 	 */
 	public MachineAuthDetails() {
-		
+
 	}
 }

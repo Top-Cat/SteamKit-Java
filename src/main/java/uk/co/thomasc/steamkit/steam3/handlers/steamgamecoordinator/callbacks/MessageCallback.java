@@ -2,11 +2,10 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator.callbacks;
 
 import lombok.Getter;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgGCClient;
-
 import uk.co.thomasc.steamkit.base.PacketClientGCMsg;
 import uk.co.thomasc.steamkit.base.PacketClientGCMsgProtobuf;
 import uk.co.thomasc.steamkit.base.gc.IPacketGCMsg;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgGCClient;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 import uk.co.thomasc.steamkit.util.util.MsgUtil;
 
@@ -17,7 +16,7 @@ public class MessageCallback extends CallbackMsg {
 	/**
 	 * raw emsg (with protobuf flag, if present)
 	 */
-	private int eMsg;
+	private final int eMsg;
 
 	/**
 	 * Gets the game coordinator message type.
@@ -29,7 +28,7 @@ public class MessageCallback extends CallbackMsg {
 	/**
 	 * Gets the AppID of the game coordinator the message is from.
 	 */
-	@Getter private int appID;
+	@Getter private final int appID;
 
 	/**
 	 * Gets a value indicating whether this message is protobuf'd.
@@ -42,22 +41,21 @@ public class MessageCallback extends CallbackMsg {
 	/**
 	 * Gets the actual message.
 	 */
-	@Getter private IPacketGCMsg message;
+	@Getter private final IPacketGCMsg message;
 
 	public MessageCallback(CMsgGCClient gcMsg) {
-		this.eMsg = gcMsg.getMsgtype();
-		this.appID = gcMsg.getAppid();
+		eMsg = gcMsg.getMsgtype();
+		appID = gcMsg.getAppid();
 
 		// we are knowingly using this obsolete property
 		//this.Payload = gcMsg.payload;
 
-		this.message = getPacketGCMsg(gcMsg.getMsgtype(), gcMsg.getPayload().toByteArray());
+		message = MessageCallback.getPacketGCMsg(gcMsg.getMsgtype(), gcMsg.getPayload().toByteArray());
 	}
-
 
 	static IPacketGCMsg getPacketGCMsg(int eMsg, byte[] data) {
 		// strip off the protobuf flag
-		int realEMsg = MsgUtil.getGCMsg(eMsg);
+		final int realEMsg = MsgUtil.getGCMsg(eMsg);
 
 		if (MsgUtil.isProtoBuf(eMsg)) {
 			return new PacketClientGCMsgProtobuf(realEMsg, data);

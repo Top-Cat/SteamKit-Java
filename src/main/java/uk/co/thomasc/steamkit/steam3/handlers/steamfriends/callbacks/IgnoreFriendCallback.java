@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientSetIgnoreFriendResponse;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -14,9 +13,9 @@ public final class IgnoreFriendCallback extends CallbackMsg {
 	/**
 	 * Gets the result of ignoring a friend.
 	 */
-	@Getter private EResult result;
+	@Getter private final EResult result;
 
 	public IgnoreFriendCallback(MsgClientSetIgnoreFriendResponse response) {
-		this.result = response.result;
+		result = response.result;
 	}
 }

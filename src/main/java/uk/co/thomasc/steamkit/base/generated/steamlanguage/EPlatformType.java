@@ -7,15 +7,14 @@ public enum EPlatformType {
 	Linux(3),
 	OSX(4),
 	PS3(5),
-	Max(6),
-	;
-	
+	Max(6), ;
+
 	private int code;
-	
+
 	private EPlatformType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

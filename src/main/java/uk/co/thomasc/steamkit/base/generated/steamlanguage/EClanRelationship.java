@@ -7,28 +7,27 @@ public enum EClanRelationship {
 	Blocked(1),
 	Invited(2),
 	Member(3),
-	Kicked(4),
-	;
-	
+	Kicked(4), ;
+
 	private int code;
-	
+
 	private EClanRelationship(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EClanRelationship> values = new HashMap<Integer, EClanRelationship>();
 
 	static {
-		for (EClanRelationship type : values()) {
-			values.put(type.v(), type);
+		for (final EClanRelationship type : EClanRelationship.values()) {
+			EClanRelationship.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EClanRelationship f(int code) {
-		return values.get(code);
+		return EClanRelationship.values.get(code);
 	}
 }

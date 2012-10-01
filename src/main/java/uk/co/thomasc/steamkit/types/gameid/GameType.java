@@ -21,28 +21,27 @@ public enum GameType {
 	/**
 	 * A peer-to-peer file.
 	 */
-	P2P(3),
-	;
-	
+	P2P(3), ;
+
 	private int code;
-	
+
 	private GameType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, GameType> values = new HashMap<Integer, GameType>();
 
 	static {
-		for (GameType type : values()) {
-			values.put(type.v(), type);
+		for (final GameType type : GameType.values()) {
+			GameType.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static GameType fromCode(int code) {
-		return values.get(code);
+		return GameType.values.get(code);
 	}
 }

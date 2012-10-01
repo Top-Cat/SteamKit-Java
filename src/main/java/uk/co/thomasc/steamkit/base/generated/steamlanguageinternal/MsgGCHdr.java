@@ -6,10 +6,10 @@ import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 public class MsgGCHdr implements IGCSerializableHeader {
-	
+
 	@Override
 	public void setEMsg(int msg) {
-		
+
 	}
 
 	// Static size: 2
@@ -20,7 +20,7 @@ public class MsgGCHdr implements IGCSerializableHeader {
 	public long sourceJobID = BinaryReader.LongMaxValue;
 
 	public MsgGCHdr() {
-		
+
 	}
 
 	@Override

@@ -2,13 +2,12 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal;
 
 import java.io.IOException;
 
+import lombok.Setter;
 
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.types.steamid.SteamID;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
-
-import lombok.Setter;
 
 public class ExtendedClientMsgHdr implements ISteamSerializableHeader {
 	// Static size: 4
@@ -25,19 +24,20 @@ public class ExtendedClientMsgHdr implements ISteamSerializableHeader {
 	public byte headerCanary = (byte) 239;
 	// Static size: 8
 	private long steamID = 0;
-	
+
 	public SteamID getSteamID() {
 		return new SteamID(steamID);
 	}
-	
+
 	public void setSteamID(SteamID steamID) {
 		this.steamID = steamID.convertToUInt64();
 	}
+
 	// Static size: 4
 	public int sessionID = 0;
 
 	public ExtendedClientMsgHdr() {
-		
+
 	}
 
 	@Override

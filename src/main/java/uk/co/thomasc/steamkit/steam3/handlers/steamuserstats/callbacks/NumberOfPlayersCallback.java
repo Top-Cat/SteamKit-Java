@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamuserstats.callbacks;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientGetNumberOfCurrentPlayersResponse;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuserstats.SteamUserStats;
@@ -16,15 +15,15 @@ public class NumberOfPlayersCallback extends CallbackMsg {
 	/**
 	 * Gets the result of the request.
 	 */
-	@Getter private EResult result;
+	@Getter private final EResult result;
 
 	/**
 	 * Gets the current number of players according to Steam.
 	 */
-	@Getter private int numPlayers;
+	@Getter private final int numPlayers;
 
 	public NumberOfPlayersCallback(MsgClientGetNumberOfCurrentPlayersResponse resp) {
-		this.result = resp.result;
-		this.numPlayers = resp.numPlayers;
+		result = resp.result;
+		numPlayers = resp.numPlayers;
 	}
 }

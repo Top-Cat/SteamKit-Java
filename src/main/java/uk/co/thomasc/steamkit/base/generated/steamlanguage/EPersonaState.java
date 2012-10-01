@@ -7,28 +7,27 @@ public enum EPersonaState {
 	Online(1),
 	Busy(2),
 	Away(3),
-	Snooze(4),
-	;
-	
+	Snooze(4), ;
+
 	private int code;
-	
+
 	private EPersonaState(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EPersonaState> values = new HashMap<Integer, EPersonaState>();
 
 	static {
-		for (EPersonaState type : values()) {
-			values.put(type.v(), type);
+		for (final EPersonaState type : EPersonaState.values()) {
+			EPersonaState.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EPersonaState f(int code) {
-		return values.get(code);
+		return EPersonaState.values.get(code);
 	}
 }

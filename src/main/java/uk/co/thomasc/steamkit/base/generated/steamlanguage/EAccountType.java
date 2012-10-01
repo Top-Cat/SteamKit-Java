@@ -14,15 +14,14 @@ public enum EAccountType {
 	Chat(8),
 	ConsoleUser(9),
 	AnonUser(10),
-	Max(11),
-	;
-	
+	Max(11), ;
+
 	private int code;
-	
+
 	private EAccountType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
@@ -30,12 +29,12 @@ public enum EAccountType {
 	private static HashMap<Integer, EAccountType> values = new HashMap<Integer, EAccountType>();
 
 	static {
-		for (EAccountType type : values()) {
-			values.put(type.v(), type);
+		for (final EAccountType type : EAccountType.values()) {
+			EAccountType.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EAccountType fromCode(int code) {
-		return values.get(code);
+		return EAccountType.values.get(code);
 	}
 }

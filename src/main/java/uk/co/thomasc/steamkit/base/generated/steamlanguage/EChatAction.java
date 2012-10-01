@@ -18,15 +18,14 @@ public enum EChatAction {
 	SetInvisibleToFriends(13),
 	SetVisibleToFriends(14),
 	SetModerated(15),
-	SetUnmoderated(16),
-	;
-	
+	SetUnmoderated(16), ;
+
 	private int code;
-	
+
 	private EChatAction(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
@@ -34,12 +33,12 @@ public enum EChatAction {
 	private static HashMap<Integer, EChatAction> values = new HashMap<Integer, EChatAction>();
 
 	static {
-		for (EChatAction type : values()) {
-			values.put(type.v(), type);
+		for (final EChatAction type : EChatAction.values()) {
+			EChatAction.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EChatAction f(int code) {
-		return values.get(code);
+		return EChatAction.values.get(code);
 	}
 }

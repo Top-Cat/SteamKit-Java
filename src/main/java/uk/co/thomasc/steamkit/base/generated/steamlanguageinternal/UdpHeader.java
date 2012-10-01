@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal;
 
 import java.io.IOException;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EUdpPacketType;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
@@ -33,9 +32,10 @@ public class UdpHeader implements ISteamSerializable {
 	public int msgSize = 0;
 
 	public UdpHeader() {
-		
+
 	}
 
+	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
 		stream.write(magic);
 		stream.write(payloadSize);
@@ -50,6 +50,7 @@ public class UdpHeader implements ISteamSerializable {
 		stream.write(msgSize);
 	}
 
+	@Override
 	public void deSerialize(BinaryReader stream) throws IOException {
 		magic = stream.readInt();
 		payloadSize = stream.readShort();

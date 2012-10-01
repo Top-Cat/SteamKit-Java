@@ -52,15 +52,14 @@ public enum EServerType {
 	RM(46),
 	FS(47),
 	Econ(48),
-	Backpack(49),
-	;
-	
+	Backpack(49), ;
+
 	private int code;
-	
+
 	private EServerType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
@@ -68,12 +67,12 @@ public enum EServerType {
 	private static HashMap<Integer, EServerType> values = new HashMap<Integer, EServerType>();
 
 	static {
-		for (EServerType type : values()) {
-			values.put(type.v(), type);
+		for (final EServerType type : EServerType.values()) {
+			EServerType.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EServerType f(int code) {
-		return values.get(code);
+		return EServerType.values.get(code);
 	}
 }

@@ -1,6 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamworkshop.types;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EWorkshopFileAction;
 import uk.co.thomasc.steamkit.steam3.handlers.steamworkshop.SteamWorkshop;
 

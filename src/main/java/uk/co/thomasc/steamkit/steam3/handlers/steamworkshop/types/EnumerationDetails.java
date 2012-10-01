@@ -39,17 +39,17 @@ public final class EnumerationDetails {
 	/**
 	 * Gets the list of tags to enumerate.
 	 */
-	@Getter private List<String> tags = new ArrayList<String>();
+	@Getter private final List<String> tags = new ArrayList<String>();
 
 	/**
 	 * Gets the list of user tags to enumerate.
 	 */
-	@Getter private List<String> userTags = new ArrayList<String>();
+	@Getter private final List<String> userTags = new ArrayList<String>();
 
 	/**
 	 * Initializes a new instance of the {@link EnumerationDetails} class.
 	 */
 	public EnumerationDetails() {
-		
+
 	}
 }

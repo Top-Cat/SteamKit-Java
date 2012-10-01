@@ -1,26 +1,25 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.types;
 
-import uk.co.thomasc.steamkit.types.steamid.SteamID;
-
 import lombok.Getter;
 
-public class AccountCache {
-	@Getter private User LocalUser;
+import uk.co.thomasc.steamkit.types.steamid.SteamID;
 
-	@Getter private AccountList<User> Users;
-	@Getter private AccountList<Clan> Clans;
+public class AccountCache {
+	@Getter private final User LocalUser;
+
+	@Getter private final AccountList<User> Users;
+	@Getter private final AccountList<Clan> Clans;
 
 	public AccountCache() {
 		LocalUser = new User();
-		LocalUser.name = "[unassigned]"; 
+		LocalUser.name = "[unassigned]";
 
 		Users = new AccountList<User>(User.class);
 		Clans = new AccountList<Clan>(Clan.class);
 	}
 
-
 	public User getUser(SteamID steamId) {
-		if (isLocalUser( steamId )) {
+		if (isLocalUser(steamId)) {
 			return LocalUser;
 		} else {
 			return Users.getAccount(steamId);

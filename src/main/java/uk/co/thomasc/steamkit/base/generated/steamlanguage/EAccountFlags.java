@@ -24,28 +24,27 @@ public enum EAccountFlags {
 	ForcePasswordChange(131072),
 	ForceEmailVerification(262144),
 	LogonExtraSecurity(524288),
-	LogonExtraSecurityDisabled(1048576),
-	;
-	
+	LogonExtraSecurityDisabled(1048576), ;
+
 	private int code;
-	
+
 	private EAccountFlags(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EAccountFlags> values = new HashMap<Integer, EAccountFlags>();
 
 	static {
-		for (EAccountFlags type : values()) {
-			values.put(type.v(), type);
+		for (final EAccountFlags type : EAccountFlags.values()) {
+			EAccountFlags.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EAccountFlags f(int code) {
-		return values.get(code);
+		return EAccountFlags.values.get(code);
 	}
 }

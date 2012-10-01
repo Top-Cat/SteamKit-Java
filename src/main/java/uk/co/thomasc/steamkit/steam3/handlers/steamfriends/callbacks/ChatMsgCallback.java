@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatEntryType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientChatMsg;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -17,17 +16,17 @@ public final class ChatMsgCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID of the chatter.
 	 */
-	@Getter private SteamID chatterID;
+	@Getter private final SteamID chatterID;
 
 	/**
 	 * Gets the SteamID of the chat room.
 	 */
-	@Getter private SteamID chatRoomID;
+	@Getter private final SteamID chatRoomID;
 
 	/**
 	 * Gets chat entry type.
 	 */
-	@Getter private EChatEntryType chatMsgType;
+	@Getter private final EChatEntryType chatMsgType;
 
 	/**
 	 * Gets the message.

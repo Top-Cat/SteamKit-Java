@@ -1,10 +1,9 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steammasterserver;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientGMSServerQuery;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgGMSClientServerQueryResponse;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientGMSServerQuery;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgGMSClientServerQueryResponse;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.steam3.handlers.ClientMsgHandler;
 import uk.co.thomasc.steamkit.steam3.handlers.steammasterserver.callbacks.QueryCallback;
@@ -24,7 +23,7 @@ public final class SteamMasterServer extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID serverQuery(QueryDetails details) {
-		ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder> query = new ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder>(EMsg.ClientGMSServerQuery, CMsgClientGMSServerQuery.class);
+		final ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder> query = new ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder>(EMsg.ClientGMSServerQuery, CMsgClientGMSServerQuery.class);
 		query.setSourceJobID(getClient().getNextJobID());
 
 		query.getBody().setAppId(details.appID);
@@ -46,6 +45,7 @@ public final class SteamMasterServer extends ClientMsgHandler {
 	/**
 	 * Handles a client message. This should not be called directly.
 	 */
+	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
 			case GMSClientServerQueryResponse:
@@ -55,10 +55,10 @@ public final class SteamMasterServer extends ClientMsgHandler {
 	}
 
 	void handleServerQueryResponse(IPacketMsg packetMsg) {
-		ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder> queryResponse = new ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder>(packetMsg, CMsgGMSClientServerQueryResponse.class);
+		final ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder> queryResponse = new ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder>(packetMsg, CMsgGMSClientServerQueryResponse.class);
 
-		QueryCallback innerCallback = new QueryCallback(queryResponse.getBody().build());
-		JobCallback<?> callback = new JobCallback<QueryCallback>(queryResponse.getTargetJobID(), innerCallback);
+		final QueryCallback innerCallback = new QueryCallback(queryResponse.getBody().build());
+		final JobCallback<?> callback = new JobCallback<QueryCallback>(queryResponse.getTargetJobID(), innerCallback);
 		getClient().postCallback(callback);
 	}
 

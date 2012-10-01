@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.management.openmbean.InvalidOpenTypeException;
 
-
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.Msg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
@@ -46,11 +45,10 @@ public final class SteamClient extends CMClient {
 	Object callbackLock = new Object();
 	Queue<CallbackMsg> callbackQueue;
 
-
 	public SteamClient() {
 		this(ProtocolType.Tcp);
 	}
-	
+
 	/**
 	 * Initializes a new instance of the {@link SteamClient} class with a specific connection type.
 	 * @param type	The connection type to use.
@@ -58,21 +56,21 @@ public final class SteamClient extends CMClient {
 	public SteamClient(ProtocolType type) {
 		super(type);
 		callbackQueue = new LinkedList<CallbackMsg>();
-		this.handlers = new HashMap<Class<? extends ClientMsgHandler>, ClientMsgHandler>();
+		handlers = new HashMap<Class<? extends ClientMsgHandler>, ClientMsgHandler>();
 
 		// add this library's handlers
-		this.addHandler(new SteamUser());
-		this.addHandler(new SteamFriends());
-		this.addHandler(new SteamApps());
-		this.addHandler(new SteamGameCoordinator());
-		this.addHandler(new SteamGameServer());
-		this.addHandler(new SteamUserStats());
-		this.addHandler(new SteamMasterServer());
-		this.addHandler(new SteamCloud());
-		this.addHandler(new SteamWorkshop());
-		this.addHandler(new SteamTrading());
+		addHandler(new SteamUser());
+		addHandler(new SteamFriends());
+		addHandler(new SteamApps());
+		addHandler(new SteamGameCoordinator());
+		addHandler(new SteamGameServer());
+		addHandler(new SteamUserStats());
+		addHandler(new SteamMasterServer());
+		addHandler(new SteamCloud());
+		addHandler(new SteamWorkshop());
+		addHandler(new SteamTrading());
 	}
-	
+
 	/**
 	 * Adds a new handler to the internal list of message handlers.
 	 * @param handler	The handler to add.
@@ -82,11 +80,11 @@ public final class SteamClient extends CMClient {
 		if (handlers.containsKey(handler.getClass())) {
 			throw new IllegalArgumentException(String.format("A handler of type \"%s\" is already registered.", handler.getClass()));
 		}
-	
+
 		handlers.put(handler.getClass(), handler);
 		handler.setup(this);
 	}
-	
+
 	/**
 	 * Removes a registered handler by name.
 	 * @param handler	The handler name to remove.
@@ -95,7 +93,7 @@ public final class SteamClient extends CMClient {
 		if (!handlers.containsKey(handler.getClass())) {
 			return;
 		}
-	
+
 		handlers.remove(handler.getClass());
 	}
 
@@ -106,7 +104,7 @@ public final class SteamClient extends CMClient {
 	public void removeHandler(ClientMsgHandler handler) {
 		removeHandler(handler.getClass());
 	}
-	
+
 	/**
 	 * Returns a registered handler.
 	 * T - The type of the handler to cast to. Must derive from ClientMsgHandler.
@@ -117,7 +115,7 @@ public final class SteamClient extends CMClient {
 		if (handlers.containsKey(type)) {
 			return (T) handlers.get(type);
 		}
-	
+
 		return null;
 	}
 
@@ -138,7 +136,7 @@ public final class SteamClient extends CMClient {
 	public CallbackMsg getCallback(boolean freeLast) {
 		synchronized (callbackLock) {
 			if (callbackQueue.size() > 0) {
-				return (freeLast ? callbackQueue.poll() : callbackQueue.peek());
+				return freeLast ? callbackQueue.poll() : callbackQueue.peek();
 			}
 		}
 
@@ -165,7 +163,7 @@ public final class SteamClient extends CMClient {
 			if (callbackQueue.size() == 0) {
 				try {
 					callbackLock.wait(timeout);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 				if (callbackQueue.size() == 0) {
@@ -187,12 +185,12 @@ public final class SteamClient extends CMClient {
 			if (callbackQueue.size() == 0) {
 				try {
 					callbackLock.wait();
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 
-			return (freeLast ? callbackQueue.poll() : callbackQueue.peek());
+			return freeLast ? callbackQueue.poll() : callbackQueue.peek();
 		}
 	}
 
@@ -207,7 +205,7 @@ public final class SteamClient extends CMClient {
 			if (callbackQueue.size() == 0) {
 				try {
 					callbackLock.wait(timeout);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 				if (callbackQueue.size() == 0) {
@@ -215,7 +213,7 @@ public final class SteamClient extends CMClient {
 				}
 			}
 
-			return (freeLast ? callbackQueue.poll() : callbackQueue.peek());
+			return freeLast ? callbackQueue.poll() : callbackQueue.peek();
 		}
 	}
 
@@ -265,13 +263,13 @@ public final class SteamClient extends CMClient {
 	protected void onClientMsgReceived(IPacketMsg packetMsg) throws IOException {
 		// let the underlying CMClient handle this message first
 		super.onClientMsgReceived(packetMsg);
-	
+
 		if (packetMsg.getMsgType() == EMsg.ChannelEncryptResult) {
 			handleEncryptResult(packetMsg); // we're interested in this client message to post the connected callback
 		}
-		
+
 		// pass along the clientmsg to all registered handlers
-		Iterator<ClientMsgHandler> it = handlers.values().iterator();
+		final Iterator<ClientMsgHandler> it = handlers.values().iterator();
 		while (it.hasNext()) {
 			it.next().handleMsg(packetMsg);
 		}
@@ -294,7 +292,7 @@ public final class SteamClient extends CMClient {
 	}
 
 	void handleEncryptResult(IPacketMsg packetMsg) { // Not an override, I know :S
-		Msg<MsgChannelEncryptResult> encResult = new Msg<MsgChannelEncryptResult>(packetMsg, MsgChannelEncryptResult.class);
+		final Msg<MsgChannelEncryptResult> encResult = new Msg<MsgChannelEncryptResult>(packetMsg, MsgChannelEncryptResult.class);
 
 		postCallback(new ConnectedCallback(encResult.getBody()));
 	}

@@ -19,7 +19,7 @@ public abstract class BaseJobCallback extends CallbackMsg {
 	 * Gets the type of the callback.
 	 */
 	@Getter protected Class<?> callbackType;
-	
+
 	public BaseJobCallback(long jobId) {
 		this.jobId = new JobID(jobId);
 	}

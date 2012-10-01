@@ -1271,28 +1271,27 @@ public enum EMsg {
 	CREGetUserPublishedItemVoteDetails(8509),
 	CREGetUserPublishedItemVoteDetailsResponse(8510),
 	CREEnumeratePublishedFiles(8511),
-	CREEnumeratePublishedFilesResponse(8512),
-	;
-	
+	CREEnumeratePublishedFilesResponse(8512), ;
+
 	private int code;
-	
+
 	private EMsg(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EMsg> values = new HashMap<Integer, EMsg>();
 
 	static {
-		for (EMsg type : values()) {
-			values.put(type.v(), type);
+		for (final EMsg type : EMsg.values()) {
+			EMsg.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EMsg f(int code) {
-		return values.get(code);
+		return EMsg.values.get(code);
 	}
 }

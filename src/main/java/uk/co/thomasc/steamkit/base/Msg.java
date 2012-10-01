@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 import lombok.Getter;
 
-
-import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdr;
@@ -40,7 +38,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	public int getSessionID() {
 		return sessionID;
 	}
-	
+
 	/**
 	 * Sets the session id for this client message.
 	 */
@@ -56,7 +54,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	public SteamID getSteamID() {
 		return steamID;
 	}
-	
+
 	/**
 	 * Sets the {@link SteamID} for this client message.
 	 */
@@ -72,7 +70,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	public JobID getTargetJobID() {
 		return targetJobID;
 	}
-	
+
 	/**
 	 * Sets the target job id for this client message.
 	 */
@@ -88,7 +86,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	public JobID getSourceJobID() {
 		return sourceJobID;
 	}
-	
+
 	/**
 	 * Sets the target job id for this client message.
 	 */
@@ -96,7 +94,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	public void setSourceJobID(JobID jobID) {
 		sourceJobID = jobID;
 	}
-	
+
 	/**
 	 * The structure body of the message.
 	 */
@@ -105,7 +103,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	public Msg(Class<T> clazz) {
 		this(clazz, 0);
 	}
-	
+
 	/**
 	 * Initializes a new instance of the {@link Msg} class.
 	 * This is a client send constructor.
@@ -113,12 +111,12 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	 */
 	public Msg(Class<T> clazz, int payloadReserve) {
 		super(MsgHdr.class, payloadReserve);
-		
+
 		try {
 			body = clazz.newInstance();
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 		}
 
@@ -147,7 +145,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 		this(clazz);
 		try {
 			deSerialize(msg.getData());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -158,8 +156,8 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	 */
 	@Override
 	public byte[] serialize() throws IOException {
-		BinaryWriter ms = new BinaryWriter();
-		
+		final BinaryWriter ms = new BinaryWriter();
+
 		getHeader().serialize(ms);
 		body.serialize(ms);
 		ms.write(getOutputStream().toByteArray());
@@ -173,13 +171,13 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	 */
 	@Override
 	public void deSerialize(byte[] data) throws IOException {
-		BinaryReader ms = new BinaryReader(data);
+		final BinaryReader ms = new BinaryReader(data);
 		getHeader().deSerialize(ms);
 		body.deSerialize(ms);
 
 		// the rest of the data is the payload
-		int payloadOffset =  ms.getPosition();
-		int payloadLen = ms.getRemaining();
+		final int payloadOffset = ms.getPosition();
+		final int payloadLen = ms.getRemaining();
 
 		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
 	}

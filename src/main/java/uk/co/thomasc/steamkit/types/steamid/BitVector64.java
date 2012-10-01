@@ -8,16 +8,16 @@ public class BitVector64 {
 
 	public BitVector64() {
 	}
-	
+
 	public BitVector64(long value) {
 		data = value;
 	}
 
 	public long getMask(short bitoffset, int valuemask) {
-		return (data >> bitoffset) & valuemask;
+		return data >> bitoffset & valuemask;
 	}
-	
+
 	public void setMask(short bitoffset, int valuemask, long value) {
-		data = (data & ~(valuemask << bitoffset)) | ((value & valuemask) << bitoffset);
+		data = data & ~(valuemask << bitoffset) | (value & valuemask) << bitoffset;
 	}
 }

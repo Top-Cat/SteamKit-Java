@@ -4,11 +4,10 @@ import java.io.IOException;
 
 import lombok.Getter;
 
+import com.google.protobuf.CodedInputStream;
 
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatMemberStateChange;
 import uk.co.thomasc.steamkit.types.steamid.SteamID;
-
-import com.google.protobuf.CodedInputStream;
 
 /**
  * Represents state change information.
@@ -30,13 +29,13 @@ public final class StateChangeDetails {
 	@Getter private SteamID chatterActedBy;
 
 	public StateChangeDetails(byte[] data) {
-		CodedInputStream is = CodedInputStream.newInstance(data);
+		final CodedInputStream is = CodedInputStream.newInstance(data);
 
 		try {
 			chatterActedOn = new SteamID(is.readInt64());
 			stateChange = EChatMemberStateChange.f(is.readInt32());
 			chatterActedBy = new SteamID(is.readInt64());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 

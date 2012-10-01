@@ -20,12 +20,14 @@ public interface IClientGCMsg {
 	 * The target job id.
 	 */
 	JobID getTargetJobID();
+
 	void setTargetJobID(JobID JobID);
 
 	/**
 	 * The source job id.
 	 */
 	JobID getSourceJobID();
+
 	void setSourceJobID(JobID JobID);
 
 	/**
@@ -33,7 +35,7 @@ public interface IClientGCMsg {
 	 * @return Data representing a client message.
 	 */
 	byte[] serialize();
-	
+
 	/**
 	 * Initializes this client message by deserializing the specified data.
 	 * @param data The data representing a client message.

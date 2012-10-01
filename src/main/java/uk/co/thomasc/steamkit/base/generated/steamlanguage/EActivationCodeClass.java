@@ -8,15 +8,14 @@ public enum EActivationCodeClass {
 	Steam2010Key(4),
 	Max(5),
 	Test(2147483647),
-	Invalid(4294967295L),
-	;
-	
+	Invalid(4294967295L), ;
+
 	private long code;
-	
+
 	private EActivationCodeClass(long code) {
 		this.code = code;
 	}
-	
+
 	public long v() {
 		return code;
 	}

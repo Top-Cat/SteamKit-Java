@@ -15,19 +15,19 @@ public class NetHelpers {
 	}*/
 
 	public static InetAddress getIPAddress(long ipAddr) {
-		ByteBuffer buff = ByteBuffer.allocate(4);
+		final ByteBuffer buff = ByteBuffer.allocate(4);
 		buff.putInt((int) ipAddr);
 
 		try {
 			return InetAddress.getByAddress(buff.array());
-		} catch (UnknownHostException e) {
+		} catch (final UnknownHostException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	public static long getIPAddress(InetAddress ipAddr) {
-		ByteBuffer buff = ByteBuffer.wrap(ipAddr.getAddress());
+		final ByteBuffer buff = ByteBuffer.wrap(ipAddr.getAddress());
 		return buff.getInt() & 0xFFFFFFFFL;
 	}
 

@@ -32,19 +32,19 @@ public class BinaryWriter {
 	}
 
 	public void write(short data) throws IOException {
-		ByteBuffer buffer = ByteBuffer.allocate(2);
+		final ByteBuffer buffer = ByteBuffer.allocate(2);
 		buffer.putShort(data);
 		writeR(buffer.array());
 	}
-	
+
 	public void write(int data) throws IOException {
-		ByteBuffer buffer = ByteBuffer.allocate(4);
+		final ByteBuffer buffer = ByteBuffer.allocate(4);
 		buffer.putInt(data);
 		writeR(buffer.array());
 	}
 
 	public void write(long data) throws IOException {
-		ByteBuffer buffer = ByteBuffer.allocate(8);
+		final ByteBuffer buffer = ByteBuffer.allocate(8);
 		buffer.putLong(data);
 		writeR(buffer.array());
 	}
@@ -57,16 +57,16 @@ public class BinaryWriter {
 	}
 
 	public void writeR(byte[] data) throws IOException {
-		for (int i=data.length-1;i>=0;--i) {
+		for (int i = data.length - 1; i >= 0; --i) {
 			write(data[i]);
 		}
 	}
-	
+
 	public void write(byte[] data) throws IOException {
 		writer.writeRawBytes(data);
 		try {
 			writer.flush();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -75,7 +75,7 @@ public class BinaryWriter {
 		writer.writeRawByte(data);
 		try {
 			writer.flush();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -87,7 +87,7 @@ public class BinaryWriter {
 	public void flush() {
 		try {
 			os.flush();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

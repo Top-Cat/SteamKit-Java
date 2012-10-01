@@ -1,10 +1,9 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamcloud;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUFSGetUGCDetails;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUFSGetUGCDetailsResponse;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUFSGetUGCDetails;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUFSGetUGCDetailsResponse;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.steam3.handlers.ClientMsgHandler;
 import uk.co.thomasc.steamkit.steam3.handlers.steamcloud.callbacks.UGCDetailsCallback;
@@ -22,7 +21,7 @@ public final class SteamCloud extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID requestUGCDetails(long ugcId) {
-		ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder>(EMsg.ClientUFSGetUGCDetails, CMsgClientUFSGetUGCDetails.class);
+		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder>(EMsg.ClientUFSGetUGCDetails, CMsgClientUFSGetUGCDetails.class);
 		request.setSourceJobID(getClient().getNextJobID());
 
 		request.getBody().setHcontent(ugcId);
@@ -45,10 +44,10 @@ public final class SteamCloud extends ClientMsgHandler {
 	}
 
 	void handleUGCDetailsResponse(IPacketMsg packetMsg) {
-		ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder> infoResponse = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder>(packetMsg, CMsgClientUFSGetUGCDetailsResponse.class);
+		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder> infoResponse = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder>(packetMsg, CMsgClientUFSGetUGCDetailsResponse.class);
 
-		UGCDetailsCallback innerCallback = new UGCDetailsCallback(infoResponse.getBody().build());
-		JobCallback<?> callback = new JobCallback<UGCDetailsCallback>(infoResponse.getTargetJobID(), innerCallback);
+		final UGCDetailsCallback innerCallback = new UGCDetailsCallback(infoResponse.getBody().build());
+		final JobCallback<?> callback = new JobCallback<UGCDetailsCallback>(infoResponse.getTargetJobID(), innerCallback);
 		getClient().postCallback(callback);
 	}
 

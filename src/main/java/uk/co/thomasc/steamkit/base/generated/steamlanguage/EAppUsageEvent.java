@@ -8,15 +8,14 @@ public enum EAppUsageEvent {
 	PreloadFinish(5),
 	MarketingMessageView(6),
 	InGameAdViewed(7),
-	GameLaunchFreeWeekend(8),
-	;
-	
+	GameLaunchFreeWeekend(8), ;
+
 	private int code;
-	
+
 	private EAppUsageEvent(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

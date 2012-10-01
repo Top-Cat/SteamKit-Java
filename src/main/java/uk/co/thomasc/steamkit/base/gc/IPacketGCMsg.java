@@ -23,12 +23,14 @@ public interface IPacketGCMsg {
 	 * The target job id.
 	 */
 	JobID getTargetJobID();
+
 	void setTargetJobID(JobID JobID);
-	
+
 	/**
 	 * The source job id.
 	 */
 	JobID getSourceJobID();
+
 	void setSourceJobID(JobID JobID);
 
 	/**

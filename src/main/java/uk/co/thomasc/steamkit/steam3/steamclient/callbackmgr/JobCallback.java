@@ -2,7 +2,6 @@ package uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr;
 
 import lombok.Getter;
 
-
 import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.util.logging.Debug;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -15,12 +14,12 @@ public final class JobCallback<T extends CallbackMsg> extends BaseJobCallback {
 	/**
 	 * Gets the inner callback message for this job.
 	 */
-	@Getter private T Callback;
+	@Getter private final T Callback;
 
 	public JobCallback(JobID jobId, T callback) {
 		super(jobId.getValue());
 		Debug.Assert(jobId.getValue() != BinaryReader.LongMaxValue, "JobCallback used for non job based callback!");
-		
+
 		callbackType = callback.getClass();
 		Callback = callback;
 	}

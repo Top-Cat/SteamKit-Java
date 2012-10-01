@@ -76,28 +76,27 @@ public enum EResult {
 	ExpiredLoginAuthCode(71),
 	IPLoginRestrictionFailed(72),
 	AccountLocked(73),
-	AccountLogonDeniedVerifiedEmailRequired(74),
-	;
-	
+	AccountLogonDeniedVerifiedEmailRequired(74), ;
+
 	private int code;
-	
+
 	private EResult(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EResult> values = new HashMap<Integer, EResult>();
 
 	static {
-		for (EResult type : values()) {
-			values.put(type.v(), type);
+		for (final EResult type : EResult.values()) {
+			EResult.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EResult f(int code) {
-		return values.get(code);
+		return EResult.values.get(code);
 	}
 }

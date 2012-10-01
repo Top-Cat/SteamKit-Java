@@ -13,28 +13,27 @@ public enum EClientPersonaStateFlag {
 	ClanInfo(128),
 	GameExtraInfo(256),
 	GameDataBlob(512),
-	ClanTag(1024),
-	;
-	
+	ClanTag(1024), ;
+
 	private int code;
-	
+
 	private EClientPersonaStateFlag(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EClientPersonaStateFlag> values = new HashMap<Integer, EClientPersonaStateFlag>();
 
 	static {
-		for (EClientPersonaStateFlag type : values()) {
-			values.put(type.v(), type);
+		for (final EClientPersonaStateFlag type : EClientPersonaStateFlag.values()) {
+			EClientPersonaStateFlag.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EClientPersonaStateFlag f(int code) {
-		return values.get(code);
+		return EClientPersonaStateFlag.values.get(code);
 	}
 }

@@ -19,28 +19,27 @@ public enum EAppInfoSection {
 	ItemsUNUSED(12),
 	Policies(13),
 	SysReqs(14),
-	Community(15),
-	;
-	
+	Community(15), ;
+
 	private int code;
-	
+
 	private EAppInfoSection(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EAppInfoSection> values = new HashMap<Integer, EAppInfoSection>();
 
 	static {
-		for (EAppInfoSection type : values()) {
-			values.put(type.v(), type);
+		for (final EAppInfoSection type : EAppInfoSection.values()) {
+			EAppInfoSection.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EAppInfoSection f(int code) {
-		return values.get(code);
+		return EAppInfoSection.values.get(code);
 	}
 }

@@ -10,15 +10,14 @@ public enum EBillingType {
 	Gift(6),
 	AutoGrant(7),
 	OEMTicket(8),
-	NumBillingTypes(9),
-	;
-	
+	NumBillingTypes(9), ;
+
 	private int code;
-	
+
 	private EBillingType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

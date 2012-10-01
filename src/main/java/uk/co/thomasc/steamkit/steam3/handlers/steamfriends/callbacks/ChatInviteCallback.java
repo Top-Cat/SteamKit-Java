@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientChatInvite;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatRoomType;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 import uk.co.thomasc.steamkit.types.gameid.GameID;
@@ -16,49 +15,49 @@ public final class ChatInviteCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID of the user who was invited to the chat.
 	 */
-	@Getter private SteamID invitedID;
+	@Getter private final SteamID invitedID;
 
 	/**
 	 * Gets the chat room SteamID.
 	 */
-	@Getter private SteamID chatRoomID;
+	@Getter private final SteamID chatRoomID;
 
 	/**
 	 * Gets the SteamID of the user who performed the invitation.
 	 */
-	@Getter private SteamID patronID;
+	@Getter private final SteamID patronID;
 
 	/**
 	 * Gets the chat room type.
 	 */
-	@Getter private EChatRoomType chatRoomType;
+	@Getter private final EChatRoomType chatRoomType;
 
 	/**
 	 * Gets the SteamID of the chat friend.
 	 */
-	@Getter private SteamID friendChatID;
+	@Getter private final SteamID friendChatID;
 
 	/**
 	 * Gets the name of the chat room.
 	 */
-	@Getter private String chatRoomName;
+	@Getter private final String chatRoomName;
 
 	/**
 	 * Gets the GameID associated with this chat room, if it's a game lobby.
 	 */
-	@Getter private GameID gameID;
+	@Getter private final GameID gameID;
 
 	public ChatInviteCallback(CMsgClientChatInvite invite) {
-		this.invitedID = new SteamID(invite.getSteamIdInvited());
-		this.chatRoomID = new SteamID(invite.getSteamIdChat());
+		invitedID = new SteamID(invite.getSteamIdInvited());
+		chatRoomID = new SteamID(invite.getSteamIdChat());
 
-		this.patronID = new SteamID(invite.getSteamIdPatron());
+		patronID = new SteamID(invite.getSteamIdPatron());
 
-		this.chatRoomType = EChatRoomType.f(invite.getChatroomType());
+		chatRoomType = EChatRoomType.f(invite.getChatroomType());
 
-		this.friendChatID = new SteamID(invite.getSteamIdFriendChat());
+		friendChatID = new SteamID(invite.getSteamIdFriendChat());
 
-		this.chatRoomName = invite.getChatName();
-		this.gameID = new GameID(invite.getGameId());
+		chatRoomName = invite.getChatName();
+		gameID = new GameID(invite.getGameId());
 	}
 }

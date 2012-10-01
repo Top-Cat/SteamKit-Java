@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLicenseList;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.types.License;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -18,17 +17,17 @@ public final class LicenseListCallback extends CallbackMsg {
 	/**
 	 * Gets the result of the message.
 	 */
-	@Getter private EResult result;
+	@Getter private final EResult result;
 
 	/**
 	 * Gets the license list.
 	 */
-	@Getter private List<License> licenseList = new ArrayList<License>();
+	@Getter private final List<License> licenseList = new ArrayList<License>();
 
 	public LicenseListCallback(CMsgClientLicenseList msg) {
-		this.result = EResult.f(msg.getEresult());
+		result = EResult.f(msg.getEresult());
 
-		for (CMsgClientLicenseList.License l : msg.getLicensesList()) {
+		for (final CMsgClientLicenseList.License l : msg.getLicensesList()) {
 			licenseList.add(new License(l));
 		}
 	}

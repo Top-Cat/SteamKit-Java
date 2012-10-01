@@ -2,13 +2,12 @@ package uk.co.thomasc.steamkit.base;
 
 import java.io.IOException;
 
+import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableHeader;
 import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.types.steamid.SteamID;
-
-import lombok.Getter;
 
 /**
  * This is the abstract base class for all available client messages.
@@ -20,7 +19,7 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	 * true if this instance is protobuf backed; otherwise, false.
 	 */
 	@Getter private boolean IsProto;
-	
+
 	/**
 	 * The network message type.
 	 */
@@ -30,7 +29,7 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	 * The session id.
 	 */
 	@Getter protected int sessionID;
-	
+
 	/**
 	 * The {@link SteamID}
 	 */
@@ -40,7 +39,7 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	 * The target job id.
 	 */
 	@Getter protected JobID targetJobID;
-	
+
 	/**
 	 * The source job id.
 	 */
@@ -54,7 +53,7 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	public MsgBase(Class<T> clazz) {
 		this(clazz, 0);
 	}
-	
+
 	/**
 	 * Initializes a new instance of the {@link MsgBase} class.
 	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
@@ -63,9 +62,9 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 		super(payloadReserve);
 		try {
 			header = clazz.newInstance();
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -74,6 +73,7 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	 * serializes this client message instance to a byte array.
 	 * @return Data representing a client message.
 	 */
+	@Override
 	public abstract byte[] serialize() throws IOException;
 
 	/**
@@ -81,6 +81,7 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	 * @param data	The data representing a client message.
 	 * @throws IOException 
 	 */
+	@Override
 	public abstract void deSerialize(byte[] data) throws IOException;
 
 }

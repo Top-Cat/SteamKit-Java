@@ -2,9 +2,9 @@ package uk.co.thomasc.steamkit.types.steam2ticket;
 
 import java.io.IOException;
 
-import uk.co.thomasc.steamkit.util.stream.BinaryReader;
-
 import lombok.Getter;
+
+import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 
 /**
  * Represents a single data entry within the ticket container.
@@ -25,11 +25,10 @@ public final class Entry {
 	 */
 	@Getter private byte[] data;
 
-
 	public void deSerialize(BinaryReader stream) throws IOException {
 		magic = stream.readShort();
 
-		int length = stream.readInt();
+		final int length = stream.readInt();
 		index = stream.readInt();
 
 		data = stream.readBytes(length);

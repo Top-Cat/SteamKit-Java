@@ -10,28 +10,27 @@ public enum ELicenseFlags {
 	Expired(0x08),
 	CancelledByUser(0x10),
 	CancelledByAdmin(0x20),
-	LowViolenceContent(0x40),
-	;
-	
+	LowViolenceContent(0x40), ;
+
 	private int code;
-	
+
 	private ELicenseFlags(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, ELicenseFlags> values = new HashMap<Integer, ELicenseFlags>();
 
 	static {
-		for (ELicenseFlags type : values()) {
-			values.put(type.v(), type);
+		for (final ELicenseFlags type : ELicenseFlags.values()) {
+			ELicenseFlags.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static ELicenseFlags f(int code) {
-		return values.get(code);
+		return ELicenseFlags.values.get(code);
 	}
 }

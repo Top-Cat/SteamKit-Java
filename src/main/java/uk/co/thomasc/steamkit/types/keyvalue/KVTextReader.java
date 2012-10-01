@@ -12,21 +12,21 @@ import uk.co.thomasc.steamkit.util.Passable;
 class KVTextReader extends BufferedReader {
 	static Map<Character, Character> escapedMapping = new HashMap<Character, Character>();
 	static {
-		escapedMapping.put('n', '\n');
-		escapedMapping.put('r', '\r');
-		escapedMapping.put('t', '\t');
+		KVTextReader.escapedMapping.put('n', '\n');
+		KVTextReader.escapedMapping.put('r', '\r');
+		KVTextReader.escapedMapping.put('t', '\t');
 		// TODO: any others?
 	}
-	
+
 	BufferedInputStream is;
 
 	public KVTextReader(KeyValue kv, BufferedInputStream input) throws IOException {
 		super(new InputStreamReader(input));
-		
+
 		is = input;
-		
-		Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
-		Passable<Boolean> wasConditional = new Passable<Boolean>(false);
+
+		final Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
+		final Passable<Boolean> wasConditional = new Passable<Boolean>(false);
 
 		KeyValue currentKey = kv;
 
@@ -62,13 +62,12 @@ class KVTextReader extends BufferedReader {
 			}
 
 			currentKey = null;
-		}
-		while (input.available() > 0);
+		} while (input.available() > 0);
 	}
-	
+
 	private char peek() throws IOException {
 		is.mark(1);
-		int i = read();
+		final int i = read();
 		is.reset();
 		return (char) i;
 	}
@@ -76,7 +75,7 @@ class KVTextReader extends BufferedReader {
 	private void eatWhiteSpace() throws IOException {
 		while (is.available() > 0) {
 			is.mark(1);
-			
+
 			if (!Character.isWhitespace((char) read())) {
 				is.reset();
 				break;
@@ -86,7 +85,7 @@ class KVTextReader extends BufferedReader {
 
 	private boolean eatCPPComment() throws IOException {
 		if (is.available() > 0) {
-			char next = peek();
+			final char next = peek();
 			if (next == '/') {
 				read();
 				if (next == '/') {
@@ -127,15 +126,15 @@ class KVTextReader extends BufferedReader {
 			// "
 			read();
 
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			while (is.available() > 0) {
 				if (peek() == '\\') {
 					read();
 
-					char escapedChar = (char) read();
+					final char escapedChar = (char) read();
 
-					if (escapedMapping.containsKey(escapedChar)) {
-						sb.append(escapedMapping.get(escapedChar));
+					if (KVTextReader.escapedMapping.containsKey(escapedChar)) {
+						sb.append(KVTextReader.escapedMapping.get(escapedChar));
 					} else {
 						sb.append(escapedChar);
 					}
@@ -158,14 +157,14 @@ class KVTextReader extends BufferedReader {
 
 		if (next == '{' || next == '}') {
 			read();
-			return ""+ next;
+			return "" + next;
 		}
 
 		boolean bConditionalStart = false;
-		int count = 0;
-		StringBuilder ret = new StringBuilder();
+		final int count = 0;
+		final StringBuilder ret = new StringBuilder();
 		while (is.available() > 0) {
-			next = (char) peek();
+			next = peek();
 
 			if (next == '"' || next == '{' || next == '}') {
 				break;
@@ -185,8 +184,8 @@ class KVTextReader extends BufferedReader {
 
 			if (count < 1023) {
 				ret.append(next);
-			} else {
-				throw new IOException("ReadToken overflow");
+				//} else { TODO: Work out why this was here :S
+				//	throw new IOException("ReadToken overflow");
 			}
 
 			read();

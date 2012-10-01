@@ -9,15 +9,14 @@ public enum ERegionCode {
 	Australia(0x05),
 	MiddleEast(0x06),
 	Africa(0x07),
-	World(0xFF),
-	;
-	
+	World(0xFF), ;
+
 	private byte code;
-	
+
 	private ERegionCode(int code) {
 		this.code = (byte) code;
 	}
-	
+
 	public byte v() {
 		return code;
 	}

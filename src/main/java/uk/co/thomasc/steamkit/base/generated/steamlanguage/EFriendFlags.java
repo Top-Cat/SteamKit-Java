@@ -11,15 +11,14 @@ public enum EFriendFlags {
 	RequestingInfo(256),
 	Ignored(512),
 	IgnoredFriend(1024),
-	FlagAll(65535),
-	;
-	
+	FlagAll(65535), ;
+
 	private int code;
-	
+
 	private EFriendFlags(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

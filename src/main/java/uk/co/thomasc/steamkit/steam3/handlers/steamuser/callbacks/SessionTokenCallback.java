@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientSessionToken;
-
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 
 /**
@@ -13,9 +12,9 @@ public final class SessionTokenCallback extends CallbackMsg {
 	/**
 	 * Gets the Steam3 session token used for authenticating to various other services.
 	 */
-	@Getter private long sessionToken;
+	@Getter private final long sessionToken;
 
 	public SessionTokenCallback(CMsgClientSessionToken msg) {
-		this.sessionToken = msg.getToken();
+		sessionToken = msg.getToken();
 	}
 }

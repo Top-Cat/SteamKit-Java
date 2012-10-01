@@ -12,11 +12,11 @@ public class Disconnect implements ISteamSerializable {
 
 	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
-		
+
 	}
 
 	@Override
 	public void deSerialize(BinaryReader stream) throws IOException {
-		
+
 	}
 }

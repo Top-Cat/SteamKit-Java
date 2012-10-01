@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.thomasc.steamkit.util.stream.BinaryReader;
-
 import lombok.Getter;
+
+import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 
 /**
  * Represents a Steam2 authentication ticket container used for downloading authenticated content from Steam2 servers.
@@ -28,25 +28,24 @@ public final class Steam2Ticket {
 	/**
 	 * Gets the {@link Entry entries} within this container.
 	 */
-	@Getter private List<Entry> entries = new ArrayList<Entry>();
-
+	@Getter private final List<Entry> entries = new ArrayList<Entry>();
 
 	public Steam2Ticket(byte[] blob) {
-		BinaryReader stream = new BinaryReader(blob);
+		final BinaryReader stream = new BinaryReader(blob);
 
 		try {
 			magic = stream.readShort();
-	
+
 			length = stream.readInt();
 			/*unknown1 = */stream.readInt();
-	
+
 			while (stream.getRemaining() > 0) {
-				Entry entry = new Entry();
+				final Entry entry = new Entry();
 				entry.deSerialize(stream);
-	
+
 				entries.add(entry);
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

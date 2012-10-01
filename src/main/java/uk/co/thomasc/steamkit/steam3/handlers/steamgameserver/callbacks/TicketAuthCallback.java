@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamgameserver.callbacks;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientTicketAuthComplete;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EAuthSessionResponse;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 import uk.co.thomasc.steamkit.types.gameid.GameID;
@@ -16,32 +15,32 @@ public final class TicketAuthCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID the ticket auth completed for.
 	 */
-	@Getter private SteamID steamID;
+	@Getter private final SteamID steamID;
 
 	/**
 	 * Gets the GameID the ticket was for.
 	 */
-	@Getter private GameID gameID;
+	@Getter private final GameID gameID;
 
 	/**
 	 * Gets the authentication state.
 	 */
-	@Getter private int state;
+	@Getter private final int state;
 
 	/**
 	 * Gets the auth session response.
 	 */
-	@Getter private EAuthSessionResponse authSessionResponse;
+	@Getter private final EAuthSessionResponse authSessionResponse;
 
 	/**
 	 * Gets the ticket CRC.
 	 */
-	@Getter private int ticketCRC;
+	@Getter private final int ticketCRC;
 
 	/**
 	 * Gets the ticket sequence.
 	 */
-	@Getter private int ticketSequence;
+	@Getter private final int ticketSequence;
 
 	public TicketAuthCallback(CMsgClientTicketAuthComplete tickAuth) {
 		steamID = new SteamID(tickAuth.getSteamId());

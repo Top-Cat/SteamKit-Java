@@ -4,9 +4,8 @@ import java.util.List;
 
 import lombok.Getter;
 
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUCMEnumerateUserPublishedFilesResponse.PublishedFileId;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUCMEnumerateUserPublishedFilesResponse;
-
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUCMEnumerateUserPublishedFilesResponse.PublishedFileId;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.steam3.handlers.steamworkshop.SteamWorkshop;
 import uk.co.thomasc.steamkit.steam3.handlers.steamworkshop.types.EnumerationUserDetails;
@@ -20,7 +19,7 @@ public final class UserPublishedFilesCallback extends CallbackMsg {
 	/**
 	 * Gets the result.
 	 */
-	@Getter private EResult result;
+	@Getter private final EResult result;
 
 	/**
 	 * Gets the list of enumerated files.
@@ -30,15 +29,15 @@ public final class UserPublishedFilesCallback extends CallbackMsg {
 	/**
 	 * Gets the count of total results.
 	 */
-	@Getter private int totalResults;
+	@Getter private final int totalResults;
 
 	public UserPublishedFilesCallback(CMsgClientUCMEnumerateUserPublishedFilesResponse msg) {
-		this.result = EResult.f(msg.getEresult());
+		result = EResult.f(msg.getEresult());
 
-		for (PublishedFileId f : msg.getPublishedFilesList()) {
+		for (final PublishedFileId f : msg.getPublishedFilesList()) {
 			files.add(new File(f));
 		}
 
-		this.totalResults = msg.getTotalResults();
+		totalResults = msg.getTotalResults();
 	}
 }

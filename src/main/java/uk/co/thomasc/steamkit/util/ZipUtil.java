@@ -1,6 +1,5 @@
 package uk.co.thomasc.steamkit.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -8,15 +7,12 @@ import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
-import java.util.zip.ZipInputStream;
+
+import com.google.protobuf.CodedOutputStream;
 
 import uk.co.thomasc.steamkit.util.crypto.CryptoHelper;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
-
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.CodedOutputStream;
 
 @SuppressWarnings("unused")
 public class ZipUtil {
@@ -29,60 +25,59 @@ public class ZipUtil {
 	private static short Version = 20;
 
 	public static byte[] deCompress(byte[] buffer) throws IOException {
-		BinaryReader is = new BinaryReader(buffer);
-		if (!peekHeader(is, LocalFileHeader)) {
+		final BinaryReader is = new BinaryReader(buffer);
+		if (!ZipUtil.peekHeader(is, ZipUtil.LocalFileHeader)) {
 			throw new IOException("Expecting LocalFileHeader at start of stream");
 		}
 
-		Passable<String> fileName = new Passable<String>("");
-		Passable<Integer> decompressedSize = new Passable<Integer>(0);
-		byte[] compressedBuffer = readLocalFile(is, fileName, decompressedSize);
+		final Passable<String> fileName = new Passable<String>("");
+		final Passable<Integer> decompressedSize = new Passable<Integer>(0);
+		final byte[] compressedBuffer = ZipUtil.readLocalFile(is, fileName, decompressedSize);
 
-		if (!peekHeader(is, CentralDirectoryHeader)) {
-			throw new IOException( "Expecting CentralDirectoryHeader following filename" );
+		if (!ZipUtil.peekHeader(is, ZipUtil.CentralDirectoryHeader)) {
+			throw new IOException("Expecting CentralDirectoryHeader following filename");
 		}
 
-		Passable<String> cdrFileName = new Passable<String>("");
-		int relativeOffset = readCentralDirectory(is, cdrFileName);
+		final Passable<String> cdrFileName = new Passable<String>("");
+		final int relativeOffset = ZipUtil.readCentralDirectory(is, cdrFileName);
 
-		if (!peekHeader(is, EndOfDirectoryHeader)) {
+		if (!ZipUtil.peekHeader(is, ZipUtil.EndOfDirectoryHeader)) {
 			throw new IOException("Expecting EndOfDirectoryHeader following CentralDirectoryHeader");
 		}
 
-		int count = readEndOfDirectory(is);
+		final int count = ZipUtil.readEndOfDirectory(is);
 
-		return inflateBuffer(compressedBuffer, decompressedSize);
+		return ZipUtil.inflateBuffer(compressedBuffer, decompressedSize);
 	}
 
 	public static byte[] compress(byte[] buffer) throws IOException {
-		BinaryWriter os = new BinaryWriter();
-	
+		final BinaryWriter os = new BinaryWriter();
+
 		int checkSum = 0;
 
-		ByteBuffer bb = ByteBuffer.wrap(CryptoHelper.CRCHash(buffer));
+		final ByteBuffer bb = ByteBuffer.wrap(CryptoHelper.CRCHash(buffer));
 		checkSum = bb.getInt();
 
-		byte[] compressed = deflateBuffer(buffer);
+		final byte[] compressed = ZipUtil.deflateBuffer(buffer);
 
-		int poslocal = writeHeader(os, LocalFileHeader);
-		writeLocalFile(os, "z", checkSum, buffer.length, compressed);
+		final int poslocal = ZipUtil.writeHeader(os, ZipUtil.LocalFileHeader);
+		ZipUtil.writeLocalFile(os, "z", checkSum, buffer.length, compressed);
 
-		int posCDR = writeHeader(os, CentralDirectoryHeader);
-		int CDRSize = writeCentralDirectory(os, "z", checkSum, compressed.length, buffer.length, poslocal);
+		final int posCDR = ZipUtil.writeHeader(os, ZipUtil.CentralDirectoryHeader);
+		final int CDRSize = ZipUtil.writeCentralDirectory(os, "z", checkSum, compressed.length, buffer.length, poslocal);
 
-		int posEOD = writeHeader(os, EndOfDirectoryHeader);
-		writeEndOfDirectory(os, 1, CDRSize, posCDR);
+		final int posEOD = ZipUtil.writeHeader(os, ZipUtil.EndOfDirectoryHeader);
+		ZipUtil.writeEndOfDirectory(os, 1, CDRSize, posCDR);
 
 		return buffer;
 	}
-
 
 	private static int writeHeader(BinaryWriter writer, int header) throws IOException {
 		Field f;
 		int position = 0;
 		try {
 			f = CodedOutputStream.class.getField("position");
-			
+
 			f.setAccessible(true);
 			try {
 				position = f.getInt(writer);
@@ -116,7 +111,7 @@ public class ZipUtil {
 		int position2 = 0;
 		try {
 			f = CodedOutputStream.class.getField("position");
-			
+
 			f.setAccessible(true);
 			try {
 				position = f.getInt(writer);
@@ -124,31 +119,31 @@ public class ZipUtil {
 				e1.printStackTrace();
 			}
 
-			writer.write(Version); // versionGenerator
-			writer.write(Version); // versionExtract
+			writer.write(ZipUtil.Version); // versionGenerator
+			writer.write(ZipUtil.Version); // versionExtract
 			writer.write((short) 0); // bitflags
-			writer.write(DeflateCompression); // compression
-	
+			writer.write(ZipUtil.DeflateCompression); // compression
+
 			writer.write((short) 0); // modTime
 			writer.write((short) 0); // createTime
 			writer.write(CRC); // CRC
-	
+
 			writer.write(compressedSize); // compressedSize
 			writer.write(decompressedSize); // decompressedSize
-	
-			int nameByteCount = fileName.getBytes().length;
+
+			final int nameByteCount = fileName.getBytes().length;
 			writer.write(nameByteCount); // nameLength
 			writer.write((short) 0); // fieldLength
 			writer.write((short) 0); // commentLength
-	
+
 			writer.write((short) 0); // diskNumber
 			writer.write((short) 1); // internalAttributes
 			writer.write((short) 32); // externalAttributes
-	
+
 			writer.write(localHeaderOffset); // relativeOffset
-	
+
 			writer.write(fileName.getBytes()); // filename
-	
+
 			try {
 				position2 = f.getInt(writer);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -158,13 +153,13 @@ public class ZipUtil {
 			e2.printStackTrace();
 		}
 
-		return (position2 - position) + 4;
+		return position2 - position + 4;
 	}
 
 	private static void writeLocalFile(BinaryWriter writer, String fileName, int CRC, int decompressedSize, byte[] processedBuffer) throws IOException {
-		writer.write(Version); // version
+		writer.write(ZipUtil.Version); // version
 		writer.write((short) 0); // bitflags
-		writer.write(DeflateCompression); // compression
+		writer.write(ZipUtil.DeflateCompression); // compression
 
 		writer.write((short) 0); // modTime
 		writer.write((short) 0); // createTime
@@ -173,7 +168,7 @@ public class ZipUtil {
 		writer.write(processedBuffer.length); // compressedSize
 		writer.write(decompressedSize); // decompressedSize
 
-		short nameByteCount = (short) fileName.getBytes().length;
+		final short nameByteCount = (short) fileName.getBytes().length;
 		writer.write(nameByteCount); // nameLength
 		writer.write((short) 0); // fieldLength
 
@@ -181,103 +176,101 @@ public class ZipUtil {
 		writer.write(processedBuffer); // contents
 	}
 
-
 	private static boolean peekHeader(BinaryReader reader, int expecting) throws IOException {
-		int header = reader.readInt();
+		final int header = reader.readInt();
 
 		return header == expecting;
 	}
 
 	private static int readEndOfDirectory(BinaryReader reader) throws IOException {
-		short diskNumber = reader.readShort();
-		short CDRDisk = reader.readShort();
-		short CDRCount = reader.readShort();
-		short CDRTotal = reader.readShort();
+		final short diskNumber = reader.readShort();
+		final short CDRDisk = reader.readShort();
+		final short CDRCount = reader.readShort();
+		final short CDRTotal = reader.readShort();
 
-		int CDRSize = reader.readInt();
-		int CDROffset = reader.readInt();
+		final int CDRSize = reader.readInt();
+		final int CDROffset = reader.readInt();
 
-		short commentLength = reader.readShort();
-		byte[] comment = reader.readBytes(commentLength);
+		final short commentLength = reader.readShort();
+		final byte[] comment = reader.readBytes(commentLength);
 
 		return CDRCount;
 	}
 
 	private static int readCentralDirectory(BinaryReader reader, Passable<String> fileName) throws IOException {
-		short versionGenerator = reader.readShort();
-		short versionExtract = reader.readShort();
-		short bitflags = reader.readShort();
-		short compression = reader.readShort();
+		final short versionGenerator = reader.readShort();
+		final short versionExtract = reader.readShort();
+		final short bitflags = reader.readShort();
+		final short compression = reader.readShort();
 
-		if (compression != DeflateCompression) {
+		if (compression != ZipUtil.DeflateCompression) {
 			throw new IOException("Invalid compression method " + compression);
 		}
 
-		short modtime = reader.readShort();
-		short createtime = reader.readShort();
-		int crc = reader.readInt();
+		final short modtime = reader.readShort();
+		final short createtime = reader.readShort();
+		final int crc = reader.readInt();
 
-		int compressedSize = reader.readInt();
-		int decompressedSize = reader.readInt();
+		final int compressedSize = reader.readInt();
+		final int decompressedSize = reader.readInt();
 
-		short nameLength = reader.readShort();
-		short fieldLength = reader.readShort();
-		short commentLength = reader.readShort();
+		final short nameLength = reader.readShort();
+		final short fieldLength = reader.readShort();
+		final short commentLength = reader.readShort();
 
-		short diskNumber = reader.readShort();
-		short internalAttributes = reader.readShort();
-		int externalAttributes = reader.readInt();
+		final short diskNumber = reader.readShort();
+		final short internalAttributes = reader.readShort();
+		final int externalAttributes = reader.readInt();
 
-		int relativeOffset = reader.readInt();
+		final int relativeOffset = reader.readInt();
 
-		byte[] name = reader.readBytes(nameLength);
-		byte[] fields = reader.readBytes(fieldLength);
-		byte[] comment = reader.readBytes(commentLength);
+		final byte[] name = reader.readBytes(nameLength);
+		final byte[] fields = reader.readBytes(fieldLength);
+		final byte[] comment = reader.readBytes(commentLength);
 
 		fileName.setValue(new String(name));
 		return relativeOffset;
 	}
 
 	private static byte[] readLocalFile(BinaryReader reader, Passable<String> fileName, Passable<Integer> decompressedSize) throws IOException {
-		short version = reader.readShort();
-		short bitflags = reader.readShort();
-		short compression = reader.readShort();
+		final short version = reader.readShort();
+		final short bitflags = reader.readShort();
+		final short compression = reader.readShort();
 
-		if (compression != DeflateCompression) {
-			throw new IOException( "Invalid compression method " + compression );
+		if (compression != ZipUtil.DeflateCompression) {
+			throw new IOException("Invalid compression method " + compression);
 		}
 
-		short modtime = reader.readShort();
-		short createtime = reader.readShort();
-		int crc = reader.readInt();
+		final short modtime = reader.readShort();
+		final short createtime = reader.readShort();
+		final int crc = reader.readInt();
 
-		int compressedSize = reader.readInt();
+		final int compressedSize = reader.readInt();
 		decompressedSize.setValue(reader.readInt());
 
-		short nameLength = reader.readShort();
-		short fieldLength = reader.readShort();
+		final short nameLength = reader.readShort();
+		final short fieldLength = reader.readShort();
 
-		byte[] name = reader.readBytes(nameLength);
-		byte[] fields = reader.readBytes(fieldLength);
+		final byte[] name = reader.readBytes(nameLength);
+		final byte[] fields = reader.readBytes(fieldLength);
 
 		fileName.setValue(new String(name));
 
 		return reader.readBytes(compressedSize);
 	}
 
-
 	private static byte[] inflateBuffer(byte[] compressedBuffer, Passable<Integer> decompressedSize) throws IOException {
-		Inflater decompressor = new Inflater(true);
+		final Inflater decompressor = new Inflater(true);
 		decompressor.setInput(compressedBuffer);
 
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(compressedBuffer.length);
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream(compressedBuffer.length);
 
-		byte[] buf = new byte[1024];
+		final byte[] buf = new byte[1024];
 		while (!decompressor.finished()) {
 			try {
-				int count = decompressor.inflate(buf);
+				final int count = decompressor.inflate(buf);
 				bos.write(buf, 0, count);
-			} catch (DataFormatException e) {
+			} catch (final DataFormatException e) {
 			}
 		}
 
@@ -285,7 +278,7 @@ public class ZipUtil {
 	}
 
 	private static byte[] deflateBuffer(byte[] uncompressedBuffer) throws IOException {
-		DeflaterOutputStream deflateStream = new DeflaterOutputStream(new ByteArrayOutputStream());
+		final DeflaterOutputStream deflateStream = new DeflaterOutputStream(new ByteArrayOutputStream());
 
 		deflateStream.write(uncompressedBuffer, 0, uncompressedBuffer.length);
 		deflateStream.close();

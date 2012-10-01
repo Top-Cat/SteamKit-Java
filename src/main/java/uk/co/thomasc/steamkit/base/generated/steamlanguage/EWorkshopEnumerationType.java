@@ -7,15 +7,14 @@ public enum EWorkshopEnumerationType {
 	FavoriteOfFriends(3),
 	VotedByFriends(4),
 	ContentByFriends(5),
-	RecentFromFollowedUsers(6),
-	;
-	
+	RecentFromFollowedUsers(6), ;
+
 	private int code;
-	
+
 	private EWorkshopEnumerationType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

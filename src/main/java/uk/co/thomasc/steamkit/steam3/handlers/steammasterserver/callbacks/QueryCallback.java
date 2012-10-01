@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgGMSClientServerQueryResponse;
-
 import uk.co.thomasc.steamkit.steam3.handlers.steammasterserver.SteamMasterServer;
 import uk.co.thomasc.steamkit.steam3.handlers.steammasterserver.types.QueryDetails;
 import uk.co.thomasc.steamkit.steam3.handlers.steammasterserver.types.Server;
@@ -19,10 +18,10 @@ public final class QueryCallback extends CallbackMsg {
 	/**
 	 * Gets the list of servers.
 	 */
-	@Getter private List<Server> servers = new ArrayList<Server>();
+	@Getter private final List<Server> servers = new ArrayList<Server>();
 
 	public QueryCallback(CMsgGMSClientServerQueryResponse msg) {
-		for (CMsgGMSClientServerQueryResponse.Server s : msg.getServersList()) {
+		for (final CMsgGMSClientServerQueryResponse.Server s : msg.getServersList()) {
 			servers.add(new Server(s));
 		}
 	}

@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks;
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLoggedOff;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 
@@ -14,9 +13,9 @@ public final class LoggedOffCallback extends CallbackMsg {
 	/**
 	 * Gets the result of the log off.
 	 */
-	@Getter private EResult result;
-	
+	@Getter private final EResult result;
+
 	public LoggedOffCallback(CMsgClientLoggedOff resp) {
-		this.result = EResult.f(resp.getEresult());
+		result = EResult.f(resp.getEresult());
 	}
 }

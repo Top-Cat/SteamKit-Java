@@ -5,7 +5,6 @@ import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import uk.co.thomasc.steamkit.base.gc.IPacketGCMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgGCHdr;
 import uk.co.thomasc.steamkit.types.JobID;
@@ -27,7 +26,7 @@ public final class PacketClientGCMsg implements IPacketGCMsg {
 	/**
 	 * Gets the network message type of this packet message.
 	 */
-	@Getter private int msgType;
+	@Getter private final int msgType;
 
 	/**
 	 * Gets the target job id for this packet message.
@@ -50,13 +49,13 @@ public final class PacketClientGCMsg implements IPacketGCMsg {
 		msgType = eMsg;
 		payload = data;
 
-		MsgGCHdr gcHdr = new MsgGCHdr();
+		final MsgGCHdr gcHdr = new MsgGCHdr();
 
 		// deserialize the gc header to get our hands on the job ids
-		BinaryReader is = new BinaryReader(data);
+		final BinaryReader is = new BinaryReader(data);
 		try {
 			gcHdr.deSerialize(is);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 

@@ -1,12 +1,11 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamtrading;
 
+import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
+import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgTrading_CancelTradeRequest;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgTrading_InitiateTradeRequest;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgTrading_InitiateTradeResponse;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgTrading_StartSession;
-
-import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
-import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.steam3.handlers.ClientMsgHandler;
 import uk.co.thomasc.steamkit.steam3.handlers.steamtrading.callbacks.SessionStartCallback;
@@ -24,7 +23,7 @@ public final class SteamTrading extends ClientMsgHandler {
 	 * @param user	The client to trade.
 	 */
 	public void trade(SteamID user) {
-		ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeReq = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(EMsg.EconTrading_InitiateTradeRequest, CMsgTrading_InitiateTradeRequest.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeReq = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(EMsg.EconTrading_InitiateTradeRequest, CMsgTrading_InitiateTradeRequest.class);
 
 		tradeReq.getBody().setOtherSteamid(user.convertToUInt64());
 
@@ -37,7 +36,7 @@ public final class SteamTrading extends ClientMsgHandler {
 	 * @param acceptTrade	if set to true, the trade will be accepted.
 	 */
 	public void respondToTrade(int tradeId, boolean acceptTrade) {
-		ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(EMsg.EconTrading_InitiateTradeResponse, CMsgTrading_InitiateTradeResponse.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(EMsg.EconTrading_InitiateTradeResponse, CMsgTrading_InitiateTradeResponse.class);
 
 		tradeResp.getBody().setTradeRequestId(tradeId);
 		tradeResp.getBody().setResponse(acceptTrade ? 0 : 1);
@@ -50,7 +49,7 @@ public final class SteamTrading extends ClientMsgHandler {
 	 * @param user	The user.
 	 */
 	public void cancelTrade(SteamID user) {
-		ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder> cancelTrade = new ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder>(EMsg.EconTrading_CancelTradeRequest, CMsgTrading_CancelTradeRequest.class);
+		final ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder> cancelTrade = new ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder>(EMsg.EconTrading_CancelTradeRequest, CMsgTrading_CancelTradeRequest.class);
 
 		cancelTrade.getBody().setOtherSteamid(user.convertToUInt64());
 
@@ -75,24 +74,24 @@ public final class SteamTrading extends ClientMsgHandler {
 		}
 	}
 
-	void handleTradeProposed( IPacketMsg packetMsg ) {
-		ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeProp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(packetMsg, CMsgTrading_InitiateTradeRequest.class);
-	
-		TradeProposedCallback callback = new TradeProposedCallback(tradeProp.getBody().build());
+	void handleTradeProposed(IPacketMsg packetMsg) {
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeProp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(packetMsg, CMsgTrading_InitiateTradeRequest.class);
+
+		final TradeProposedCallback callback = new TradeProposedCallback(tradeProp.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleTradeResult(IPacketMsg packetMsg) {
-		ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResult = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(packetMsg, CMsgTrading_InitiateTradeResponse.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResult = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(packetMsg, CMsgTrading_InitiateTradeResponse.class);
 
-		TradeResultCallback callback = new TradeResultCallback(tradeResult.getBody().build());
+		final TradeResultCallback callback = new TradeResultCallback(tradeResult.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleStartSession(IPacketMsg packetMsg) {
-		ClientMsgProtobuf<CMsgTrading_StartSession.Builder> startSess = new ClientMsgProtobuf<CMsgTrading_StartSession.Builder>(packetMsg, CMsgTrading_StartSession.class);
+		final ClientMsgProtobuf<CMsgTrading_StartSession.Builder> startSess = new ClientMsgProtobuf<CMsgTrading_StartSession.Builder>(packetMsg, CMsgTrading_StartSession.class);
 
-		SessionStartCallback callback = new SessionStartCallback(startSess.getBody().build());
+		final SessionStartCallback callback = new SessionStartCallback(startSess.getBody().build());
 		getClient().postCallback(callback);
 	}
 }

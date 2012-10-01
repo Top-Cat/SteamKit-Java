@@ -16,28 +16,27 @@ public enum EChatRoomEnterResponse {
 	YouBlockedMember(11),
 	NoRankingDataLobby(12),
 	NoRankingDataUser(13),
-	RankOutOfRange(14),
-	;
-	
+	RankOutOfRange(14), ;
+
 	private int code;
-	
+
 	private EChatRoomEnterResponse(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
-	
+
 	private static HashMap<Integer, EChatRoomEnterResponse> values = new HashMap<Integer, EChatRoomEnterResponse>();
 
 	static {
-		for (EChatRoomEnterResponse type : values()) {
-			values.put(type.v(), type);
+		for (final EChatRoomEnterResponse type : EChatRoomEnterResponse.values()) {
+			EChatRoomEnterResponse.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static EChatRoomEnterResponse f(int code) {
-		return values.get(code);
+		return EChatRoomEnterResponse.values.get(code);
 	}
 }

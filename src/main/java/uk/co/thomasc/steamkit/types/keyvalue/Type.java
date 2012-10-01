@@ -11,28 +11,27 @@ enum Type {
 	WideString(5),
 	Color(6),
 	UInt64(7),
-	End(8),
-	;
-	
+	End(8), ;
+
 	private byte code;
-	
+
 	private Type(int code) {
 		this.code = (byte) code;
 	}
-	
+
 	public byte v() {
 		return code;
 	}
-	
+
 	private static HashMap<Byte, Type> values = new HashMap<Byte, Type>();
 
 	static {
-		for (Type type : values()) {
-			values.put(type.v(), type);
+		for (final Type type : Type.values()) {
+			Type.values.put(type.v(), type);
 		}
 	}
-	
+
 	public static Type f(int code) {
-		return values.get((byte) code);
+		return Type.values.get((byte) code);
 	}
 }

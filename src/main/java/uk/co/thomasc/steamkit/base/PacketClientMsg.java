@@ -2,12 +2,11 @@ package uk.co.thomasc.steamkit.base;
 
 import java.io.IOException;
 
+import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ExtendedClientMsgHdr;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
-
-import lombok.Getter;
 
 /**
  * Represents a packet message with extended header information.
@@ -25,7 +24,7 @@ public final class PacketClientMsg implements IPacketMsg {
 	/**
 	 * Gets the network message type of this packet message.
 	 */
-	@Getter private EMsg msgType;
+	@Getter private final EMsg msgType;
 
 	/**
 	 * Gets the target job id for this packet message.
@@ -48,15 +47,15 @@ public final class PacketClientMsg implements IPacketMsg {
 		msgType = eMsg;
 		payload = data;
 
-		ExtendedClientMsgHdr extendedHdr = new ExtendedClientMsgHdr();
+		final ExtendedClientMsgHdr extendedHdr = new ExtendedClientMsgHdr();
 
-		BinaryReader is = new BinaryReader(data);
+		final BinaryReader is = new BinaryReader(data);
 		try {
 			extendedHdr.deSerialize(is);
-			
+
 			targetJobID = extendedHdr.targetJobID;
 			sourceJobID = extendedHdr.sourceJobID;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -64,6 +63,7 @@ public final class PacketClientMsg implements IPacketMsg {
 	/**
 	 * Gets the underlying data that represents this client message.
 	 */
+	@Override
 	public byte[] getData() {
 		return payload;
 	}

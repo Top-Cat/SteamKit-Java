@@ -6,9 +6,9 @@ import lombok.Getter;
 
 public class IPEndPoint {
 
-	@Getter private String ipAddress;
+	@Getter private final String ipAddress;
 	@Getter private int port = 0;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -19,14 +19,15 @@ public class IPEndPoint {
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}
-	
+
 	public IPEndPoint(InetAddress ipAddress, short port) {
 		this.ipAddress = ipAddress.getHostAddress();
 		this.port = port;
 	}
-	
+
+	@Override
 	public String toString() {
-		StringBuffer result = new StringBuffer();
+		final StringBuffer result = new StringBuffer();
 		result.append("[").append(ipAddress).append(":").append(port).append("]");
 		return result.toString();
 	}

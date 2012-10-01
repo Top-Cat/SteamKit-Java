@@ -24,9 +24,9 @@ class AsnParser {
 		int length = 0;
 
 		// Checkpoint
-		int position = currentPosition();
+		final int position = currentPosition();
 
-		byte b = GetNextOctet();
+		final byte b = GetNextOctet();
 
 		if (b == (b & 0x7f)) {
 			return b;
@@ -34,7 +34,7 @@ class AsnParser {
 		int i = b & 0x7f;
 
 		if (i > 4) {
-			StringBuilder sb = new StringBuilder("Invalid Length Encoding. ");
+			final StringBuilder sb = new StringBuilder("Invalid Length Encoding. ");
 			sb.append(String.format("Length uses %d _octets", i));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -50,13 +50,13 @@ class AsnParser {
 	}
 
 	public byte[] Next() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
 		/*byte b = */GetNextOctet();
 
-		int length = GetLength();
+		final int length = GetLength();
 		if (length > remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -65,31 +65,31 @@ class AsnParser {
 	}
 
 	public byte GetNextOctet() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
 		if (0 == remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", "1", remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		byte b = GetOctets(1)[0];
+		final byte b = GetOctets(1)[0];
 
 		return b;
 	}
 
 	public byte[] GetOctets(int octetCount) throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
 		if (octetCount > remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", octetCount, remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		byte[] values = new byte[octetCount];
-		
-		for (int i=0;i<octetCount;i++) {
+		final byte[] values = new byte[octetCount];
+
+		for (int i = 0; i < octetCount; i++) {
 			values[i] = _octets.remove(0);
 		}
 
@@ -101,11 +101,11 @@ class AsnParser {
 	}
 
 	public int NextNull() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
 		byte b = GetNextOctet();
 		if (0x05 != b) {
-			StringBuilder sb = new StringBuilder("Expected Null. ");
+			final StringBuilder sb = new StringBuilder("Expected Null. ");
 			sb.append(String.format("Specified Identifier: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -113,7 +113,7 @@ class AsnParser {
 		// Next octet must be 0
 		b = GetNextOctet();
 		if (0x00 != b) {
-			StringBuilder sb = new StringBuilder("Null has non-zero size. ");
+			final StringBuilder sb = new StringBuilder("Null has non-zero size. ");
 			sb.append(String.format("Size: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -126,18 +126,18 @@ class AsnParser {
 	}
 
 	public int nextSequence() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
-		byte b = GetNextOctet();
+		final byte b = GetNextOctet();
 		if (0x30 != b) {
-			StringBuilder sb = new StringBuilder("Expected Sequence. ");
+			final StringBuilder sb = new StringBuilder("Expected Sequence. ");
 			sb.append(String.format("Specified Identifier: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		int length = GetLength();
+		final int length = GetLength();
 		if (length > remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Sequence Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Sequence Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -150,20 +150,18 @@ class AsnParser {
 	}
 
 	public int NextOctetString() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
-		byte b = GetNextOctet();
-		if (0x04 != b)
-		{
-			StringBuilder sb = new StringBuilder("Expected Octet String. ");
+		final byte b = GetNextOctet();
+		if (0x04 != b) {
+			final StringBuilder sb = new StringBuilder("Expected Octet String. ");
 			sb.append(String.format("Specified Identifier: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		int length = GetLength();
-		if (length > remainingBytes())
-		{
-			StringBuilder sb = new StringBuilder("Incorrect Octet String Size. ");
+		final int length = GetLength();
+		if (length > remainingBytes()) {
+			final StringBuilder sb = new StringBuilder("Incorrect Octet String Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -176,11 +174,11 @@ class AsnParser {
 	}
 
 	public int NextBitString() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
 		byte b = GetNextOctet();
 		if (0x03 != b) {
-			StringBuilder sb = new StringBuilder("Expected Bit String. ");
+			final StringBuilder sb = new StringBuilder("Expected Bit String. ");
 			sb.append(String.format("Specified Identifier: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -205,18 +203,18 @@ class AsnParser {
 	}
 
 	public byte[] nextInteger() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
-		byte b = GetNextOctet();
+		final byte b = GetNextOctet();
 		if (0x02 != b) {
-			StringBuilder sb = new StringBuilder("Expected Integer. ");
+			final StringBuilder sb = new StringBuilder("Expected Integer. ");
 			sb.append(String.format("Specified Identifier: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		int length = GetLength();
+		final int length = GetLength();
 		if (length > remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Integer Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Integer Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
@@ -225,23 +223,23 @@ class AsnParser {
 	}
 
 	public byte[] nextOID() throws BerDecodeException {
-		int position = currentPosition();
+		final int position = currentPosition();
 
-		byte b = GetNextOctet();
+		final byte b = GetNextOctet();
 		if (0x06 != b) {
-			StringBuilder sb = new StringBuilder("Expected Object Identifier. ");
+			final StringBuilder sb = new StringBuilder("Expected Object Identifier. ");
 			sb.append(String.format("Specified Identifier: %d", b));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		int length = GetLength();
+		final int length = GetLength();
 		if (length > remainingBytes()) {
-			StringBuilder sb = new StringBuilder("Incorrect Object Identifier Size. ");
+			final StringBuilder sb = new StringBuilder("Incorrect Object Identifier Size. ");
 			sb.append(String.format("Specified: %d, Remaining: %d", length, remainingBytes()));
 			throw new BerDecodeException(sb.toString(), position);
 		}
 
-		byte[] values = new byte[length];
+		final byte[] values = new byte[length];
 
 		for (int i = 0; i < length; i++) {
 			values[i] = _octets.get(0);

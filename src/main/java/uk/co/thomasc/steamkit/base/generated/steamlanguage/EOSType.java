@@ -29,15 +29,14 @@ public enum EOSType {
 	Win7(10),
 	Win2008(11),
 	WinMAX(12),
-	Max(23),
-	;
-	
+	Max(23), ;
+
 	private int code;
-	
+
 	private EOSType(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}

@@ -45,36 +45,35 @@ public class SteamID {
 		/**
 		 * This flag is set for clan based chat {@link SteamID}s.
 		 */
-		Clan((AccountInstanceMask + 1) >> 1),
+		Clan(SteamID.AccountInstanceMask + 1 >> 1),
 		/**
 		 * This flag is set for lobby based chat {@link SteamID}s.
 		 */
-		Lobby((AccountInstanceMask + 1 ) >> 2),
+		Lobby(SteamID.AccountInstanceMask + 1 >> 2),
 		/**
 		 * This flag is set for matchmaking lobby based chat {@link SteamID}s.
 		 */
-		MMSLobby((AccountInstanceMask + 1) >> 3),
-		;
-		
+		MMSLobby(SteamID.AccountInstanceMask + 1 >> 3), ;
+
 		private int flag;
-		
+
 		private ChatInstanceFlags(int flag) {
 			this.flag = flag;
 		}
-		
+
 		public int v() {
 			return flag;
 		}
 
 		private static HashMap<Integer, ChatInstanceFlags> values = new HashMap<Integer, ChatInstanceFlags>();
 		static {
-			for (ChatInstanceFlags type : values()) {
-				values.put(type.v(), type);
+			for (final ChatInstanceFlags type : ChatInstanceFlags.values()) {
+				ChatInstanceFlags.values.put(type.v(), type);
 			}
 		}
-		
+
 		public static ChatInstanceFlags f(int code) {
-			return values.get(code);
+			return ChatInstanceFlags.values.get(code);
 		}
 	}
 
@@ -93,7 +92,7 @@ public class SteamID {
 	 */
 	public SteamID(int unAccountID, EUniverse eUniverse, EAccountType eAccountType) {
 		this();
-		set( unAccountID, eUniverse, eAccountType );
+		set(unAccountID, eUniverse, eAccountType);
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class SteamID {
 	 * @param id	The 64bit integer to assign this SteamID from.
 	 */
 	public SteamID(long id) {
-		this.steamid = new BitVector64(id);
+		steamid = new BitVector64(id);
 	}
 
 	/**
@@ -148,7 +147,7 @@ public class SteamID {
 		if (eAccountType == EAccountType.Clan) {
 			setAccountInstance(0);
 		} else {
-			setAccountInstance(DesktopInstance);
+			setAccountInstance(SteamID.DesktopInstance);
 		}
 	}
 
@@ -177,19 +176,19 @@ public class SteamID {
 			return false;
 		}
 
-		Matcher m = SteamIDRegex.matcher(steamId);
+		final Matcher m = SteamID.SteamIDRegex.matcher(steamId);
 
 		if (!m.matches()) {
 			return false;
 		}
 
-		int accId = Integer.parseInt(m.group("accountid"));
-		int authServer = Integer.parseInt(m.group("authserver"));
+		final int accId = Integer.parseInt(m.group("accountid"));
+		final int authServer = Integer.parseInt(m.group("authserver"));
 
 		setAccountUniverse(eUniverse);
 		setAccountInstance(1);
 		setAccountType(EAccountType.Individual);
-		setAccountID((accId << 1) | authServer);
+		setAccountID(accId << 1 | authServer);
 
 		return true;
 	}
@@ -199,7 +198,7 @@ public class SteamID {
 	 * @param ulSteamID	The 64bit integer to assign this SteamID from.
 	 */
 	public void setFromUInt64(long ulSteamID) {
-		this.steamid.setData(ulSteamID);
+		steamid.setData(ulSteamID);
 	}
 
 	/**
@@ -207,7 +206,7 @@ public class SteamID {
 	 * @return A 64bit integer representing this SteamID.
 	 */
 	public long convertToUInt64() {
-		return this.steamid.getData();
+		return steamid.getData();
 	}
 
 	/**
@@ -279,7 +278,7 @@ public class SteamID {
 	 * @return true if this instance is a lobby; otherwise, false.
 	 */
 	public boolean IsLobby() {
-		return (getAccountType() == EAccountType.Chat) && ((getAccountInstance() & ChatInstanceFlags.Lobby.v()) > 0);
+		return getAccountType() == EAccountType.Chat && (getAccountInstance() & ChatInstanceFlags.Lobby.v()) > 0;
 	}
 
 	/**
@@ -328,7 +327,7 @@ public class SteamID {
 		}
 
 		if (getAccountType() == EAccountType.Individual) {
-			if (getAccountID() == 0 || getAccountInstance() > WebInstance) {
+			if (getAccountID() == 0 || getAccountInstance() > SteamID.WebInstance) {
 				return false;
 			}
 		}
@@ -355,7 +354,7 @@ public class SteamID {
 	public long getAccountID() {
 		return steamid.getMask((short) 0, 0xFFFFFFFF);
 	}
-	
+
 	/**
 	 * Sets the account id.
 	 * @param value	The account id.
@@ -371,7 +370,7 @@ public class SteamID {
 	public long getAccountInstance() {
 		return steamid.getMask((short) 32, 0xFFFFF);
 	}
-	
+
 	/**
 	 * Sets the account instance.
 	 * @param value	The account instance.
@@ -379,7 +378,6 @@ public class SteamID {
 	public void setAccountInstance(long value) {
 		steamid.setMask((short) 32, 0xFFFFF, value);
 	}
-	
 
 	public void setAccountInstance(ChatInstanceFlags clan) {
 		setAccountInstance(clan.v());
@@ -392,7 +390,7 @@ public class SteamID {
 	public EAccountType getAccountType() {
 		return EAccountType.fromCode((int) steamid.getMask((short) 52, 0xF));
 	}
-	
+
 	/**
 	 * Sets the account type.
 	 * @param value	The account type.
@@ -408,7 +406,7 @@ public class SteamID {
 	public EUniverse getAccountUniverse() {
 		return EUniverse.f((int) steamid.getMask((short) 56, 0xFF));
 	}
-	
+
 	/**
 	 * Sets the account universe.
 	 * @param value	The account universe.
@@ -451,13 +449,13 @@ public class SteamID {
 		if (obj == null) {
 			return false;
 		}
-		
+
 		if (!(obj instanceof SteamID)) {
 			return false;
 		}
-		
-		SteamID sid = (SteamID) obj;
-		
+
+		final SteamID sid = (SteamID) obj;
+
 		return steamid.getData().equals(sid.steamid.getData());
 	}
 
@@ -465,7 +463,7 @@ public class SteamID {
 	public SteamID clone() {
 		return new SteamID(steamid.getData());
 	}
-	
+
 	/**
 	 * Returns a hash code for this instance.
 	 */

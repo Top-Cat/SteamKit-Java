@@ -18,7 +18,7 @@ public class OTPDetails {
 	 * Gets or sets the one-time-password value.
 	 */
 	public int value;
-	
+
 	/**
 	 * Gets the OTP shared secret.
 	 */

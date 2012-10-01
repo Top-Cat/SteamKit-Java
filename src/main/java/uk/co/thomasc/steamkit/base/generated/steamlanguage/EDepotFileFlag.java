@@ -7,15 +7,14 @@ public enum EDepotFileFlag {
 	ReadOnly(8),
 	Hidden(16),
 	Executable(32),
-	Directory(64),
-	;
-	
+	Directory(64), ;
+
 	private int code;
-	
+
 	private EDepotFileFlag(int code) {
 		this.code = code;
 	}
-	
+
 	public int v() {
 		return code;
 	}
