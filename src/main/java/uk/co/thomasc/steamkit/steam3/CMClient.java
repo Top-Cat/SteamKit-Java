@@ -92,17 +92,17 @@ public abstract class CMClient {
 	/**
 	 * The universe.
 	 */
-	@Getter private EUniverse ConnectedUniverse;
+	@Getter private EUniverse connectedUniverse;
 
 	/**
 	 * The session ID.
 	 */
-	@Getter private Integer SessionID;
+	@Getter private Integer sessionId;
 
 	/**
 	 * The SteamID.
 	 */
-	@Getter private SteamID SteamID;
+	@Getter private SteamID steamId;
 
 	Connection connection;
 	byte[] tempSessionKey;
@@ -135,7 +135,7 @@ public abstract class CMClient {
 				throw new UnsupportedOperationException("The provided protocol type is not supported. Only Tcp and Udp are available.");
 		}
 
-		connection.NetMsgReceived.addEventHandler(new EventHandler<NetMsgEventArgs>() {
+		connection.netMsgReceived.addEventHandler(new EventHandler<NetMsgEventArgs>() {
 			@Override
 			public void handleEvent(Object sender, NetMsgEventArgs e) {
 				try {
@@ -145,18 +145,18 @@ public abstract class CMClient {
 				}
 			}
 		});
-		connection.Disconnected.addEventHandler(new EventHandler<EventArgs>() {
+		connection.disconnected.addEventHandler(new EventHandler<EventArgs>() {
 			@Override
 			public void handleEvent(Object sender, EventArgs e) {
-				ConnectedUniverse = EUniverse.Invalid;
+				connectedUniverse = EUniverse.Invalid;
 
 				heartBeatFunc.stop();
-				connection.NetFilter = null;
+				connection.netFilter = null;
 
 				onClientDisconnected();
 			}
 		});
-		connection.Connected.addEventHandler(new EventHandler<EventArgs>() {
+		connection.connected.addEventHandler(new EventHandler<EventArgs>() {
 			@Override
 			public void handleEvent(Object sender, EventArgs e) {
 				// If we're on an encrypted connection, we wait for the handshake to complete
@@ -165,7 +165,7 @@ public abstract class CMClient {
 				}
 
 				// we only connect to the public universe
-				ConnectedUniverse = EUniverse.Public;
+				connectedUniverse = EUniverse.Public;
 
 				// since there is no encryption handshake, we're 'connected' after the underlying connection is established
 				onClientConnected();
@@ -216,12 +216,12 @@ public abstract class CMClient {
 	 * @param msg	The client message to send.
 	 */
 	public void send(IClientMsg msg) {
-		if (SessionID != null) {
-			msg.setSessionID(SessionID);
+		if (sessionId != null) {
+			msg.setSessionID(sessionId);
 		}
 
-		if (SteamID != null) {
-			msg.setSteamID(SteamID);
+		if (steamId != null) {
+			msg.setSteamID(steamId);
 		}
 
 		DebugLog.writeLine("CMClient", "Sent -> EMsg: %s (Proto: %s)", msg.getMsgType(), msg.isProto());
@@ -354,8 +354,8 @@ public abstract class CMClient {
 		final ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(packetMsg, CMsgClientLogonResponse.class);
 
 		if (EResult.f(logonResp.getBody().getEresult()) == EResult.OK) {
-			SessionID = logonResp.getProtoHeader().getClientSessionid();
-			SteamID = new SteamID(logonResp.getProtoHeader().getSteamid());
+			sessionId = logonResp.getProtoHeader().getClientSessionid();
+			steamId = new SteamID(logonResp.getProtoHeader().getSteamid());
 
 			final int hbDelay = logonResp.getBody().getOutOfGameHeartbeatSeconds();
 
@@ -381,7 +381,7 @@ public abstract class CMClient {
 			return;
 		}
 
-		ConnectedUniverse = eUniv;
+		connectedUniverse = eUniv;
 
 		final Msg<MsgChannelEncryptResponse> encResp = new Msg<MsgChannelEncryptResponse>(MsgChannelEncryptResponse.class);
 
@@ -410,13 +410,13 @@ public abstract class CMClient {
 		DebugLog.writeLine("CMClient", "Encryption result: %s", encResult.getBody().result);
 
 		if (encResult.getBody().result == EResult.OK) {
-			connection.NetFilter = new NetFilterEncryption(tempSessionKey);
+			connection.netFilter = new NetFilterEncryption(tempSessionKey);
 		}
 	}
 
 	void handleLoggedOff(IPacketMsg packetMsg) {
-		SessionID = null;
-		SteamID = null;
+		sessionId = null;
+		steamId = null;
 
 		heartBeatFunc.stop();
 	}

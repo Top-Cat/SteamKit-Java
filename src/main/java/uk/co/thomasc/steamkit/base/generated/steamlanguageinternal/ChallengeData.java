@@ -8,9 +8,9 @@ import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 public class ChallengeData implements ISteamSerializable {
 	public static final int CHALLENGE_MASK = 0xA426DF2B;
 	// Static size: 4
-	public int ChallengeValue = 0;
+	public int challengeValue = 0;
 	// Static size: 4
-	public int ServerLoad = 0;
+	public int serverLoad = 0;
 
 	public ChallengeData() {
 
@@ -18,13 +18,13 @@ public class ChallengeData implements ISteamSerializable {
 
 	@Override
 	public void serialize(BinaryWriter stream) throws IOException {
-		stream.write(ChallengeValue);
-		stream.write(ServerLoad);
+		stream.write(challengeValue);
+		stream.write(serverLoad);
 	}
 
 	@Override
 	public void deSerialize(BinaryReader stream) throws IOException {
-		ChallengeValue = stream.readInt();
-		ServerLoad = stream.readInt();
+		challengeValue = stream.readInt();
+		serverLoad = stream.readInt();
 	}
 }

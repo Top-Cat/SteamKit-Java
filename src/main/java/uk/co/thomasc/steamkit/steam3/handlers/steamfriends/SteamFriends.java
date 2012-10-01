@@ -188,7 +188,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @return The gameid of a friend playing a game, or 0 if they haven't been cached yet.
 	 */
 	public GameID getFriendGamePlayed(SteamID steamId) {
-		return cache.getUser(steamId).gameID;
+		return cache.getUser(steamId).gameId;
 	}
 
 	/**
@@ -248,7 +248,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @param steamId	The SteamID of the clan to get the avatar of.
 	 * @return A byte array representing a SHA-1 hash of the clan's avatar, or null if the clan could not be found.
 	 */
-	public byte[] GetClanAvatar(SteamID steamId) {
+	public byte[] getClanAvatar(SteamID steamId) {
 		return cache.getClans().getAccount(steamId).avatarHash;
 	}
 
@@ -344,9 +344,9 @@ public final class SteamFriends extends ClientMsgHandler {
 		leaveChat.getBody().type = EChatInfoType.StateChange;
 
 		try {
-			leaveChat.write(getClient().getSteamID().convertToUInt64()); // ChatterActedOn
+			leaveChat.write(getClient().getSteamId().convertToUInt64()); // ChatterActedOn
 			leaveChat.write(EChatMemberStateChange.Left.v()); // StateChange
-			leaveChat.write(getClient().getSteamID().convertToUInt64()); // ChatterActedBy
+			leaveChat.write(getClient().getSteamId().convertToUInt64()); // ChatterActedBy
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -373,7 +373,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 		chatMsg.getBody().chatMsgType = type;
 		chatMsg.getBody().setSteamIdChatRoom(chatId);
-		chatMsg.getBody().setSteamIdChatter(getClient().getSteamID());
+		chatMsg.getBody().setSteamIdChatter(getClient().getSteamId());
 
 		try {
 			chatMsg.writeNullTermString(message, Charset.forName("UTF8"));
@@ -491,7 +491,7 @@ public final class SteamFriends extends ClientMsgHandler {
 		final ClientMsg<MsgClientSetIgnoreFriend> ignore = new ClientMsg<MsgClientSetIgnoreFriend>(MsgClientSetIgnoreFriend.class);
 		ignore.setSourceJobID(getClient().getNextJobID());
 
-		ignore.getBody().setMySteamId(getClient().getSteamID());
+		ignore.getBody().setMySteamId(getClient().getSteamId());
 		ignore.getBody().ignore = (byte) (setIgnore ? 1 : 0);
 		ignore.getBody().setSteamIdFriend(steamId);
 
@@ -563,7 +563,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	void handleFriendsList(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientFriendsList.Builder> list = new ClientMsgProtobuf<CMsgClientFriendsList.Builder>(packetMsg, CMsgClientFriendsList.class);
 
-		cache.getLocalUser().SteamID = getClient().getSteamID();
+		cache.getLocalUser().steamId = getClient().getSteamId();
 
 		if (!list.getBody().getBincremental()) {
 			// if we're not an incremental update, the message contains all friends, so we should clear our current list
@@ -659,8 +659,8 @@ public final class SteamFriends extends ClientMsgHandler {
 
 				if ((flags & EClientPersonaStateFlag.GameExtraInfo.v()) == EClientPersonaStateFlag.GameExtraInfo.v()) {
 					cacheFriend.gameName = friend.getGameName();
-					cacheFriend.gameID = new GameID(friend.getGameid());
-					cacheFriend.gameAppID = friend.getGamePlayedAppId();
+					cacheFriend.gameId = new GameID(friend.getGameid());
+					cacheFriend.gameAppId = friend.getGamePlayedAppId();
 				}
 			} else if (friendId.isClanAccount()) {
 				final Clan cacheClan = cache.getClans().getAccount(friendId);

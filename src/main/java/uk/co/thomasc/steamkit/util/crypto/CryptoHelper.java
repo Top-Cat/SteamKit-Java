@@ -28,10 +28,6 @@ import uk.co.thomasc.steamkit.util.logging.Debug;
  */
 public class CryptoHelper {
 
-	static {
-		//Security.addProvider(new BouncyCastleProvider());
-	}
-
 	private CryptoHelper() {
 		throw new AssertionError();
 	}

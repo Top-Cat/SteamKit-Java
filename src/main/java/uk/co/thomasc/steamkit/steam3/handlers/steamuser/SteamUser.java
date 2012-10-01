@@ -44,8 +44,8 @@ public final class SteamUser extends ClientMsgHandler {
 	 * Gets the SteamID of this client. This value is assigned after a logon attempt has succeeded.
 	 * @return The SteamID.
 	 */
-	public SteamID getSteamID() {
-		return getClient().getSteamID();
+	public SteamID getSteamId() {
+		return getClient().getSteamId();
 	}
 
 	/**

@@ -43,6 +43,7 @@ public class Utils {
 
 	public static byte[] generateMachineID() {
 		// Java can't really do much here :/
+		// TODO: Make this better?
 
 		try {
 			final Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();

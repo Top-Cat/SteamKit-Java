@@ -115,8 +115,8 @@ public class TcpConnection extends Connection {
 		byte[] data = clientMsg.serialize();
 
 		// encrypt outgoing traffic if we need to
-		if (NetFilter != null) {
-			data = NetFilter.processOutgoing(data);
+		if (netFilter != null) {
+			data = netFilter.processOutgoing(data);
 		}
 
 		synchronized (sock) {
@@ -195,8 +195,8 @@ public class TcpConnection extends Connection {
 			}
 
 			// decrypt the data off the wire if needed
-			if (NetFilter != null) {
-				packData = NetFilter.processIncoming(packData);
+			if (netFilter != null) {
+				packData = netFilter.processIncoming(packData);
 			}
 		} catch (final IOException ex) {
 			DebugLog.writeLine("TcpConnection", "Socket exception occurred while reading packet: %s", ex);

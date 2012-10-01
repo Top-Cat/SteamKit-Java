@@ -14,13 +14,13 @@ public final class JobCallback<T extends CallbackMsg> extends BaseJobCallback {
 	/**
 	 * Gets the inner callback message for this job.
 	 */
-	@Getter private final T Callback;
+	@Getter private final T callback;
 
 	public JobCallback(JobID jobId, T callback) {
 		super(jobId.getValue());
 		Debug.Assert(jobId.getValue() != BinaryReader.LongMaxValue, "JobCallback used for non job based callback!");
 
 		callbackType = callback.getClass();
-		Callback = callback;
+		this.callback = callback;
 	}
 }

@@ -13,9 +13,9 @@ public final class SessionStartCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID of the client that this the trading session has started with.
 	 */
-	@Getter private final SteamID OtherClient;
+	@Getter private final SteamID otherClient;
 
 	public SessionStartCallback(CMsgTrading_StartSession msg) {
-		OtherClient = new SteamID(msg.getOtherSteamid());
+		otherClient = new SteamID(msg.getOtherSteamid());
 	}
 }

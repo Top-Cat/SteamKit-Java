@@ -55,7 +55,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder>(EMsg.ClientUCMEnumerateUserPublishedFiles, CMsgClientUCMEnumerateUserPublishedFiles.class);
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
-		enumRequest.getBody().setAppId(details.appID);
+		enumRequest.getBody().setAppId(details.appId);
 		enumRequest.getBody().setSortOrder(details.sortOrder);
 		enumRequest.getBody().setStartIndex(details.startIndex);
 
@@ -74,7 +74,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder>(EMsg.ClientUCMEnumerateUserSubscribedFiles, CMsgClientUCMEnumerateUserSubscribedFiles.class);
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
-		enumRequest.getBody().setAppId(details.appID);
+		enumRequest.getBody().setAppId(details.appId);
 		enumRequest.getBody().setStartIndex(details.startIndex);
 
 		getClient().send(enumRequest);
@@ -93,7 +93,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
 		enumRequest.getBody().setAction(details.userAction.v());
-		enumRequest.getBody().setAppId(details.appID);
+		enumRequest.getBody().setAppId(details.appId);
 		enumRequest.getBody().setStartIndex(details.startIndex);
 
 		getClient().send(enumRequest);

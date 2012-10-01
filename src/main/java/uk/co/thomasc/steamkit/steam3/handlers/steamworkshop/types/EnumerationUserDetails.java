@@ -10,7 +10,7 @@ public final class EnumerationUserDetails {
 	/**
 	 * Gets or sets the AppID of the workshop to enumerate.
 	 */
-	public int appID;
+	public int appId;
 
 	/**
 	 * Gets or sets the sort order.

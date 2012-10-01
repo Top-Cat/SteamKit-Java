@@ -18,12 +18,12 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
 	/**
 	 * true if this instance is protobuf backed; otherwise, false.
 	 */
-	@Getter private boolean IsProto;
+	@Getter private boolean isProto;
 
 	/**
 	 * The network message type.
 	 */
-	@Getter private EMsg MsgType;
+	@Getter private EMsg msgType;
 
 	/**
 	 * The session id.

@@ -24,11 +24,11 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 	/**
 	 * The message type.
 	 */
-	@Getter @Setter private EMsg MsgType;
+	@Getter @Setter private EMsg msgType;
 
-	@Getter private final long TargetJobID;
+	@Getter private final long targetJobID;
 
-	@Getter private final long SourceJobID;
+	@Getter private final long sourceJobID;
 
 	byte[] payload;
 
@@ -38,7 +38,7 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 	 * @param data	The data.
 	 */
 	public PacketClientMsgProtobuf(EMsg eMsg, byte[] data) {
-		MsgType = eMsg;
+		msgType = eMsg;
 		payload = data;
 
 		final MsgHdrProtoBuf protobufHeader = new MsgHdrProtoBuf();
@@ -51,8 +51,8 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 			e.printStackTrace();
 		}
 
-		TargetJobID = protobufHeader.proto.getJobidTarget();
-		SourceJobID = protobufHeader.proto.getJobidSource();
+		targetJobID = protobufHeader.proto.getJobidTarget();
+		sourceJobID = protobufHeader.proto.getJobidSource();
 	}
 
 	/**

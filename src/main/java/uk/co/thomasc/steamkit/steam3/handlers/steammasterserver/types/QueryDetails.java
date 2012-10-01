@@ -11,7 +11,7 @@ public final class QueryDetails {
 	/**
 	 * Gets or sets the AppID used when querying servers.
 	 */
-	public int appID;
+	public int appId;
 
 	/**
 	 * Gets or sets the filter used for querying the master server.

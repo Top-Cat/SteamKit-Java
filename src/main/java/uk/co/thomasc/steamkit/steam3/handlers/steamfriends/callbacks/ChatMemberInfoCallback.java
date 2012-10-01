@@ -25,7 +25,7 @@ public final class ChatMemberInfoCallback extends CallbackMsg {
 	/**
 	 * Gets the state change info for {@link EChatInfoType#StateChange} member info updates.
 	 */
-	@Getter private StateChangeDetails StateChangeInfo;
+	@Getter private StateChangeDetails stateChangeInfo;
 
 	public ChatMemberInfoCallback(MsgClientChatMemberInfo msg, byte[] payload) {
 		chatRoomID = msg.getSteamIdChat();
@@ -33,7 +33,7 @@ public final class ChatMemberInfoCallback extends CallbackMsg {
 
 		switch (type) {
 			case StateChange:
-				StateChangeInfo = new StateChangeDetails(payload);
+				stateChangeInfo = new StateChangeDetails(payload);
 				break;
 		//TODO: handle more types
 		}

@@ -17,5 +17,5 @@ public final class LogOnDetails {
 	/**
 	 * Gets or sets the AppID this gameserver will serve.
 	 */
-	public int appID;
+	public int appId;
 }

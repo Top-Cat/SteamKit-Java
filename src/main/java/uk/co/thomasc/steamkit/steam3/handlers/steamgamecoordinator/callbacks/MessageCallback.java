@@ -28,7 +28,7 @@ public class MessageCallback extends CallbackMsg {
 	/**
 	 * Gets the AppID of the game coordinator the message is from.
 	 */
-	@Getter private final int appID;
+	@Getter private final int appId;
 
 	/**
 	 * Gets a value indicating whether this message is protobuf'd.
@@ -45,7 +45,7 @@ public class MessageCallback extends CallbackMsg {
 
 	public MessageCallback(CMsgGCClient gcMsg) {
 		eMsg = gcMsg.getMsgtype();
-		appID = gcMsg.getAppid();
+		appId = gcMsg.getAppid();
 
 		// we are knowingly using this obsolete property
 		//this.Payload = gcMsg.payload;

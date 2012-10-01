@@ -11,13 +11,13 @@ public class File {
 	/**
 	 * Gets the file ID.
 	 */
-	@Getter private final long fileID;
+	@Getter private final long fileId;
 
 	public File(CMsgClientUCMEnumerateUserPublishedFilesResponse.PublishedFileId file) {
-		fileID = file.getPublishedFileId();
+		fileId = file.getPublishedFileId();
 	}
 
 	public File(long fileId) {
-		fileID = fileId;
+		this.fileId = fileId;
 	}
 }

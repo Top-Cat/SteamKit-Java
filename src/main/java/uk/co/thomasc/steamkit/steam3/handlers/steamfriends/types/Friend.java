@@ -13,7 +13,7 @@ public final class Friend {
 	/**
 	 * Gets the SteamID of the friend.
 	 */
-	@Getter private final SteamID steamID;
+	@Getter private final SteamID steamId;
 
 	/**
 	 * Gets the relationship to this friend.
@@ -21,7 +21,7 @@ public final class Friend {
 	@Getter private final EFriendRelationship relationship;
 
 	public Friend(CMsgClientFriendsList.Friend friend) {
-		steamID = new SteamID(friend.getUlfriendid());
+		steamId = new SteamID(friend.getUlfriendid());
 		relationship = EFriendRelationship.f(friend.getEfriendrelationship());
 	}
 }

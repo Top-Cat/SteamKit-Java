@@ -7,7 +7,7 @@ import uk.co.thomasc.steamkit.types.steamid.BitVector64;
  */
 public class GameID {
 
-	BitVector64 gameid;
+	BitVector64 gameId;
 
 	/**
 	 * Initializes a new instance of the {@link GameID} class.
@@ -21,7 +21,7 @@ public class GameID {
 	 * @param id	The 64bit integer to assign this GameID from.
 	 */
 	public GameID(long id) {
-		gameid = new BitVector64(id);
+		gameId = new BitVector64(id);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class GameID {
 	 * @param gameId	The 64bit integer to assign this GameID from.
 	 */
 	public void set(long gameId) {
-		gameid.setData(gameId);
+		this.gameId.setData(gameId);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class GameID {
 	 * @return	A 64bit integer representing this GameID.
 	 */
 	public long toLong() {
-		return gameid.getData();
+		return gameId.getData();
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class GameID {
 	 */
 	@Override
 	public String toString() {
-		return gameid.getData().toString();
+		return gameId.getData().toString();
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class GameID {
 	 * @return The app IDid
 	 */
 	public long getAppID() {
-		return gameid.getMask((short) 0, 0xFFFFFF);
+		return gameId.getMask((short) 0, 0xFFFFFF);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class GameID {
 	 * @param appID	The app IDid
 	 */
 	public void setAppID(long appID) {
-		gameid.setMask((short) 0, 0xFFFFFF, appID);
+		gameId.setMask((short) 0, 0xFFFFFF, appID);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class GameID {
 	 * @return The type of the app.
 	 */
 	public GameType getAppType() {
-		return GameType.fromCode((int) gameid.getMask((short) 24, 0xFF));
+		return GameType.fromCode((int) gameId.getMask((short) 24, 0xFF));
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class GameID {
 	 * @param appType	The type of the app.
 	 */
 	public void setAppType(GameType appType) {
-		gameid.setMask((short) 24, 0xFF, appType.v());
+		gameId.setMask((short) 24, 0xFF, appType.v());
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class GameID {
 	 * @return The mod ID.
 	 */
 	public long getModID() {
-		return gameid.getMask((short) 32, 0xFFFFFFFF);
+		return gameId.getMask((short) 32, 0xFFFFFFFF);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class GameID {
 	 * @param modID	The mod ID.
 	 */
 	public void setModID(long modID) {
-		gameid.setMask((short) 32, 0xFFFFFFFF, modID);
+		gameId.setMask((short) 32, 0xFFFFFFFF, modID);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class GameID {
 			return false;
 		}
 
-		return gameid.getData().equals(((GameID) obj).gameid.getData());
+		return gameId.getData().equals(((GameID) obj).gameId.getData());
 	}
 
 	/**
@@ -157,6 +157,6 @@ public class GameID {
 	 */
 	@Override
 	public int hashCode() {
-		return gameid.hashCode();
+		return gameId.hashCode();
 	}
 }

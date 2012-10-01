@@ -71,7 +71,7 @@ public final class LoggedOnCallback extends CallbackMsg {
 	/**
 	 * Gets the Steam2 CellID.
 	 */
-	@Getter private final int cellID;
+	@Getter private final int cellId;
 
 	/**
 	 * Gets the Steam2 ticket.
@@ -97,7 +97,7 @@ public final class LoggedOnCallback extends CallbackMsg {
 
 		emailDomain = resp.getEmailDomain();
 
-		cellID = resp.getCellId();
+		cellId = resp.getCellId();
 
 		if (resp.getSteam2Ticket() != ByteString.EMPTY) {
 			steam2Ticket = new Steam2Ticket(resp.getSteam2Ticket().toByteArray());

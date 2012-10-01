@@ -13,42 +13,42 @@ public abstract class Connection {
 	/**
 	 * The net filter.
 	 */
-	public NetFilterEncryption NetFilter;
+	public NetFilterEncryption netFilter;
 
 	/**
 	 * Occurs when a net message is recieved over the network.
 	 */
-	public Event<NetMsgEventArgs> NetMsgReceived = new Event<NetMsgEventArgs>();
+	public Event<NetMsgEventArgs> netMsgReceived = new Event<NetMsgEventArgs>();
 
 	/**
-	 * Raises the {@link #NetMsgReceived} event.
+	 * Raises the {@link #netMsgReceived} event.
 	 * @param e	The {@link NetMsgEventArgs} instance containing the event data.
 	 */
 	protected void onNetMsgReceived(NetMsgEventArgs e) {
-		if (NetMsgReceived != null) {
-			NetMsgReceived.handleEvent(this, e);
+		if (netMsgReceived != null) {
+			netMsgReceived.handleEvent(this, e);
 		}
 	}
 
 	/**
 	 * Occurs when the physical connection is established.
 	 */
-	public GenericEvent Connected = new GenericEvent();
+	public GenericEvent connected = new GenericEvent();
 
 	protected void onConnected(EventArgs e) {
-		if (Connected != null) {
-			Connected.handleEvent(this, e);
+		if (connected != null) {
+			connected.handleEvent(this, e);
 		}
 	}
 
 	/**
 	 * Occurs when the physical connection is broken.
 	 */
-	public GenericEvent Disconnected = new GenericEvent();
+	public GenericEvent disconnected = new GenericEvent();
 
 	protected void onDisconnected(EventArgs e) {
-		if (Disconnected != null) {
-			Disconnected.handleEvent(this, e);
+		if (disconnected != null) {
+			disconnected.handleEvent(this, e);
 		}
 	}
 

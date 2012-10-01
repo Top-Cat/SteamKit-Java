@@ -15,12 +15,12 @@ public final class TicketAuthCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID the ticket auth completed for.
 	 */
-	@Getter private final SteamID steamID;
+	@Getter private final SteamID steamId;
 
 	/**
 	 * Gets the GameID the ticket was for.
 	 */
-	@Getter private final GameID gameID;
+	@Getter private final GameID gameId;
 
 	/**
 	 * Gets the authentication state.
@@ -43,8 +43,8 @@ public final class TicketAuthCallback extends CallbackMsg {
 	@Getter private final int ticketSequence;
 
 	public TicketAuthCallback(CMsgClientTicketAuthComplete tickAuth) {
-		steamID = new SteamID(tickAuth.getSteamId());
-		gameID = new GameID(tickAuth.getGameId());
+		steamId = new SteamID(tickAuth.getSteamId());
+		gameId = new GameID(tickAuth.getGameId());
 
 		state = tickAuth.getEstate();
 

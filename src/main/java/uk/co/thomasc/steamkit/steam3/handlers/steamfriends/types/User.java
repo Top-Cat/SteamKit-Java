@@ -9,7 +9,7 @@ public final class User extends Account {
 
 	public EPersonaState personaState;
 
-	public int gameAppID;
-	public GameID gameID = new GameID();
+	public int gameAppId;
+	public GameID gameId = new GameID();
 	public String gameName;
 }

@@ -55,7 +55,7 @@ public final class SteamGameServer extends ClientMsgHandler {
 		logon.getBody().setProtocolVersion(MsgClientLogon.CurrentProtocol);
 
 		logon.getBody().setClientOsType(Utils.getOSType().v());
-		logon.getBody().setGameServerAppId(details.appID);
+		logon.getBody().setGameServerAppId(details.appId);
 		logon.getBody().setMachineId(ByteString.copyFrom(Utils.generateMachineID()));
 
 		logon.getBody().setAccountName(details.username);

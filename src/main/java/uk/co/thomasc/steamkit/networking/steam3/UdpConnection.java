@@ -173,8 +173,8 @@ public class UdpConnection extends Connection {
 		try {
 			byte[] data = clientMsg.serialize();
 
-			if (NetFilter != null) {
-				data = NetFilter.processOutgoing(data);
+			if (netFilter != null) {
+				data = netFilter.processOutgoing(data);
 			}
 
 			sendData(new BinaryReader(data));
@@ -347,8 +347,8 @@ public class UdpConnection extends Connection {
 
 		byte[] data = payload.toByteArray();
 
-		if (NetFilter != null) {
-			data = NetFilter.processIncoming(data);
+		if (netFilter != null) {
+			data = netFilter.processIncoming(data);
 		}
 
 		DebugLog.writeLine("UdpConnection", "Dispatching message; %d bytes", data.length);
@@ -553,7 +553,7 @@ public class UdpConnection extends Connection {
 		}
 
 		final ConnectData cd = new ConnectData();
-		cd.ChallengeValue = cr.ChallengeValue ^ ConnectData.CHALLENGE_MASK;
+		cd.challengeValue = cr.challengeValue ^ ConnectData.CHALLENGE_MASK;
 
 		final BinaryWriter ms = new BinaryWriter();
 		try {

@@ -16,27 +16,27 @@ public abstract class GCMsgBase<T extends IGCSerializableHeader> extends AMsgBas
 	/**
 	 * true if this instance is protobuf backed; otherwise, false
 	 */
-	@Getter private boolean IsProto;
+	@Getter private boolean isProto;
 
 	/**
 	 * The network message type.
 	 */
-	@Getter private int MsgType;
+	@Getter private int msgType;
 
 	/**
 	 * The target job id.
 	 */
-	public JobID TargetJobID;
+	public JobID targetJobID;
 
 	/**
 	 * The source job id.
 	 */
-	public JobID SourceJobID;
+	public JobID sourceJobID;
 
 	/**
 	 * Gets the header for this message type. 
 	 */
-	@Getter private T Header;
+	@Getter private T header;
 
 	/**
 	 * Initializes a new instance of the {@link GCMsgBase} class.
@@ -45,7 +45,7 @@ public abstract class GCMsgBase<T extends IGCSerializableHeader> extends AMsgBas
 	public GCMsgBase(int payloadReserve, Class<T> aClass) {
 		super(payloadReserve);
 		try {
-			Header = aClass.newInstance();
+			header = aClass.newInstance();
 		} catch (final InstantiationException e) {
 			e.printStackTrace();
 		} catch (final IllegalAccessException e) {

@@ -24,7 +24,7 @@ public final class PublishedFileDetailsCallback extends CallbackMsg {
 	/**
 	 * Gets the file ID.
 	 */
-	@Getter private final long fileID;
+	@Getter private final long fileId;
 
 	/**
 	 * Gets the SteamID of the creator of this file.
@@ -34,12 +34,12 @@ public final class PublishedFileDetailsCallback extends CallbackMsg {
 	/**
 	 * Gets the AppID used during creation.
 	 */
-	@Getter private final int creatorAppID;
+	@Getter private final int creatorAppId;
 
 	/**
 	 * Gets the AppID used during consumption.
 	 */
-	@Getter private final int consumerAppID;
+	@Getter private final int consumerAppId;
 
 	/**
 	 * Gets the handle for the UGC file this published file represents.
@@ -109,12 +109,12 @@ public final class PublishedFileDetailsCallback extends CallbackMsg {
 	public PublishedFileDetailsCallback(CMsgClientUCMGetPublishedFileDetailsResponse msg) {
 		result = EResult.f(msg.getEresult());
 
-		fileID = msg.getPublishedFileId();
+		fileId = msg.getPublishedFileId();
 
 		creator = new SteamID(msg.getCreatorSteamId());
 
-		creatorAppID = msg.getConsumerAppId();
-		consumerAppID = msg.getConsumerAppId();
+		creatorAppId = msg.getConsumerAppId();
+		consumerAppId = msg.getConsumerAppId();
 
 		fileUGC = msg.getFileHcontent();
 		previewFileUGC = msg.getPreviewHcontent();

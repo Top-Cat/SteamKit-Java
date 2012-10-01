@@ -9,11 +9,11 @@ import uk.co.thomasc.steamkit.util.cSharp.ip.IPEndPoint;
  * Represents data that has been received over the network.
  */
 public class NetMsgEventArgs extends EventArgs {
-	@Getter private final byte[] Data;
-	@Getter private final IPEndPoint EndPoint;
+	@Getter private final byte[] data;
+	@Getter private final IPEndPoint endPoint;
 
 	public NetMsgEventArgs(byte[] data, IPEndPoint endPoint) {
-		Data = data;
-		EndPoint = endPoint;
+		this.data = data;
+		this.endPoint = endPoint;
 	}
 }

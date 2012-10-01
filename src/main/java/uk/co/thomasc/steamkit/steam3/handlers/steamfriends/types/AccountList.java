@@ -17,7 +17,7 @@ public final class AccountList<T extends Account> extends HashMap<SteamID, T> {
 		if (!containsKey(steamId)) {
 			try {
 				final T account = clazz.newInstance();
-				account.SteamID = steamId;
+				account.steamId = steamId;
 				put(steamId, account);
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();

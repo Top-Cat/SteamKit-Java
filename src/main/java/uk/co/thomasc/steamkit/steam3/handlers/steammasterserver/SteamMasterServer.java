@@ -26,7 +26,7 @@ public final class SteamMasterServer extends ClientMsgHandler {
 		final ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder> query = new ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder>(EMsg.ClientGMSServerQuery, CMsgClientGMSServerQuery.class);
 		query.setSourceJobID(getClient().getNextJobID());
 
-		query.getBody().setAppId(details.appID);
+		query.getBody().setAppId(details.appId);
 
 		if (details.geoLocatedIP != null) {
 			query.getBody().setGeoLocationIp((int) NetHelpers.getIPAddress(details.geoLocatedIP));
