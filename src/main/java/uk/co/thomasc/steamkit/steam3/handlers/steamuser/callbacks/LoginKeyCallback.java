@@ -1,0 +1,27 @@
+package uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks;
+
+import lombok.Getter;
+
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientNewLoginKey;
+
+import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
+
+/**
+ * This callback is returned some time after logging onto the network.
+ */
+public final class LoginKeyCallback extends CallbackMsg {
+	/**
+	 * Gets the login key.
+	 */
+	@Getter private String loginKey;
+	
+	/**
+	 * Gets the unique ID.
+	 */
+	@Getter private int uniqueID;
+
+	public LoginKeyCallback(CMsgClientNewLoginKey logKey) {
+		this.loginKey = logKey.getLoginKey();
+		this.uniqueID = logKey.getUniqueId();
+	}
+}
