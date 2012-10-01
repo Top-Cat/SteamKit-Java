@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.thomasc.steamkit.util.Passable;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 
 import lombok.Getter;
@@ -241,8 +242,8 @@ public class KeyValue {
 	}
 
 	public void recursiveLoadFromBuffer(KVTextReader kvr) throws IOException {
-		boolean wasQuoted = false;
-		boolean wasConditional = false;
+		Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
+		Passable<Boolean> wasConditional = new Passable<Boolean>(false);
 
 		while (true) {
 			//boolean bAccepted = true;
@@ -254,7 +255,7 @@ public class KeyValue {
 				throw new IOException("RecursiveLoadFromBuffer: got EOF or empty keyname");
 			}
 
-			if (name.startsWith("}") && !wasQuoted ) { // top level closed, stop reading
+			if (name.startsWith("}") && !wasQuoted.getValue()) { // top level closed, stop reading
 				break;
 			}
 
@@ -264,7 +265,7 @@ public class KeyValue {
 			// get the value
 			String value = kvr.readToken(wasQuoted, wasConditional);
 
-			if (wasConditional && value != null) {
+			if (wasConditional.getValue() && value != null) {
 				//bAccepted = (value == "[$WIN32]");
 				value = kvr.readToken(wasQuoted, wasConditional);
 			}
@@ -273,14 +274,14 @@ public class KeyValue {
 				throw new IOException("RecursiveLoadFromBuffer:  got NULL key");
 			}
 
-			if (value.startsWith( "}" ) && !wasQuoted) {
+			if (value.startsWith("}") && !wasQuoted.getValue()) {
 				throw new IOException("RecursiveLoadFromBuffer:  got } in key");
 			}
 
-			if (value.startsWith( "{" ) && !wasQuoted) {
+			if (value.startsWith("{") && !wasQuoted.getValue()) {
 				dat.recursiveLoadFromBuffer(kvr);
 			} else {
-				if (wasConditional) {
+				if (wasConditional.getValue()) {
 					throw new IOException("RecursiveLoadFromBuffer:  got conditional between key and value");
 				}
 

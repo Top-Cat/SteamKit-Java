@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.thomasc.steamkit.util.Passable;
+
 class KVTextReader extends BufferedReader {
 	static Map<Character, Character> escapedMapping = new HashMap<Character, Character>();
 	static {
@@ -23,8 +25,8 @@ class KVTextReader extends BufferedReader {
 		
 		is = input;
 		
-		boolean wasQuoted = false;
-		boolean wasConditional = false;
+		Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
+		Passable<Boolean> wasConditional = new Passable<Boolean>(false);
 
 		KeyValue currentKey = kv;
 
@@ -45,14 +47,14 @@ class KVTextReader extends BufferedReader {
 
 			s = readToken(wasQuoted, wasConditional);
 
-			if (wasConditional) {
+			if (wasConditional.getValue()) {
 				//bAccepted = (s == "[$WIN32]");
 
 				// Now get the '{'
 				s = readToken(wasQuoted, wasConditional);
 			}
 
-			if (s.startsWith("{") && !wasQuoted) {
+			if (s.startsWith("{") && !wasQuoted.getValue()) {
 				// header is valid so load the file
 				currentKey.recursiveLoadFromBuffer(this);
 			} else {
@@ -98,9 +100,9 @@ class KVTextReader extends BufferedReader {
 		return false;
 	}
 
-	public String readToken(boolean wasQuoted, boolean wasConditional) throws IOException {
-		wasQuoted = false;
-		wasConditional = false;
+	public String readToken(Passable<Boolean> wasQuoted, Passable<Boolean> wasConditional) throws IOException {
+		wasQuoted.setValue(false);
+		wasConditional.setValue(false);
 
 		while (true) {
 			eatWhiteSpace();
@@ -120,7 +122,7 @@ class KVTextReader extends BufferedReader {
 
 		char next = peek();
 		if (next == '"') {
-			wasQuoted = true;
+			wasQuoted.setValue(true);
 
 			// "
 			read();
@@ -174,7 +176,7 @@ class KVTextReader extends BufferedReader {
 			}
 
 			if (next == ']' && bConditionalStart) {
-				wasConditional = true;
+				wasConditional.setValue(true);
 			}
 
 			if (Character.isWhitespace(next)) {
