@@ -34,19 +34,19 @@ public class BinaryWriter {
 	public void write(short data) throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(2);
 		buffer.putShort(data);
-		writeR(buffer.array());
+		writeR(buffer);
 	}
 
 	public void write(int data) throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(4);
 		buffer.putInt(data);
-		writeR(buffer.array());
+		writeR(buffer);
 	}
 
 	public void write(long data) throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(8);
 		buffer.putLong(data);
-		writeR(buffer.array());
+		writeR(buffer);
 	}
 
 	public byte[] toByteArray() {
@@ -56,9 +56,9 @@ public class BinaryWriter {
 		return null;
 	}
 
-	public void writeR(byte[] data) throws IOException {
-		for (int i = data.length - 1; i >= 0; --i) {
-			write(data[i]);
+	public void writeR(ByteBuffer buffer) throws IOException {
+		for (int i = buffer.capacity() - 1; i >= 0; --i) {
+			write(buffer.get(i));
 		}
 	}
 
