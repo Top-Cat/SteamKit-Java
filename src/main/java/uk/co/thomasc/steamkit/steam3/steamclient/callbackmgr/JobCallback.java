@@ -12,19 +12,16 @@ import uk.co.thomasc.steamkit.util.stream.BinaryReader;
  * @param <T> The inner callback this job represents.
  */
 public final class JobCallback<T extends CallbackMsg> extends BaseJobCallback {
-
 	/**
 	 * Gets the inner callback message for this job.
 	 */
 	@Getter private T Callback;
 
-
-	@SuppressWarnings("unchecked")
 	public JobCallback(JobID jobId, T callback) {
 		super(jobId.getValue());
 		Debug.Assert(jobId.getValue() != BinaryReader.LongMaxValue, "JobCallback used for non job based callback!");
 		
-		callbackType = (Class<T>) callback.getClass();
+		callbackType = callback.getClass();
 		Callback = callback;
 	}
 }
