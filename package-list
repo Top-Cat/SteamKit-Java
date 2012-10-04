@@ -1,5 +1,8 @@
 uk.co.thomasc.steamkit.base
 uk.co.thomasc.steamkit.base.gc
+uk.co.thomasc.steamkit.base.gc.csgo
+uk.co.thomasc.steamkit.base.gc.dota
+uk.co.thomasc.steamkit.base.gc.tf2
 uk.co.thomasc.steamkit.base.generated.steamlanguage
 uk.co.thomasc.steamkit.base.generated.steamlanguageinternal
 uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg
@@ -35,6 +38,7 @@ uk.co.thomasc.steamkit.steam3.handlers.steamworkshop.types
 uk.co.thomasc.steamkit.steam3.steamclient
 uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr
 uk.co.thomasc.steamkit.steam3.steamclient.callbacks
+uk.co.thomasc.steamkit.steam3.webapi
 uk.co.thomasc.steamkit.types
 uk.co.thomasc.steamkit.types.gameid
 uk.co.thomasc.steamkit.types.keyvalue
