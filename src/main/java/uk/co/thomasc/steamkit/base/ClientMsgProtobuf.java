@@ -71,7 +71,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 */
 	@Override
 	public void setSteamID(SteamID steamID) {
-		getProtoHeader().setSteamid(steamID.convertToUInt64());
+		getProtoHeader().setSteamid(steamID.convertToLong());
 	}
 
 	/**
@@ -120,8 +120,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 
 	private Class<? extends AbstractMessage> clazz;
 
-	public ClientMsgProtobuf(EMsg eMsg, Class<? extends AbstractMessage> clazz) {
-		this(eMsg, clazz, 64);
+	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, EMsg eMsg) {
+		this(clazz, eMsg, 64);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
 	 */
 	@SuppressWarnings("unchecked")
-	public ClientMsgProtobuf(EMsg eMsg, Class<? extends AbstractMessage> clazz, int payloadReserve) {
+	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, EMsg eMsg, int payloadReserve) {
 		super(MsgHdrProtoBuf.class, payloadReserve);
 
 		this.clazz = clazz;
@@ -148,8 +148,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 		getHeader().msg = eMsg;
 	}
 
-	public ClientMsgProtobuf(EMsg eMsg, MsgBase<MsgHdrProtoBuf> msg, Class<? extends AbstractMessage> clazz) {
-		this(eMsg, msg, clazz, 64);
+	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, EMsg eMsg, MsgBase<MsgHdrProtoBuf> msg) {
+		this(clazz, eMsg, msg, 64);
 	}
 
 	/**
@@ -159,8 +159,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 * @param msg				The message that this instance is a reply for.
 	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
 	 */
-	public ClientMsgProtobuf(EMsg eMsg, MsgBase<MsgHdrProtoBuf> msg, Class<? extends AbstractMessage> clazz, int payloadReserve) {
-		this(eMsg, clazz, payloadReserve);
+	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, EMsg eMsg, MsgBase<MsgHdrProtoBuf> msg, int payloadReserve) {
+		this(clazz, eMsg, payloadReserve);
 		// our target is where the message came from
 		getHeader().proto.setJobidTarget(msg.getHeader().proto.getJobidSource());
 	}
@@ -170,8 +170,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	 * This is a recieve constructor.
 	 * @param msg	The packet message to build this client message from.
 	 */
-	public ClientMsgProtobuf(IPacketMsg msg, Class<? extends AbstractMessage> clazz) {
-		this(msg.getMsgType(), clazz);
+	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, IPacketMsg msg) {
+		this(clazz, msg.getMsgType());
 
 		Debug.Assert(msg.isProto(), "ClientMsgProtobuf used for non-proto message!");
 

@@ -24,7 +24,7 @@ public class MsgClientChatAction implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdChat(SteamID steamId) {
-		steamIdChat = steamId.convertToUInt64();
+		steamIdChat = steamId.convertToLong();
 	}
 
 	// Static size: 8
@@ -35,7 +35,7 @@ public class MsgClientChatAction implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdUserToActOn(SteamID steamId) {
-		steamIdUserToActOn = steamId.convertToUInt64();
+		steamIdUserToActOn = steamId.convertToLong();
 	}
 
 	// Static size: 4

@@ -18,12 +18,8 @@ class KVTextReader extends BufferedReader {
 		// TODO: any others?
 	}
 
-	BufferedInputStream is;
-
 	public KVTextReader(KeyValue kv, BufferedInputStream input) throws IOException {
 		super(new InputStreamReader(input));
-
-		is = input;
 
 		final Passable<Boolean> wasQuoted = new Passable<Boolean>(false);
 		final Passable<Boolean> wasConditional = new Passable<Boolean>(false);
@@ -65,26 +61,25 @@ class KVTextReader extends BufferedReader {
 		} while (input.available() > 0);
 	}
 
-	private char peek() throws IOException {
-		is.mark(1);
+	private Character peek() throws IOException {
+		mark(1);
 		final int i = read();
-		is.reset();
+		reset();
 		return (char) i;
 	}
 
 	private void eatWhiteSpace() throws IOException {
-		while (is.available() > 0) {
-			is.mark(1);
-
-			if (!Character.isWhitespace((char) read())) {
-				is.reset();
+		while (peek() != null) {
+			if (!Character.isWhitespace(peek())) {
 				break;
 			}
+
+			read();
 		}
 	}
 
 	private boolean eatCPPComment() throws IOException {
-		if (is.available() > 0) {
+		if (peek() != null) {
 			final char next = peek();
 			if (next == '/') {
 				read();
@@ -106,7 +101,7 @@ class KVTextReader extends BufferedReader {
 		while (true) {
 			eatWhiteSpace();
 
-			if (is.available() == 0) {
+			if (peek() == null) {
 				return null;
 			}
 
@@ -115,7 +110,7 @@ class KVTextReader extends BufferedReader {
 			}
 		}
 
-		if (is.available() == 0) {
+		if (peek() == null) {
 			return null;
 		}
 
@@ -127,7 +122,7 @@ class KVTextReader extends BufferedReader {
 			read();
 
 			final StringBuilder sb = new StringBuilder();
-			while (is.available() > 0) {
+			while (peek() != null) {
 				if (peek() == '\\') {
 					read();
 
@@ -163,7 +158,7 @@ class KVTextReader extends BufferedReader {
 		boolean bConditionalStart = false;
 		final int count = 0;
 		final StringBuilder ret = new StringBuilder();
-		while (is.available() > 0) {
+		while (peek() != null) {
 			next = peek();
 
 			if (next == '"' || next == '{' || next == '}') {

@@ -3,7 +3,7 @@ package uk.co.thomasc.steamkit.util.cSharp.events;
 import java.util.HashSet;
 
 public class Event<T> {
-	private final HashSet<EventHandler<T>> handlers = new HashSet<EventHandler<T>>();
+	protected final HashSet<EventHandler<T>> handlers = new HashSet<EventHandler<T>>();
 
 	public void addEventHandler(EventHandler<T> handler) {
 		handlers.add(handler);

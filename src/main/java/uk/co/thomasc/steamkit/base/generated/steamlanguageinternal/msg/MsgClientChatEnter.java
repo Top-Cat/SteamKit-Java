@@ -25,7 +25,7 @@ public class MsgClientChatEnter implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdChat(SteamID steamId) {
-		steamIdChat = steamId.convertToUInt64();
+		steamIdChat = steamId.convertToLong();
 	}
 
 	// Static size: 8
@@ -36,7 +36,7 @@ public class MsgClientChatEnter implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdFriend(SteamID steamId) {
-		steamIdFriend = steamId.convertToUInt64();
+		steamIdFriend = steamId.convertToLong();
 	}
 
 	// Static size: 4
@@ -49,7 +49,7 @@ public class MsgClientChatEnter implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdOwner(SteamID steamId) {
-		steamIdOwner = steamId.convertToUInt64();
+		steamIdOwner = steamId.convertToLong();
 	}
 
 	// Static size: 8
@@ -60,7 +60,7 @@ public class MsgClientChatEnter implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdClan(SteamID steamId) {
-		steamIdClan = steamId.convertToUInt64();
+		steamIdClan = steamId.convertToLong();
 	}
 
 	// Static size: 1

@@ -23,9 +23,9 @@ public final class SteamTrading extends ClientMsgHandler {
 	 * @param user	The client to trade.
 	 */
 	public void trade(SteamID user) {
-		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeReq = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(EMsg.EconTrading_InitiateTradeRequest, CMsgTrading_InitiateTradeRequest.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeReq = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(CMsgTrading_InitiateTradeRequest.class, EMsg.EconTrading_InitiateTradeRequest);
 
-		tradeReq.getBody().setOtherSteamid(user.convertToUInt64());
+		tradeReq.getBody().setOtherSteamid(user.convertToLong());
 
 		getClient().send(tradeReq);
 	}
@@ -36,7 +36,7 @@ public final class SteamTrading extends ClientMsgHandler {
 	 * @param acceptTrade	if set to true, the trade will be accepted.
 	 */
 	public void respondToTrade(int tradeId, boolean acceptTrade) {
-		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(EMsg.EconTrading_InitiateTradeResponse, CMsgTrading_InitiateTradeResponse.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(CMsgTrading_InitiateTradeResponse.class, EMsg.EconTrading_InitiateTradeResponse);
 
 		tradeResp.getBody().setTradeRequestId(tradeId);
 		tradeResp.getBody().setResponse(acceptTrade ? 0 : 1);
@@ -49,9 +49,9 @@ public final class SteamTrading extends ClientMsgHandler {
 	 * @param user	The user.
 	 */
 	public void cancelTrade(SteamID user) {
-		final ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder> cancelTrade = new ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder>(EMsg.EconTrading_CancelTradeRequest, CMsgTrading_CancelTradeRequest.class);
+		final ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder> cancelTrade = new ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder>(CMsgTrading_CancelTradeRequest.class, EMsg.EconTrading_CancelTradeRequest);
 
-		cancelTrade.getBody().setOtherSteamid(user.convertToUInt64());
+		cancelTrade.getBody().setOtherSteamid(user.convertToLong());
 
 		getClient().send(cancelTrade);
 	}
@@ -75,21 +75,21 @@ public final class SteamTrading extends ClientMsgHandler {
 	}
 
 	void handleTradeProposed(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeProp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(packetMsg, CMsgTrading_InitiateTradeRequest.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeProp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(CMsgTrading_InitiateTradeRequest.class, packetMsg);
 
 		final TradeProposedCallback callback = new TradeProposedCallback(tradeProp.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleTradeResult(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResult = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(packetMsg, CMsgTrading_InitiateTradeResponse.class);
+		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResult = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(CMsgTrading_InitiateTradeResponse.class, packetMsg);
 
 		final TradeResultCallback callback = new TradeResultCallback(tradeResult.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleStartSession(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgTrading_StartSession.Builder> startSess = new ClientMsgProtobuf<CMsgTrading_StartSession.Builder>(packetMsg, CMsgTrading_StartSession.class);
+		final ClientMsgProtobuf<CMsgTrading_StartSession.Builder> startSess = new ClientMsgProtobuf<CMsgTrading_StartSession.Builder>(CMsgTrading_StartSession.class, packetMsg);
 
 		final SessionStartCallback callback = new SessionStartCallback(startSess.getBody().build());
 		getClient().postCallback(callback);

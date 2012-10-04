@@ -174,7 +174,7 @@ public abstract class CMClient {
 		heartBeatFunc = new ScheduledFunction(new Action() {
 			@Override
 			public void call() {
-				send(new ClientMsgProtobuf<CMsgClientHeartBeat.Builder>(EMsg.ClientHeartBeat, CMsgClientHeartBeat.class));
+				send(new ClientMsgProtobuf<CMsgClientHeartBeat.Builder>(CMsgClientHeartBeat.class, EMsg.ClientHeartBeat));
 			}
 		});
 	}
@@ -322,7 +322,7 @@ public abstract class CMClient {
 			return;
 		}
 
-		final ClientMsgProtobuf<CMsgMulti.Builder> msgMulti = new ClientMsgProtobuf<CMsgMulti.Builder>(packetMsg, CMsgMulti.class);
+		final ClientMsgProtobuf<CMsgMulti.Builder> msgMulti = new ClientMsgProtobuf<CMsgMulti.Builder>(CMsgMulti.class, packetMsg);
 
 		byte[] payload = msgMulti.getBody().getMessageBody().toByteArray();
 
@@ -351,7 +351,7 @@ public abstract class CMClient {
 			return;
 		}
 
-		final ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(packetMsg, CMsgClientLogonResponse.class);
+		final ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(CMsgClientLogonResponse.class, packetMsg);
 
 		if (EResult.f(logonResp.getBody().getEresult()) == EResult.OK) {
 			sessionId = logonResp.getProtoHeader().getClientSessionid();
@@ -422,7 +422,7 @@ public abstract class CMClient {
 	}
 
 	void handleServerList(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientServerList.Builder> listMsg = new ClientMsgProtobuf<CMsgClientServerList.Builder>(packetMsg, CMsgClientServerList.class);
+		final ClientMsgProtobuf<CMsgClientServerList.Builder> listMsg = new ClientMsgProtobuf<CMsgClientServerList.Builder>(CMsgClientServerList.class, packetMsg);
 
 		for (final Server server : listMsg.getBody().getServersList()) {
 			final EServerType type = EServerType.f(server.getServerType());

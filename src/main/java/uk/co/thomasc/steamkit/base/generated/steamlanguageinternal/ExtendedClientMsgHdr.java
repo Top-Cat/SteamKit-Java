@@ -30,7 +30,7 @@ public class ExtendedClientMsgHdr implements ISteamSerializableHeader {
 	}
 
 	public void setSteamID(SteamID steamID) {
-		this.steamID = steamID.convertToUInt64();
+		this.steamID = steamID.convertToLong();
 	}
 
 	// Static size: 4

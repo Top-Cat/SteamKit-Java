@@ -42,12 +42,12 @@ public final class SteamGameServer extends ClientMsgHandler {
 			throw new InvalidParameterException("LogOn requires a username and password to be set in 'details'.");
 		}
 
-		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(EMsg.ClientLogon, CMsgClientLogon.class);
+		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(CMsgClientLogon.class, EMsg.ClientLogon);
 
 		final SteamID gsId = new SteamID(0, 0, getClient().getConnectedUniverse(), EAccountType.GameServer);
 
 		logon.getProtoHeader().setClientSessionid(0);
-		logon.getProtoHeader().setSteamid(gsId.convertToUInt64());
+		logon.getProtoHeader().setSteamid(gsId.convertToLong());
 
 		final int localIp = (int) NetHelpers.getIPAddress(getClient().getLocalIP());
 		logon.getBody().setObfustucatedPrivateIp(localIp ^ MsgClientLogon.ObfuscationMask);
@@ -71,12 +71,12 @@ public final class SteamGameServer extends ClientMsgHandler {
 	 * @param appId	The AppID served by this game server, or 0 for the default.
 	 */
 	public void logOnAnonymous(int appId) {
-		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(EMsg.ClientLogon, CMsgClientLogon.class);
+		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(CMsgClientLogon.class, EMsg.ClientLogon);
 
 		final SteamID gsId = new SteamID(0, 0, getClient().getConnectedUniverse(), EAccountType.AnonGameServer);
 
 		logon.getProtoHeader().setClientSessionid(0);
-		logon.getProtoHeader().setSteamid(gsId.convertToUInt64());
+		logon.getProtoHeader().setSteamid(gsId.convertToLong());
 
 		final int localIp = (int) NetHelpers.getIPAddress(getClient().getLocalIP());
 		logon.getBody().setObfustucatedPrivateIp(localIp ^ MsgClientLogon.ObfuscationMask);
@@ -100,7 +100,7 @@ public final class SteamGameServer extends ClientMsgHandler {
 	 * Results are returned in a {@link LoggedOffCallback}.
 	 */
 	public void logOff() {
-		final ClientMsgProtobuf<CMsgClientLogOff.Builder> logOff = new ClientMsgProtobuf<CMsgClientLogOff.Builder>(EMsg.ClientLogOff, CMsgClientLogOff.class);
+		final ClientMsgProtobuf<CMsgClientLogOff.Builder> logOff = new ClientMsgProtobuf<CMsgClientLogOff.Builder>(CMsgClientLogOff.class, EMsg.ClientLogOff);
 		getClient().send(logOff);
 	}
 
@@ -120,14 +120,14 @@ public final class SteamGameServer extends ClientMsgHandler {
 	}
 
 	void handleStatusReply(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgGSStatusReply.Builder> statusReply = new ClientMsgProtobuf<CMsgGSStatusReply.Builder>(packetMsg, CMsgGSStatusReply.class);
+		final ClientMsgProtobuf<CMsgGSStatusReply.Builder> statusReply = new ClientMsgProtobuf<CMsgGSStatusReply.Builder>(CMsgGSStatusReply.class, packetMsg);
 
 		final StatusReplyCallback callback = new StatusReplyCallback(statusReply.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleAuthComplete(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientTicketAuthComplete.Builder> authComplete = new ClientMsgProtobuf<CMsgClientTicketAuthComplete.Builder>(packetMsg, CMsgClientTicketAuthComplete.class);
+		final ClientMsgProtobuf<CMsgClientTicketAuthComplete.Builder> authComplete = new ClientMsgProtobuf<CMsgClientTicketAuthComplete.Builder>(CMsgClientTicketAuthComplete.class, packetMsg);
 
 		final TicketAuthCallback callback = new TicketAuthCallback(authComplete.getBody().build());
 		getClient().postCallback(callback);

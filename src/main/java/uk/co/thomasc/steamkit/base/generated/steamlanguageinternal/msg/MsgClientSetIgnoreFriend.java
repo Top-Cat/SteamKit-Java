@@ -23,7 +23,7 @@ public class MsgClientSetIgnoreFriend implements ISteamSerializableMessage {
 	}
 
 	public void setMySteamId(SteamID steamId) {
-		mySteamId = steamId.convertToUInt64();
+		mySteamId = steamId.convertToLong();
 	}
 
 	// Static size: 8
@@ -34,7 +34,7 @@ public class MsgClientSetIgnoreFriend implements ISteamSerializableMessage {
 	}
 
 	public void setSteamIdFriend(SteamID steamId) {
-		steamIdFriend = steamId.convertToUInt64();
+		steamIdFriend = steamId.convertToLong();
 	}
 
 	// Static size: 1

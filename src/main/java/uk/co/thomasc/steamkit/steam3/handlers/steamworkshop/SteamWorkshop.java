@@ -35,7 +35,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID requestPublishedFileDetails(long publishedFileId) {
-		final ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetails.Builder>(EMsg.ClientUCMGetPublishedFileDetails, CMsgClientUCMGetPublishedFileDetails.class);
+		final ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetails.Builder>(CMsgClientUCMGetPublishedFileDetails.class, EMsg.ClientUCMGetPublishedFileDetails);
 		request.setSourceJobID(getClient().getNextJobID());
 
 		request.getBody().setPublishedFileId(publishedFileId);
@@ -52,7 +52,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID enumerateUserPublishedFiles(EnumerationUserDetails details) {
-		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder>(EMsg.ClientUCMEnumerateUserPublishedFiles, CMsgClientUCMEnumerateUserPublishedFiles.class);
+		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder>(CMsgClientUCMEnumerateUserPublishedFiles.class, EMsg.ClientUCMEnumerateUserPublishedFiles);
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
 		enumRequest.getBody().setAppId(details.appId);
@@ -71,7 +71,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID enumerateUserSubscribedFiles(EnumerationUserDetails details) {
-		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder>(EMsg.ClientUCMEnumerateUserSubscribedFiles, CMsgClientUCMEnumerateUserSubscribedFiles.class);
+		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder>(CMsgClientUCMEnumerateUserSubscribedFiles.class, EMsg.ClientUCMEnumerateUserSubscribedFiles);
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
 		enumRequest.getBody().setAppId(details.appId);
@@ -89,7 +89,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID enumeratePublishedFilesByUserAction(EnumerationUserDetails details) {
-		final ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserAction.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserAction.Builder>(EMsg.ClientUCMEnumeratePublishedFilesByUserAction, CMsgClientUCMEnumeratePublishedFilesByUserAction.class);
+		final ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserAction.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserAction.Builder>(CMsgClientUCMEnumeratePublishedFilesByUserAction.class, EMsg.ClientUCMEnumeratePublishedFilesByUserAction);
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
 		enumRequest.getBody().setAction(details.userAction.v());
@@ -108,7 +108,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID enumeratePublishedFiles(EnumerationDetails details) {
-		final ClientMsgProtobuf<CMsgCREEnumeratePublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgCREEnumeratePublishedFiles.Builder>(EMsg.CREEnumeratePublishedFiles, CMsgCREEnumeratePublishedFiles.class);
+		final ClientMsgProtobuf<CMsgCREEnumeratePublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgCREEnumeratePublishedFiles.Builder>(CMsgCREEnumeratePublishedFiles.class, EMsg.CREEnumeratePublishedFiles);
 		enumRequest.setSourceJobID(getClient().getNextJobID());
 
 		enumRequest.getBody().setAppId(details.appID);
@@ -153,7 +153,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	void handleEnumPublishedFiles(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgCREEnumeratePublishedFilesResponse.Builder> response = new ClientMsgProtobuf<CMsgCREEnumeratePublishedFilesResponse.Builder>(packetMsg, CMsgCREEnumeratePublishedFilesResponse.class);
+		final ClientMsgProtobuf<CMsgCREEnumeratePublishedFilesResponse.Builder> response = new ClientMsgProtobuf<CMsgCREEnumeratePublishedFilesResponse.Builder>(CMsgCREEnumeratePublishedFilesResponse.class, packetMsg);
 
 		final PublishedFilesCallback innerCallback = new PublishedFilesCallback(response.getBody().build());
 		final JobCallback<?> callback = new JobCallback<PublishedFilesCallback>(response.getTargetJobID(), innerCallback);
@@ -161,7 +161,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	void handleEnumUserPublishedFiles(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFilesResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFilesResponse.Builder>(packetMsg, CMsgClientUCMEnumerateUserPublishedFilesResponse.class);
+		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFilesResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFilesResponse.Builder>(CMsgClientUCMEnumerateUserPublishedFilesResponse.class, packetMsg);
 
 		final UserPublishedFilesCallback innerCallback = new UserPublishedFilesCallback(response.getBody().build());
 		final JobCallback<?> callback = new JobCallback<UserPublishedFilesCallback>(response.getTargetJobID(), innerCallback);
@@ -169,7 +169,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	void handleEnumUserSubscribedFiles(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFilesResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFilesResponse.Builder>(packetMsg, CMsgClientUCMEnumerateUserSubscribedFilesResponse.class);
+		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFilesResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFilesResponse.Builder>(CMsgClientUCMEnumerateUserSubscribedFilesResponse.class, packetMsg);
 
 		final UserSubscribedFilesCallback innerCallback = new UserSubscribedFilesCallback(response.getBody().build());
 		final JobCallback<?> callback = new JobCallback<UserSubscribedFilesCallback>(response.getTargetJobID(), innerCallback);
@@ -177,7 +177,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	void handleEnumPublishedFilesByAction(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserActionResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserActionResponse.Builder>(packetMsg, CMsgClientUCMEnumeratePublishedFilesByUserActionResponse.class);
+		final ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserActionResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserActionResponse.Builder>(CMsgClientUCMEnumeratePublishedFilesByUserActionResponse.class, packetMsg);
 
 		final UserActionPublishedFilesCallback innerCallback = new UserActionPublishedFilesCallback(response.getBody().build());
 		final JobCallback<?> callback = new JobCallback<UserActionPublishedFilesCallback>(response.getTargetJobID(), innerCallback);
@@ -185,7 +185,7 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	void handlePublishedFileDetails(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetailsResponse.Builder> details = new ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetailsResponse.Builder>(packetMsg, CMsgClientUCMGetPublishedFileDetailsResponse.class);
+		final ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetailsResponse.Builder> details = new ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetailsResponse.Builder>(CMsgClientUCMGetPublishedFileDetailsResponse.class, packetMsg);
 
 		final PublishedFileDetailsCallback innerCallback = new PublishedFileDetailsCallback(details.getBody().build());
 		final JobCallback<?> callback = new JobCallback<PublishedFileDetailsCallback>(new JobID(packetMsg.getTargetJobID()), innerCallback);

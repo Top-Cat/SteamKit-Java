@@ -1,5 +1,7 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator;
 
+import java.io.IOException;
+
 import com.google.protobuf.ByteString;
 
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
@@ -21,14 +23,17 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 	 * @param appId	The app id of the game coordinator to send to.
 	 */
 	public void send(IClientGCMsg msg, int appId) {
-		final ClientMsgProtobuf<CMsgGCClient.Builder> clientMsg = new ClientMsgProtobuf<CMsgGCClient.Builder>(EMsg.ClientToGC, CMsgGCClient.class);
+		final ClientMsgProtobuf<CMsgGCClient.Builder> clientMsg = new ClientMsgProtobuf<CMsgGCClient.Builder>(CMsgGCClient.class, EMsg.ClientToGC);
 
 		clientMsg.getBody().setMsgtype(MsgUtil.makeGCMsg(msg.getMsgType(), msg.isProto()));
 		clientMsg.getBody().setAppid(appId);
 
-		clientMsg.getBody().setPayload(ByteString.copyFrom(msg.serialize()));
+		try {
+			clientMsg.getBody().setPayload(ByteString.copyFrom(msg.serialize()));
 
-		getClient().send(clientMsg);
+			getClient().send(clientMsg);
+		} catch (final IOException e) {
+		}
 	}
 
 	/**
@@ -38,7 +43,7 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		if (packetMsg.getMsgType() == EMsg.ClientFromGC) {
-			final ClientMsgProtobuf<CMsgGCClient.Builder> msg = new ClientMsgProtobuf<CMsgGCClient.Builder>(packetMsg, CMsgGCClient.class);
+			final ClientMsgProtobuf<CMsgGCClient.Builder> msg = new ClientMsgProtobuf<CMsgGCClient.Builder>(CMsgGCClient.class, packetMsg);
 
 			final MessageCallback callback = new MessageCallback(msg.getBody().build());
 			getClient().postCallback(callback);

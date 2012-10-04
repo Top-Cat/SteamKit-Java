@@ -1,5 +1,7 @@
 package uk.co.thomasc.steamkit.base.gc;
 
+import java.io.IOException;
+
 import lombok.Getter;
 
 import uk.co.thomasc.steamkit.base.AMsgBase;
@@ -42,10 +44,10 @@ public abstract class GCMsgBase<T extends IGCSerializableHeader> extends AMsgBas
 	 * Initializes a new instance of the {@link GCMsgBase} class.
 	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
 	 */
-	public GCMsgBase(int payloadReserve, Class<T> aClass) {
+	public GCMsgBase(Class<T> clazz, int payloadReserve) {
 		super(payloadReserve);
 		try {
-			header = aClass.newInstance();
+			header = clazz.newInstance();
 		} catch (final InstantiationException e) {
 			e.printStackTrace();
 		} catch (final IllegalAccessException e) {
@@ -58,13 +60,14 @@ public abstract class GCMsgBase<T extends IGCSerializableHeader> extends AMsgBas
 	 * @return Data representing a client message.
 	 */
 	@Override
-	public abstract byte[] serialize();
+	public abstract byte[] serialize() throws IOException;
 
 	/**
 	 * Initializes this client message by deserializing the specified data.
 	 * @param data	The data representing a client message.
+	 * @throws IOException 
 	 */
 	@Override
-	public abstract void deSerialize(byte[] data);
+	public abstract void deSerialize(byte[] data) throws IOException;
 
 }

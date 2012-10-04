@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.networking.steam3;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventArgs;
@@ -39,16 +38,13 @@ public class TcpConnection extends Connection {
 		Socket socket = null;
 		try {
 			socket = new Socket(endPoint.getIpAddress(), endPoint.getPort());
-		} catch (final UnknownHostException e) {
-			e.printStackTrace();
 		} catch (final IOException e) {
-			e.printStackTrace();
 		}
 
 		try {
 			connectCompleted(socket);
 		} catch (final IOException e) {
-		};
+		}
 	}
 
 	void connectCompleted(Socket socket) throws IOException {

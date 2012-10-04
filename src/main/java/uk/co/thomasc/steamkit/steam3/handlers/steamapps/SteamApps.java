@@ -48,7 +48,7 @@ public final class SteamApps extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID getAppOwnershipTicket(int appid) {
-		final ClientMsgProtobuf<CMsgClientGetAppOwnershipTicket.Builder> request = new ClientMsgProtobuf<CMsgClientGetAppOwnershipTicket.Builder>(EMsg.ClientGetAppOwnershipTicket, CMsgClientGetAppOwnershipTicket.class);
+		final ClientMsgProtobuf<CMsgClientGetAppOwnershipTicket.Builder> request = new ClientMsgProtobuf<CMsgClientGetAppOwnershipTicket.Builder>(CMsgClientGetAppOwnershipTicket.class, EMsg.ClientGetAppOwnershipTicket);
 		request.setSourceJobID(getClient().getNextJobID());
 
 		request.getBody().setAppId(appid);
@@ -117,7 +117,7 @@ public final class SteamApps extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID getAppInfo(Collection<AppDetails> apps, boolean supportsBatches) {
-		final ClientMsgProtobuf<CMsgClientAppInfoRequest.Builder> request = new ClientMsgProtobuf<CMsgClientAppInfoRequest.Builder>(EMsg.ClientAppInfoRequest, CMsgClientAppInfoRequest.class);
+		final ClientMsgProtobuf<CMsgClientAppInfoRequest.Builder> request = new ClientMsgProtobuf<CMsgClientAppInfoRequest.Builder>(CMsgClientAppInfoRequest.class, EMsg.ClientAppInfoRequest);
 		request.setSourceJobID(getClient().getNextJobID());
 
 		for (final AppDetails ad : apps) {
@@ -160,7 +160,7 @@ public final class SteamApps extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID getPackageInfo(Collection<Integer> packageId, boolean metaDataOnly) {
-		final ClientMsgProtobuf<CMsgClientPackageInfoRequest.Builder> request = new ClientMsgProtobuf<CMsgClientPackageInfoRequest.Builder>(EMsg.ClientPackageInfoRequest, CMsgClientPackageInfoRequest.class);
+		final ClientMsgProtobuf<CMsgClientPackageInfoRequest.Builder> request = new ClientMsgProtobuf<CMsgClientPackageInfoRequest.Builder>(CMsgClientPackageInfoRequest.class, EMsg.ClientPackageInfoRequest);
 
 		request.setSourceJobID(getClient().getNextJobID());
 
@@ -183,7 +183,7 @@ public final class SteamApps extends ClientMsgHandler {
 	 * @param sendChangelist	if set to true, request a change list.
 	 */
 	public void getAppChanges(int lastChangeNumber, boolean sendChangelist) {
-		final ClientMsgProtobuf<CMsgClientAppInfoUpdate.Builder> request = new ClientMsgProtobuf<CMsgClientAppInfoUpdate.Builder>(EMsg.ClientAppInfoUpdate, CMsgClientAppInfoUpdate.class);
+		final ClientMsgProtobuf<CMsgClientAppInfoUpdate.Builder> request = new ClientMsgProtobuf<CMsgClientAppInfoUpdate.Builder>(CMsgClientAppInfoUpdate.class, EMsg.ClientAppInfoUpdate);
 
 		request.getBody().setLastChangenumber(lastChangeNumber);
 		request.getBody().setSendChangelist(sendChangelist);
@@ -208,7 +208,7 @@ public final class SteamApps extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID getDepotDecryptionKey(int depotid, int appid) {
-		final ClientMsgProtobuf<CMsgClientGetDepotDecryptionKey.Builder> request = new ClientMsgProtobuf<CMsgClientGetDepotDecryptionKey.Builder>(EMsg.ClientGetDepotDecryptionKey, CMsgClientGetDepotDecryptionKey.class);
+		final ClientMsgProtobuf<CMsgClientGetDepotDecryptionKey.Builder> request = new ClientMsgProtobuf<CMsgClientGetDepotDecryptionKey.Builder>(CMsgClientGetDepotDecryptionKey.class, EMsg.ClientGetDepotDecryptionKey);
 		request.setSourceJobID(getClient().getNextJobID());
 
 		request.getBody().setDepotId(depotid);
@@ -261,7 +261,7 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	void handleAppOwnershipTicketResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientGetAppOwnershipTicketResponse.Builder> ticketResponse = new ClientMsgProtobuf<CMsgClientGetAppOwnershipTicketResponse.Builder>(packetMsg, CMsgClientGetAppOwnershipTicketResponse.class);
+		final ClientMsgProtobuf<CMsgClientGetAppOwnershipTicketResponse.Builder> ticketResponse = new ClientMsgProtobuf<CMsgClientGetAppOwnershipTicketResponse.Builder>(CMsgClientGetAppOwnershipTicketResponse.class, packetMsg);
 
 		final AppOwnershipTicketCallback innerCallback = new AppOwnershipTicketCallback(ticketResponse.getBody().build());
 		final JobCallback<?> callback = new JobCallback<AppOwnershipTicketCallback>(ticketResponse.getTargetJobID(), innerCallback);
@@ -269,7 +269,7 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	void handleAppInfoResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientAppInfoResponse.Builder> infoResponse = new ClientMsgProtobuf<CMsgClientAppInfoResponse.Builder>(packetMsg, CMsgClientAppInfoResponse.class);
+		final ClientMsgProtobuf<CMsgClientAppInfoResponse.Builder> infoResponse = new ClientMsgProtobuf<CMsgClientAppInfoResponse.Builder>(CMsgClientAppInfoResponse.class, packetMsg);
 
 		final AppInfoCallback innerCallback = new AppInfoCallback(infoResponse.getBody().build());
 		final JobCallback<?> callback = new JobCallback<AppInfoCallback>(infoResponse.getTargetJobID(), innerCallback);
@@ -277,7 +277,7 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	void handlePackageInfoResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientPackageInfoResponse.Builder> response = new ClientMsgProtobuf<CMsgClientPackageInfoResponse.Builder>(packetMsg, CMsgClientPackageInfoResponse.class);
+		final ClientMsgProtobuf<CMsgClientPackageInfoResponse.Builder> response = new ClientMsgProtobuf<CMsgClientPackageInfoResponse.Builder>(CMsgClientPackageInfoResponse.class, packetMsg);
 
 		final PackageInfoCallback innerCallback = new PackageInfoCallback(response.getBody().build());
 		final JobCallback<?> callback = new JobCallback<PackageInfoCallback>(response.getTargetJobID(), innerCallback);
@@ -285,14 +285,14 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	void handleAppInfoChanges(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientAppInfoChanges.Builder> changes = new ClientMsgProtobuf<CMsgClientAppInfoChanges.Builder>(packetMsg, CMsgClientAppInfoChanges.class);
+		final ClientMsgProtobuf<CMsgClientAppInfoChanges.Builder> changes = new ClientMsgProtobuf<CMsgClientAppInfoChanges.Builder>(CMsgClientAppInfoChanges.class, packetMsg);
 
 		final AppChangesCallback callback = new AppChangesCallback(changes.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleDepotKeyResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientGetDepotDecryptionKeyResponse.Builder> keyResponse = new ClientMsgProtobuf<CMsgClientGetDepotDecryptionKeyResponse.Builder>(packetMsg, CMsgClientGetDepotDecryptionKeyResponse.class);
+		final ClientMsgProtobuf<CMsgClientGetDepotDecryptionKeyResponse.Builder> keyResponse = new ClientMsgProtobuf<CMsgClientGetDepotDecryptionKeyResponse.Builder>(CMsgClientGetDepotDecryptionKeyResponse.class, packetMsg);
 
 		final DepotKeyCallback innerCallback = new DepotKeyCallback(keyResponse.getBody().build());
 		final JobCallback<?> callback = new JobCallback<DepotKeyCallback>(keyResponse.getTargetJobID(), innerCallback);
@@ -300,14 +300,14 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	void handleGameConnectTokens(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientGameConnectTokens.Builder> gcTokens = new ClientMsgProtobuf<CMsgClientGameConnectTokens.Builder>(packetMsg, CMsgClientGameConnectTokens.class);
+		final ClientMsgProtobuf<CMsgClientGameConnectTokens.Builder> gcTokens = new ClientMsgProtobuf<CMsgClientGameConnectTokens.Builder>(CMsgClientGameConnectTokens.class, packetMsg);
 
 		final GameConnectTokensCallback callback = new GameConnectTokensCallback(gcTokens.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleLicenseList(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientLicenseList.Builder> licenseList = new ClientMsgProtobuf<CMsgClientLicenseList.Builder>(packetMsg, CMsgClientLicenseList.class);
+		final ClientMsgProtobuf<CMsgClientLicenseList.Builder> licenseList = new ClientMsgProtobuf<CMsgClientLicenseList.Builder>(CMsgClientLicenseList.class, packetMsg);
 
 		final LicenseListCallback callback = new LicenseListCallback(licenseList.getBody().build());
 		getClient().postCallback(callback);

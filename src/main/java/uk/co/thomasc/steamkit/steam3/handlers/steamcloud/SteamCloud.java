@@ -21,7 +21,7 @@ public final class SteamCloud extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID requestUGCDetails(long ugcId) {
-		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder>(EMsg.ClientUFSGetUGCDetails, CMsgClientUFSGetUGCDetails.class);
+		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder>(CMsgClientUFSGetUGCDetails.class, EMsg.ClientUFSGetUGCDetails);
 		request.setSourceJobID(getClient().getNextJobID());
 
 		request.getBody().setHcontent(ugcId);
@@ -44,7 +44,7 @@ public final class SteamCloud extends ClientMsgHandler {
 	}
 
 	void handleUGCDetailsResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder> infoResponse = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder>(packetMsg, CMsgClientUFSGetUGCDetailsResponse.class);
+		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder> infoResponse = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetailsResponse.Builder>(CMsgClientUFSGetUGCDetailsResponse.class, packetMsg);
 
 		final UGCDetailsCallback innerCallback = new UGCDetailsCallback(infoResponse.getBody().build());
 		final JobCallback<?> callback = new JobCallback<UGCDetailsCallback>(infoResponse.getTargetJobID(), innerCallback);

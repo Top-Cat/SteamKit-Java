@@ -33,7 +33,7 @@ public class KeyValue {
 	}
 
 	public KeyValue(String name) {
-		this(null, null);
+		this(name, null);
 	}
 
 	public KeyValue() {

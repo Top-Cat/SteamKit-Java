@@ -205,7 +205,7 @@ public class SteamID {
 	 * Converts this SteamID into it's 64bit integer form.
 	 * @return A 64bit integer representing this SteamID.
 	 */
-	public long convertToUInt64() {
+	public long convertToLong() {
 		return steamid.getData();
 	}
 
@@ -424,9 +424,9 @@ public class SteamID {
 			case Invalid:
 			case Individual:
 				if (getAccountUniverse().v() <= EUniverse.Public.v()) {
-					return String.format("STEAM_0:%d:%d", getAccountID() & 1, getAccountID() >> 1);
+					return String.format("STEAM_0:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1);
 				} else {
-					return String.format("STEAM_%d:%d:%d", getAccountID() & 1, getAccountID() >> 1, getAccountUniverse().v());
+					return String.format("STEAM_%d:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1, getAccountUniverse().v());
 				}
 			default:
 				return super.toString();

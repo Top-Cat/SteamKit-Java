@@ -34,13 +34,33 @@ public class RSACrypto {
 			}
 			final AsnKeyParser keyParser = new AsnKeyParser(list);
 			final BigInteger[] keys = keyParser.parseRSAPublicKey();
-			final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(keys[0], keys[1]);
+			init(keys[0], keys[1], true);
+		} catch (final BerDecodeException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public RSACrypto(BigInteger mod, BigInteger exp) {
+		this(mod, exp, true);
+	}
+
+	public RSACrypto(BigInteger mod, BigInteger exp, boolean oaep) {
+		init(mod, exp, oaep);
+	}
+
+	private void init(BigInteger mod, BigInteger exp, boolean oaep) {
+		try {
+			final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(mod, exp);
 
 			final KeyFactory factory = KeyFactory.getInstance("RSA");
 			RSAkey = (RSAPublicKey) factory.generatePublic(publicKeySpec);
 
 			Security.addProvider(new BouncyCastleProvider());
-			cipher = Cipher.getInstance("RSA/None/OAEPWithSHA1AndMGF1Padding", "BC");
+			if (oaep) {
+				cipher = Cipher.getInstance("RSA/None/OAEPWithSHA1AndMGF1Padding", "BC");
+			} else {
+				cipher = Cipher.getInstance("RSA/None/PKCS1Padding", "BC");
+			}
 			cipher.init(Cipher.ENCRYPT_MODE, RSAkey);
 		} catch (final NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -49,8 +69,6 @@ public class RSACrypto {
 		} catch (final InvalidKeyException e) {
 			e.printStackTrace();
 		} catch (final InvalidKeySpecException e) {
-			e.printStackTrace();
-		} catch (final BerDecodeException e) {
 			e.printStackTrace();
 		} catch (final NoSuchProviderException e) {
 			e.printStackTrace();

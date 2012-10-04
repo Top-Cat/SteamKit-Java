@@ -23,7 +23,7 @@ public final class SteamMasterServer extends ClientMsgHandler {
 	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
 	 */
 	public JobID serverQuery(QueryDetails details) {
-		final ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder> query = new ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder>(EMsg.ClientGMSServerQuery, CMsgClientGMSServerQuery.class);
+		final ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder> query = new ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder>(CMsgClientGMSServerQuery.class, EMsg.ClientGMSServerQuery);
 		query.setSourceJobID(getClient().getNextJobID());
 
 		query.getBody().setAppId(details.appId);
@@ -55,7 +55,7 @@ public final class SteamMasterServer extends ClientMsgHandler {
 	}
 
 	void handleServerQueryResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder> queryResponse = new ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder>(packetMsg, CMsgGMSClientServerQueryResponse.class);
+		final ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder> queryResponse = new ClientMsgProtobuf<CMsgGMSClientServerQueryResponse.Builder>(CMsgGMSClientServerQueryResponse.class, packetMsg);
 
 		final QueryCallback innerCallback = new QueryCallback(queryResponse.getBody().build());
 		final JobCallback<?> callback = new JobCallback<QueryCallback>(queryResponse.getTargetJobID(), innerCallback);

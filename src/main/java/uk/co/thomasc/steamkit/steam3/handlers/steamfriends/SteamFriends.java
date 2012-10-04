@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import lombok.Getter;
+
 import com.google.protobuf.ByteString;
 
 import uk.co.thomasc.steamkit.base.ClientMsg;
@@ -63,9 +65,9 @@ import uk.co.thomasc.steamkit.types.steamid.SteamID;
  * This handler handles all interaction with other users on the Steam3 network.
  */
 public final class SteamFriends extends ClientMsgHandler {
-	Object listLock = new Object();
-	List<SteamID> friendList;
-	List<SteamID> clanList;
+	private final Object listLock = new Object();
+	@Getter private final List<SteamID> friendList;
+	@Getter private final List<SteamID> clanList;
 
 	AccountCache cache;
 
@@ -92,7 +94,7 @@ public final class SteamFriends extends ClientMsgHandler {
 		// cache the local name right away, so that early calls to SetPersonaState don't reset the set name
 		cache.getLocalUser().name = name;
 
-		final ClientMsgProtobuf<CMsgClientChangeStatus.Builder> stateMsg = new ClientMsgProtobuf<CMsgClientChangeStatus.Builder>(EMsg.ClientChangeStatus, CMsgClientChangeStatus.class);
+		final ClientMsgProtobuf<CMsgClientChangeStatus.Builder> stateMsg = new ClientMsgProtobuf<CMsgClientChangeStatus.Builder>(CMsgClientChangeStatus.class, EMsg.ClientChangeStatus);
 		stateMsg.getBody().setPersonaState(cache.getLocalUser().personaState.v());
 		stateMsg.getBody().setPlayerName(name);
 
@@ -114,7 +116,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	public void setPersonaState(EPersonaState state) {
 		cache.getLocalUser().personaState = state;
 
-		final ClientMsgProtobuf<CMsgClientChangeStatus.Builder> stateMsg = new ClientMsgProtobuf<CMsgClientChangeStatus.Builder>(EMsg.ClientChangeStatus, CMsgClientChangeStatus.class);
+		final ClientMsgProtobuf<CMsgClientChangeStatus.Builder> stateMsg = new ClientMsgProtobuf<CMsgClientChangeStatus.Builder>(CMsgClientChangeStatus.class, EMsg.ClientChangeStatus);
 		stateMsg.getBody().setPersonaState(state.v());
 		stateMsg.getBody().setPlayerName(cache.getLocalUser().name);
 
@@ -259,9 +261,9 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @param message	The message to send.
 	 */
 	public void sendChatMessage(SteamID target, EChatEntryType type, String message) {
-		final ClientMsgProtobuf<CMsgClientFriendMsg.Builder> chatMsg = new ClientMsgProtobuf<CMsgClientFriendMsg.Builder>(EMsg.ClientFriendMsg, CMsgClientFriendMsg.class);
+		final ClientMsgProtobuf<CMsgClientFriendMsg.Builder> chatMsg = new ClientMsgProtobuf<CMsgClientFriendMsg.Builder>(CMsgClientFriendMsg.class, EMsg.ClientFriendMsg);
 
-		chatMsg.getBody().setSteamid(target.convertToUInt64());
+		chatMsg.getBody().setSteamid(target.convertToLong());
 		chatMsg.getBody().setChatEntryType(type.v());
 		chatMsg.getBody().setMessage(ByteString.copyFromUtf8(message));
 
@@ -273,7 +275,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @param accountNameOrEmail	The account name or email of the user.
 	 */
 	public void addFriend(String accountNameOrEmail) {
-		final ClientMsgProtobuf<CMsgClientAddFriend.Builder> addFriend = new ClientMsgProtobuf<CMsgClientAddFriend.Builder>(EMsg.ClientAddFriend, CMsgClientAddFriend.class);
+		final ClientMsgProtobuf<CMsgClientAddFriend.Builder> addFriend = new ClientMsgProtobuf<CMsgClientAddFriend.Builder>(CMsgClientAddFriend.class, EMsg.ClientAddFriend);
 
 		addFriend.getBody().setAccountnameOrEmailToAdd(accountNameOrEmail);
 
@@ -285,9 +287,9 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @param steamId	The SteamID of the friend to add.
 	 */
 	public void addFriend(SteamID steamId) {
-		final ClientMsgProtobuf<CMsgClientAddFriend.Builder> addFriend = new ClientMsgProtobuf<CMsgClientAddFriend.Builder>(EMsg.ClientAddFriend, CMsgClientAddFriend.class);
+		final ClientMsgProtobuf<CMsgClientAddFriend.Builder> addFriend = new ClientMsgProtobuf<CMsgClientAddFriend.Builder>(CMsgClientAddFriend.class, EMsg.ClientAddFriend);
 
-		addFriend.getBody().setSteamidToAdd(steamId.convertToUInt64());
+		addFriend.getBody().setSteamidToAdd(steamId.convertToLong());
 
 		getClient().send(addFriend);
 	}
@@ -297,9 +299,9 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @param steamId	The SteamID of the friend to remove.
 	 */
 	public void removeFriend(SteamID steamId) {
-		final ClientMsgProtobuf<CMsgClientRemoveFriend.Builder> removeFriend = new ClientMsgProtobuf<CMsgClientRemoveFriend.Builder>(EMsg.ClientRemoveFriend, CMsgClientRemoveFriend.class);
+		final ClientMsgProtobuf<CMsgClientRemoveFriend.Builder> removeFriend = new ClientMsgProtobuf<CMsgClientRemoveFriend.Builder>(CMsgClientRemoveFriend.class, EMsg.ClientRemoveFriend);
 
-		removeFriend.getBody().setFriendid(steamId.convertToUInt64());
+		removeFriend.getBody().setFriendid(steamId.convertToLong());
 
 		getClient().send(removeFriend);
 	}
@@ -344,9 +346,9 @@ public final class SteamFriends extends ClientMsgHandler {
 		leaveChat.getBody().type = EChatInfoType.StateChange;
 
 		try {
-			leaveChat.write(getClient().getSteamId().convertToUInt64()); // ChatterActedOn
+			leaveChat.write(getClient().getSteamId().convertToLong()); // ChatterActedOn
 			leaveChat.write(EChatMemberStateChange.Left.v()); // StateChange
-			leaveChat.write(getClient().getSteamId().convertToUInt64()); // ChatterActedBy
+			leaveChat.write(getClient().getSteamId().convertToLong()); // ChatterActedBy
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -442,10 +444,10 @@ public final class SteamFriends extends ClientMsgHandler {
 	 * @param requestedInfo	The requested info flags.
 	 */
 	public void requestFriendInfo(Collection<SteamID> steamIdList, int requestedInfo) {
-		final ClientMsgProtobuf<CMsgClientRequestFriendData.Builder> request = new ClientMsgProtobuf<CMsgClientRequestFriendData.Builder>(EMsg.ClientRequestFriendData, CMsgClientRequestFriendData.class);
+		final ClientMsgProtobuf<CMsgClientRequestFriendData.Builder> request = new ClientMsgProtobuf<CMsgClientRequestFriendData.Builder>(CMsgClientRequestFriendData.class, EMsg.ClientRequestFriendData);
 
 		for (final SteamID steamId : steamIdList) {
-			request.getBody().getFriendsList().add(steamId.convertToUInt64());
+			request.getBody().getFriendsList().add(steamId.convertToLong());
 		}
 		request.getBody().setPersonaStateRequested(requestedInfo);
 
@@ -547,21 +549,21 @@ public final class SteamFriends extends ClientMsgHandler {
 	}
 
 	void handleAccountInfo(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientAccountInfo.Builder> accInfo = new ClientMsgProtobuf<CMsgClientAccountInfo.Builder>(packetMsg, CMsgClientAccountInfo.class);
+		final ClientMsgProtobuf<CMsgClientAccountInfo.Builder> accInfo = new ClientMsgProtobuf<CMsgClientAccountInfo.Builder>(CMsgClientAccountInfo.class, packetMsg);
 
 		// cache off our local name
 		cache.getLocalUser().name = accInfo.getBody().getPersonaName();
 	}
 
 	void handleFriendMsg(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientFriendMsgIncoming.Builder> friendMsg = new ClientMsgProtobuf<CMsgClientFriendMsgIncoming.Builder>(packetMsg, CMsgClientFriendMsgIncoming.class);
+		final ClientMsgProtobuf<CMsgClientFriendMsgIncoming.Builder> friendMsg = new ClientMsgProtobuf<CMsgClientFriendMsgIncoming.Builder>(CMsgClientFriendMsgIncoming.class, packetMsg);
 
 		final FriendMsgCallback callback = new FriendMsgCallback(friendMsg.getBody().build());
 		getClient().postCallback(callback);
 	}
 
 	void handleFriendsList(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientFriendsList.Builder> list = new ClientMsgProtobuf<CMsgClientFriendsList.Builder>(packetMsg, CMsgClientFriendsList.class);
+		final ClientMsgProtobuf<CMsgClientFriendsList.Builder> list = new ClientMsgProtobuf<CMsgClientFriendsList.Builder>(CMsgClientFriendsList.class, packetMsg);
 
 		cache.getLocalUser().steamId = getClient().getSteamId();
 
@@ -574,7 +576,7 @@ public final class SteamFriends extends ClientMsgHandler {
 		}
 
 		// we have to request information for all of our friends because steam only sends persona information for online friends
-		final ClientMsgProtobuf<CMsgClientRequestFriendData.Builder> reqInfo = new ClientMsgProtobuf<CMsgClientRequestFriendData.Builder>(EMsg.ClientRequestFriendData, CMsgClientRequestFriendData.class);
+		final ClientMsgProtobuf<CMsgClientRequestFriendData.Builder> reqInfo = new ClientMsgProtobuf<CMsgClientRequestFriendData.Builder>(CMsgClientRequestFriendData.class, EMsg.ClientRequestFriendData);
 
 		reqInfo.getBody().setPersonaStateRequested(defaultInfoRequest);
 
@@ -618,7 +620,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 				if (!list.getBody().getBincremental()) {
 					// request persona state for our friend & clan list when it's a non-incremental update
-					reqInfo.getBody().addFriends(friendId.convertToUInt64());
+					reqInfo.getBody().addFriends(friendId.convertToLong());
 				}
 			}
 
@@ -636,7 +638,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	}
 
 	void handlePersonaState(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientPersonaState.Builder> perState = new ClientMsgProtobuf<CMsgClientPersonaState.Builder>(packetMsg, CMsgClientPersonaState.class);
+		final ClientMsgProtobuf<CMsgClientPersonaState.Builder> perState = new ClientMsgProtobuf<CMsgClientPersonaState.Builder>(CMsgClientPersonaState.class, packetMsg);
 
 		final int flags = perState.getBody().getStatusFlags();
 
@@ -680,7 +682,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	}
 
 	void handleFriendResponse(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientAddFriendResponse.Builder> friendResponse = new ClientMsgProtobuf<CMsgClientAddFriendResponse.Builder>(packetMsg, CMsgClientAddFriendResponse.class);
+		final ClientMsgProtobuf<CMsgClientAddFriendResponse.Builder> friendResponse = new ClientMsgProtobuf<CMsgClientAddFriendResponse.Builder>(CMsgClientAddFriendResponse.class, packetMsg);
 
 		final FriendAddedCallback callback = new FriendAddedCallback(friendResponse.getBody().build());
 		getClient().postCallback(callback);
@@ -719,7 +721,7 @@ public final class SteamFriends extends ClientMsgHandler {
 	}
 
 	void handleChatInvite(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientChatInvite.Builder> chatInvite = new ClientMsgProtobuf<CMsgClientChatInvite.Builder>(packetMsg, CMsgClientChatInvite.class);
+		final ClientMsgProtobuf<CMsgClientChatInvite.Builder> chatInvite = new ClientMsgProtobuf<CMsgClientChatInvite.Builder>(CMsgClientChatInvite.class, packetMsg);
 
 		final ChatInviteCallback callback = new ChatInviteCallback(chatInvite.getBody().build());
 		getClient().postCallback(callback);
