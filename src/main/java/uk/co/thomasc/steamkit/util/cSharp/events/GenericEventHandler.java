@@ -7,6 +7,6 @@ public abstract class GenericEventHandler implements EventHandler<EventArgs> {
 		handleEvent(sender);
 	}
 
-	abstract void handleEvent(Object sender);
+	public abstract void handleEvent(Object sender);
 
 }

@@ -68,13 +68,32 @@ public abstract class CMClient {
 	static {
 		InetAddress[] temp = null;
 		try {
-			temp = new InetAddress[] { InetAddress.getByName("68.142.64.164"), InetAddress.getByName("68.142.64.165"), InetAddress.getByName("68.142.91.34"), InetAddress.getByName("68.142.91.35"), InetAddress.getByName("68.142.91.36"), InetAddress.getByName("68.142.116.178"), InetAddress.getByName("68.142.116.179"),
+			temp = new InetAddress[] {
+				InetAddress.getByName("68.142.64.164"),
+				InetAddress.getByName("68.142.64.165"),
+				InetAddress.getByName("68.142.91.34"),
+				InetAddress.getByName("68.142.91.35"),
+				InetAddress.getByName("68.142.91.36"),
+				InetAddress.getByName("68.142.116.178"),
+				InetAddress.getByName("68.142.116.179"),
 
-			InetAddress.getByName("69.28.145.170"), InetAddress.getByName("69.28.145.171"), InetAddress.getByName("69.28.145.172"), InetAddress.getByName("69.28.156.250"),
-
-			InetAddress.getByName("72.165.61.185"), InetAddress.getByName("72.165.61.186"), InetAddress.getByName("72.165.61.187"), InetAddress.getByName("72.165.61.188"),
-
-			InetAddress.getByName("208.111.133.84"), InetAddress.getByName("208.111.133.85"), InetAddress.getByName("208.111.158.52"), InetAddress.getByName("208.111.158.53"), InetAddress.getByName("208.111.171.82"), InetAddress.getByName("208.111.171.83"), };
+				InetAddress.getByName("69.28.145.170"),
+				InetAddress.getByName("69.28.145.171"),
+				InetAddress.getByName("69.28.145.172"),
+				InetAddress.getByName("69.28.156.250"),
+	
+				InetAddress.getByName("72.165.61.185"),
+				InetAddress.getByName("72.165.61.186"),
+				InetAddress.getByName("72.165.61.187"),
+				InetAddress.getByName("72.165.61.188"),
+	
+				InetAddress.getByName("208.111.133.84"),
+				InetAddress.getByName("208.111.133.85"),
+				InetAddress.getByName("208.111.158.52"),
+				InetAddress.getByName("208.111.158.53"),
+				InetAddress.getByName("208.111.171.82"),
+				InetAddress.getByName("208.111.171.83"),
+			};
 		} catch (final UnknownHostException e) {
 			e.printStackTrace();
 		}

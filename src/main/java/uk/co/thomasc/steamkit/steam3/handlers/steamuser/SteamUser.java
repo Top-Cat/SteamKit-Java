@@ -90,8 +90,10 @@ public final class SteamUser extends ClientMsgHandler {
 		// but it's good enough for identifying a machine
 		logon.getBody().setMachineId(ByteString.copyFrom(Utils.generateMachineID()));
 
-		// steam guard 
-		logon.getBody().setAuthCode(details.authCode);
+		// steam guard
+		if (details.authCode.length() > 0) {
+			logon.getBody().setAuthCode(details.authCode);
+		}
 
 		logon.getBody().setShaSentryfile(details.sentryFileHash != null ? ByteString.copyFrom(details.sentryFileHash) : ByteString.EMPTY);
 		logon.getBody().setEresultSentryfile((details.sentryFileHash != null ? EResult.OK : EResult.FileNotFound).v());
@@ -168,36 +170,36 @@ public final class SteamUser extends ClientMsgHandler {
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
 			case ClientLogOnResponse:
-				HandleLogOnResponse(packetMsg);
+				handleLogOnResponse(packetMsg);
 				break;
 			case ClientNewLoginKey:
-				HandleLoginKey(packetMsg);
+				handleLoginKey(packetMsg);
 				break;
 			case ClientSessionToken:
-				HandleSessionToken(packetMsg);
+				handleSessionToken(packetMsg);
 				break;
 			case ClientLoggedOff:
-				HandleLoggedOff(packetMsg);
+				handleLoggedOff(packetMsg);
 				break;
 			case ClientUpdateMachineAuth:
-				HandleUpdateMachineAuth(packetMsg);
+				handleUpdateMachineAuth(packetMsg);
 				break;
 			case ClientAccountInfo:
-				HandleAccountInfo(packetMsg);
+				handleAccountInfo(packetMsg);
 				break;
 			case ClientWalletInfoUpdate:
-				HandleWalletInfo(packetMsg);
+				handleWalletInfo(packetMsg);
 				break;
 		}
 	}
 
-	void HandleLoggedOff(IPacketMsg packetMsg) {
+	void handleLoggedOff(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientLoggedOff.Builder> loggedOff = new ClientMsgProtobuf<CMsgClientLoggedOff.Builder>(CMsgClientLoggedOff.class, packetMsg);
 
 		getClient().postCallback(new LoggedOffCallback(loggedOff.getBody().build()));
 	}
 
-	void HandleUpdateMachineAuth(IPacketMsg packetMsg) {
+	void handleUpdateMachineAuth(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientUpdateMachineAuth.Builder> machineAuth = new ClientMsgProtobuf<CMsgClientUpdateMachineAuth.Builder>(CMsgClientUpdateMachineAuth.class, packetMsg);
 
 		final UpdateMachineAuthCallback innerCallback = new UpdateMachineAuthCallback(machineAuth.getBody().build());
@@ -205,14 +207,14 @@ public final class SteamUser extends ClientMsgHandler {
 		getClient().postCallback(callback);
 	}
 
-	void HandleSessionToken(IPacketMsg packetMsg) {
+	void handleSessionToken(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientSessionToken.Builder> sessToken = new ClientMsgProtobuf<CMsgClientSessionToken.Builder>(CMsgClientSessionToken.class, packetMsg);
 
 		final SessionTokenCallback callback = new SessionTokenCallback(sessToken.getBody().build());
 		getClient().postCallback(callback);
 	}
 
-	void HandleLoginKey(IPacketMsg packetMsg) {
+	void handleLoginKey(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientNewLoginKey.Builder> loginKey = new ClientMsgProtobuf<CMsgClientNewLoginKey.Builder>(CMsgClientNewLoginKey.class, packetMsg);
 
 		final ClientMsgProtobuf<CMsgClientNewLoginKeyAccepted.Builder> resp = new ClientMsgProtobuf<CMsgClientNewLoginKeyAccepted.Builder>(CMsgClientNewLoginKeyAccepted.class, EMsg.ClientNewLoginKeyAccepted);
@@ -224,7 +226,7 @@ public final class SteamUser extends ClientMsgHandler {
 		getClient().postCallback(callback);
 	}
 
-	void HandleLogOnResponse(IPacketMsg packetMsg) {
+	void handleLogOnResponse(IPacketMsg packetMsg) {
 		if (packetMsg.isProto()) {
 			final ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(CMsgClientLogonResponse.class, packetMsg);
 
@@ -233,14 +235,14 @@ public final class SteamUser extends ClientMsgHandler {
 		}
 	}
 
-	void HandleAccountInfo(IPacketMsg packetMsg) {
+	void handleAccountInfo(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientAccountInfo.Builder> accInfo = new ClientMsgProtobuf<CMsgClientAccountInfo.Builder>(CMsgClientAccountInfo.class, packetMsg);
 
 		final AccountInfoCallback callback = new AccountInfoCallback(accInfo.getBody().build());
 		getClient().postCallback(callback);
 	}
 
-	void HandleWalletInfo(IPacketMsg packetMsg) {
+	void handleWalletInfo(IPacketMsg packetMsg) {
 		final ClientMsgProtobuf<CMsgClientWalletInfoUpdate.Builder> walletInfo = new ClientMsgProtobuf<CMsgClientWalletInfoUpdate.Builder>(CMsgClientWalletInfoUpdate.class, packetMsg);
 
 		final WalletInfoCallback callback = new WalletInfoCallback(walletInfo.getBody().build());

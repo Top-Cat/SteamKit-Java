@@ -18,8 +18,6 @@ public class TcpConnection extends Connection {
 
 	Socket sock;
 
-	//NetworkStream netStream;
-
 	BinaryReader netReader;
 	BinaryWriter netWriter;
 
@@ -59,8 +57,6 @@ public class TcpConnection extends Connection {
 		DebugLog.writeLine("TcpConnection", "Connected!");
 
 		isConnected = true;
-
-		//netStream = ;
 
 		netReader = new BinaryReader(sock.getInputStream());
 		netWriter = new BinaryWriter(sock.getOutputStream());
@@ -210,26 +206,6 @@ public class TcpConnection extends Connection {
 	}
 
 	void cleanup() {
-		// cleanup streams
-		/*if ( netReader != null) {
-			try {
-				netReader.close();
-			} catch (IOException e) {};
-			netReader = null;
-		}
-
-		if (netWriter != null) {
-			try {
-				netWriter.close();
-			} catch (IOException e) {};
-			netWriter = null;
-		}
-
-		if (netStream != null) {
-			netStream.Dispose();
-			netStream = null;
-		}*/
-
 		if (sock != null) {
 			// cleanup socket
 			try {
@@ -250,6 +226,9 @@ public class TcpConnection extends Connection {
 	 */
 	@Override
 	public InetAddress getLocalIP() {
+		if (sock == null) {
+			return InetAddress.getLoopbackAddress(); // Return an InetAddress. The request will fail anyway so it doesn't matter
+		}
 		return sock.getLocalAddress();
 	}
 }
