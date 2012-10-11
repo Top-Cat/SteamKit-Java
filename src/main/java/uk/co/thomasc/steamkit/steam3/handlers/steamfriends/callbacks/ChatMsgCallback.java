@@ -31,7 +31,7 @@ public final class ChatMsgCallback extends CallbackMsg {
 	/**
 	 * Gets the message.
 	 */
-	@Getter private String message;
+	@Getter private String message = "";
 
 	public ChatMsgCallback(MsgClientChatMsg msg, byte[] payload) {
 		chatterID = msg.getSteamIdChatter();

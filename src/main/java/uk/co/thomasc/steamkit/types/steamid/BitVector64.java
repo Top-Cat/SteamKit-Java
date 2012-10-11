@@ -17,7 +17,7 @@ public class BitVector64 {
 		return data >> bitoffset & valuemask;
 	}
 
-	public void setMask(short bitoffset, int valuemask, long value) {
-		data = data & ~(valuemask << bitoffset) | (value & valuemask) << bitoffset;
+	public void setMask(short bitoffset, long valuemask, long value) {
+		data = (data & ~(valuemask << bitoffset)) | ((value & valuemask) << bitoffset);
 	}
 }

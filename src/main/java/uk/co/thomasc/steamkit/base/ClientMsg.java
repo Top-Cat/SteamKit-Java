@@ -1,6 +1,5 @@
 package uk.co.thomasc.steamkit.base;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -187,7 +186,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 		// the rest of the data is the payload
 		final int payloadOffset = cs.getPosition();
 		final int payloadLen = cs.getRemaining();
-
-		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
+		
+		setReader(new BinaryReader(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen)));
 	}
 }

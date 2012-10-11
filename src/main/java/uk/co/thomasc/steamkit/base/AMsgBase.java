@@ -14,7 +14,7 @@ import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
  */
 public abstract class AMsgBase {
 
-	@SuppressWarnings("unused") @Setter private BinaryReader reader;
+	@Setter @Getter private BinaryReader reader;
 	@Getter private final BinaryWriter outputStream;
 
 	/**

@@ -698,7 +698,12 @@ public final class SteamFriends extends ClientMsgHandler {
 	void handleChatMsg(IPacketMsg packetMsg) {
 		final ClientMsg<MsgClientChatMsg> chatMsg = new ClientMsg<MsgClientChatMsg>(packetMsg, MsgClientChatMsg.class);
 
-		final byte[] msgData = chatMsg.getOutputStream().toByteArray();
+		byte[] msgData = new byte[0];
+		try {
+			msgData = chatMsg.getReader().readBytes();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		final ChatMsgCallback callback = new ChatMsgCallback(chatMsg.getBody(), msgData);
 		getClient().postCallback(callback);
