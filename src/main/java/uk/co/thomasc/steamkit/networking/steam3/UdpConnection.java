@@ -458,7 +458,7 @@ public class UdpConnection extends Connection {
 			}
 
 			DebugLog.writeLine("UdpConnection", "Calling OnDisconnected");
-			onDisconnected(EventArgs.Empty);
+			onDisconnected(false);
 		}
 	}
 

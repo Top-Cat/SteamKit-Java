@@ -26,7 +26,7 @@ public final class LogOnDetails {
 	/**
 	 * Gets or sets the sentry file hash for this logon attempt, or null if no sentry file is available.
 	 */
-	public byte[] sentryFileHash;
+	public byte[] sentryFileHash = null;
 
 	/**
 	 * Gets or sets the account instance. 1 for the PC instance or 2 for the Console (PS3) instance.

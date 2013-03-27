@@ -64,20 +64,12 @@ public class BinaryWriter {
 
 	public void write(byte[] data) throws IOException {
 		writer.writeRawBytes(data);
-		try {
-			writer.flush();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+		writer.flush();
 	}
 
 	public void write(byte data) throws IOException {
 		writer.writeRawByte(data);
-		try {
-			writer.flush();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+		writer.flush();
 	}
 
 	public CodedOutputStream getStream() {

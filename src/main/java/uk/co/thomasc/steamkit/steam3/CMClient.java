@@ -44,6 +44,7 @@ import uk.co.thomasc.steamkit.util.ScheduledFunction;
 import uk.co.thomasc.steamkit.util.ZipUtil;
 import uk.co.thomasc.steamkit.util.cSharp.events.Action;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventArgs;
+import uk.co.thomasc.steamkit.util.cSharp.events.EventArgsGeneric;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventHandler;
 import uk.co.thomasc.steamkit.util.cSharp.ip.IPEndPoint;
 import uk.co.thomasc.steamkit.util.cSharp.ip.ProtocolType;
@@ -81,18 +82,37 @@ public abstract class CMClient {
 				InetAddress.getByName("69.28.145.171"),
 				InetAddress.getByName("69.28.145.172"),
 				InetAddress.getByName("69.28.156.250"),
-	
+
+				InetAddress.getByName("72.165.61.174"),
+				InetAddress.getByName("72.165.61.175"),
+				InetAddress.getByName("72.165.61.176"),
 				InetAddress.getByName("72.165.61.185"),
-				InetAddress.getByName("72.165.61.186"),
 				InetAddress.getByName("72.165.61.187"),
 				InetAddress.getByName("72.165.61.188"),
-	
+
+				InetAddress.getByName("81.171.115.34"),
+				InetAddress.getByName("81.171.115.35"),
+				InetAddress.getByName("81.171.115.36"),
+				InetAddress.getByName("81.171.115.37"),
+
+				InetAddress.getByName("146.66.152.12"),
+				InetAddress.getByName("146.66.152.13"),
+				InetAddress.getByName("146.66.152.14"),
+				InetAddress.getByName("146.66.152.15"),
+
+				InetAddress.getByName("203.77.185.4"),
+				InetAddress.getByName("203.77.185.5"),
+
+				InetAddress.getByName("205.185.220.133"),
+
+				InetAddress.getByName("208.64.200.201"),
+				InetAddress.getByName("208.111.171.82"),
 				InetAddress.getByName("208.111.133.84"),
 				InetAddress.getByName("208.111.133.85"),
-				InetAddress.getByName("208.111.158.52"),
-				InetAddress.getByName("208.111.158.53"),
-				InetAddress.getByName("208.111.171.82"),
-				InetAddress.getByName("208.111.171.83"),
+
+				InetAddress.getByName("209.197.20.104"),
+				InetAddress.getByName("209.197.30.36"),
+				InetAddress.getByName("209.197.6.233"),
 			};
 		} catch (final UnknownHostException e) {
 			e.printStackTrace();
@@ -164,15 +184,15 @@ public abstract class CMClient {
 				}
 			}
 		});
-		connection.disconnected.addEventHandler(new EventHandler<EventArgs>() {
+		connection.disconnected.addEventHandler(new EventHandler<EventArgsGeneric<Boolean>>() {
 			@Override
-			public void handleEvent(Object sender, EventArgs e) {
+			public void handleEvent(Object sender, EventArgsGeneric<Boolean> e) {
 				connectedUniverse = EUniverse.Invalid;
 
 				heartBeatFunc.stop();
 				connection.netFilter = null;
 
-				onClientDisconnected();
+				onClientDisconnected(e.getValue());
 			}
 		});
 		connection.connected.addEventHandler(new EventHandler<EventArgs>() {
@@ -301,7 +321,7 @@ public abstract class CMClient {
 	/**
 	 * Called when the client is physically disconnected from Steam3.
 	 */
-	protected abstract void onClientDisconnected();
+	protected abstract void onClientDisconnected(boolean newconnection);
 
 	/**
 	 * Called when the client is connected to Steam3 and is ready to send messages.

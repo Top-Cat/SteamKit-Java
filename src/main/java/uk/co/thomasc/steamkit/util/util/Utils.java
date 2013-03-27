@@ -4,8 +4,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import org.bouncycastle.util.Arrays;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EOSType;
 import uk.co.thomasc.steamkit.util.crypto.CryptoHelper;
 
@@ -50,7 +48,7 @@ public class Utils {
 			do {
 				final NetworkInterface n = interfaces.nextElement();
 				if (n.getHardwareAddress() != null && n.getHardwareAddress().length > 0) {
-					return Arrays.copyOfRange(CryptoHelper.CRCHash(n.getHardwareAddress()), 0, 20);
+					return CryptoHelper.SHAHash(n.getHardwareAddress());
 				}
 			} while (NetworkInterface.getNetworkInterfaces().hasMoreElements());
 		} catch (final SocketException e) {

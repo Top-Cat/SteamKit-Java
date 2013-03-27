@@ -50,7 +50,7 @@ public class TcpConnection extends Connection {
 		sock = socket;
 
 		if (sock == null || !sock.isConnected()) {
-			onDisconnected(EventArgs.Empty);
+			onDisconnected(false);
 			return;
 		}
 
@@ -89,7 +89,7 @@ public class TcpConnection extends Connection {
 
 		cleanup();
 
-		onDisconnected(EventArgs.Empty);
+		onDisconnected(true);
 	}
 
 	/**
@@ -98,27 +98,39 @@ public class TcpConnection extends Connection {
 	 * @throws IOException 
 	 */
 	@Override
-	public void send(IClientMsg clientMsg) throws IOException {
-		if (!isConnected) {
-			DebugLog.writeLine("TcpConnection", "Attempting to send client message when not connected: %s", clientMsg.getMsgType());
+	public void send(IClientMsg clientMsg) {
+		try {
+			if (!isConnected) {
+				DebugLog.writeLine("TcpConnection", "Attempting to send client message when not connected: %s", clientMsg.getMsgType());
+				return;
+			}
+	
+			byte[] data = clientMsg.serialize();
+	
+			// encrypt outgoing traffic if we need to
+			if (netFilter != null) {
+				data = netFilter.processOutgoing(data);
+			}
+	
+			synchronized (sock) {
+				// write header
+				netWriter.write(data.length);
+				netWriter.write(TcpConnection.MAGIC);
+	
+				netWriter.write(data);
+	
+				netWriter.flush();
+			}
+		} catch (final IOException ex) {
+			DebugLog.writeLine("TcpConnection", "Socket exception occurred while writing packet: %s", ex);
+
+			// signal that our connection is dead
+			isConnected = false;
+
+			cleanup();
+
+			onDisconnected(false);
 			return;
-		}
-
-		byte[] data = clientMsg.serialize();
-
-		// encrypt outgoing traffic if we need to
-		if (netFilter != null) {
-			data = netFilter.processOutgoing(data);
-		}
-
-		synchronized (sock) {
-			// write header
-			netWriter.write(data.length);
-			netWriter.write(TcpConnection.MAGIC);
-
-			netWriter.write(data);
-
-			netWriter.flush();
 		}
 	}
 
@@ -198,7 +210,7 @@ public class TcpConnection extends Connection {
 
 			cleanup();
 
-			onDisconnected(EventArgs.Empty);
+			onDisconnected(false);
 			return;
 		}
 
@@ -227,7 +239,7 @@ public class TcpConnection extends Connection {
 	@Override
 	public InetAddress getLocalIP() {
 		if (sock == null) {
-			return InetAddress.getLoopbackAddress(); // Return an InetAddress. The request will fail anyway so it doesn't matter
+			return InetAddress.getLoopbackAddress(); // Return a InetAddress. The request will fail anyway so it doesn't matter
 		}
 		return sock.getLocalAddress();
 	}

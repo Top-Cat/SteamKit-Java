@@ -712,10 +712,14 @@ public final class SteamFriends extends ClientMsgHandler {
 	void handleChatMemberInfo(IPacketMsg packetMsg) {
 		final ClientMsg<MsgClientChatMemberInfo> membInfo = new ClientMsg<MsgClientChatMemberInfo>(packetMsg, MsgClientChatMemberInfo.class);
 
-		final byte[] payload = membInfo.getOutputStream().toByteArray();
-
-		final ChatMemberInfoCallback callback = new ChatMemberInfoCallback(membInfo.getBody(), payload);
-		getClient().postCallback(callback);
+		try {
+			byte[] payload = membInfo.getReader().readBytes();
+			
+			final ChatMemberInfoCallback callback = new ChatMemberInfoCallback(membInfo.getBody(), payload);
+			getClient().postCallback(callback);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	void handleChatActionResult(IPacketMsg packetMsg) {

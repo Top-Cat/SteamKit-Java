@@ -279,8 +279,8 @@ public final class SteamClient extends CMClient {
 	 * Called when the client is physically disconnected from Steam3.
 	 */
 	@Override
-	protected void onClientDisconnected() {
-		postCallback(new DisconnectedCallback());
+	protected void onClientDisconnected(boolean newconnection) {
+		postCallback(new DisconnectedCallback(newconnection));
 	}
 
 	/**

@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.util.cSharp.events.Event;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventArgs;
+import uk.co.thomasc.steamkit.util.cSharp.events.EventArgsGeneric;
 import uk.co.thomasc.steamkit.util.cSharp.events.GenericEvent;
 import uk.co.thomasc.steamkit.util.cSharp.ip.IPEndPoint;
 
@@ -44,11 +45,11 @@ public abstract class Connection {
 	/**
 	 * Occurs when the physical connection is broken.
 	 */
-	public GenericEvent disconnected = new GenericEvent();
+	public Event<EventArgsGeneric<Boolean>> disconnected = new Event<EventArgsGeneric<Boolean>>();
 
-	protected void onDisconnected(EventArgs e) {
+	protected void onDisconnected(boolean e) {
 		if (disconnected != null) {
-			disconnected.handleEvent(this, e);
+			disconnected.handleEvent(this, new EventArgsGeneric<Boolean>(e));
 		}
 	}
 
