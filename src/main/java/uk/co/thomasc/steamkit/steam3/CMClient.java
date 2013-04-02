@@ -70,12 +70,39 @@ public abstract class CMClient {
 		InetAddress[] temp = null;
 		try {
 			temp = new InetAddress[] {
-				// CenturyLink/Qwest, Seattle
 				InetAddress.getByName("72.165.61.174"),
 				InetAddress.getByName("72.165.61.175"),
 				InetAddress.getByName("72.165.61.176"),
 				InetAddress.getByName("72.165.61.185"),
 				InetAddress.getByName("72.165.61.187"),
+				InetAddress.getByName("72.165.61.188"),
+
+				InetAddress.getByName("208.64.200.202"),
+				InetAddress.getByName("208.64.200.203"),
+				InetAddress.getByName("208.64.200.204"),
+				InetAddress.getByName("208.64.200.205"),
+				InetAddress.getByName("208.64.200.201"),
+
+				InetAddress.getByName("146.66.152.12"),
+				InetAddress.getByName("146.66.152.13"),
+				InetAddress.getByName("146.66.152.14"),
+				InetAddress.getByName("146.66.152.15"),
+
+				InetAddress.getByName("81.171.115.34"),
+				InetAddress.getByName("81.171.115.35"),
+				InetAddress.getByName("81.171.115.36"),
+				InetAddress.getByName("81.171.115.37"),
+
+				InetAddress.getByName("209.197.30.36"),
+				InetAddress.getByName("205.185.220.134"),
+				InetAddress.getByName("209.197.6.233"),
+				InetAddress.getByName("209.197.29.196"),
+				InetAddress.getByName("209.197.29.197"),
+				InetAddress.getByName("103.28.54.10"),
+				InetAddress.getByName("103.28.54.11"),
+				InetAddress.getByName("208.64.200.137"),
+				InetAddress.getByName("183.136.139.25"),
+				InetAddress.getByName("183.136.139.27")
 			};
 		} catch (final UnknownHostException e) {
 			e.printStackTrace();
