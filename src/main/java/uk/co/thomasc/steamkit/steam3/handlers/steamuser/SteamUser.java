@@ -94,8 +94,13 @@ public final class SteamUser extends ClientMsgHandler {
 		if (details.authCode.length() > 0) {
 			logon.getBody().setAuthCode(details.authCode);
 		}
+		
+		if(details.sentryFileHash != null){
+			logon.getBody().setShaSentryfile(ByteString.copyFrom(details.sentryFileHash));
+		}else{
+			logon.getBody().clearShaSentryfile();
+		}
 
-		logon.getBody().setShaSentryfile(details.sentryFileHash != null ? ByteString.copyFrom(details.sentryFileHash) : ByteString.EMPTY);
 		logon.getBody().setEresultSentryfile((details.sentryFileHash != null ? EResult.OK : EResult.FileNotFound).v());
 
 		getClient().send(logon);
